@@ -1,0 +1,7 @@
+target/
+bin/
+.metadata/
+Servers/
+*.log
+db.properties
+build/

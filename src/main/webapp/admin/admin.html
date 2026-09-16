@@ -1,0 +1,3222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | Employee Management System</title>
+
+<style>
+:root{
+    --primary:#4f46e5;
+    --primary-dark:#3730a3;
+    --text:#172033;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --background:#f5f7fb;
+    --white:#fff;
+    --success:#16a34a;
+    --warning:#d97706;
+    --danger:#dc2626;
+    --sidebar:#111827;
+    --sidebar-text:#aeb7c8;
+    --shadow:0 8px 30px rgba(25,35,55,.07);
+    --radius:14px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,Arial,Helvetica,sans-serif;
+    background:var(--background);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,input,select,textarea{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+    display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:var(--sidebar);
+    color:white;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    display:flex;
+    flex-direction:column;
+    z-index:1000;
+    transition:.25s;
+}
+
+.brand{
+    height:78px;
+    padding:0 22px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.brand-logo{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:var(--primary);
+    font-size:13px;
+    font-weight:900;
+}
+
+.brand h2{
+    font-size:16px;
+}
+
+.brand span{
+    display:block;
+    color:#7f899d;
+    font-size:10px;
+    margin-top:3px;
+}
+
+.user-mini{
+    margin:20px 16px 12px;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(255,255,255,.05);
+    border-radius:12px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    flex:0 0 40px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#e0e7ff;
+    color:#3730a3;
+    font-size:12px;
+    font-weight:800;
+}
+
+.navigation{
+    flex:1;
+    padding:10px 12px;
+    overflow-y:auto;
+}
+
+.nav-title{
+    color:#697387;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1.2px;
+    padding:16px 12px 8px;
+}
+
+.nav-item{
+    width:100%;
+    min-height:43px;
+    margin-bottom:3px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 12px;
+    color:var(--sidebar-text);
+    background:transparent;
+    border-radius:9px;
+    text-align:left;
+    font-size:12px;
+    transition:.2s;
+}
+
+.nav-item:hover{
+    background:rgba(255,255,255,.06);
+    color:white;
+}
+
+.nav-item.active{
+    background:var(--primary);
+    color:white;
+}
+
+.nav-icon{
+    width:20px;
+    text-align:center;
+    font-size:15px;
+}
+
+.nav-badge{
+    margin-left:auto;
+    min-width:20px;
+    height:20px;
+    display:grid;
+    place-items:center;
+    padding:0 5px;
+    background:#ef4444;
+    border-radius:10px;
+    font-size:9px;
+    font-weight:800;
+}
+
+.logout-btn{
+    margin:14px 16px 20px;
+    padding:18px 0 0;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    color:#fca5a5;
+    background:transparent;
+    border-top:1px solid rgba(255,255,255,.07);
+    font-size:12px;
+}
+
+/* ================= MAIN ================= */
+
+.main-content{
+    width:calc(100% - 260px);
+    margin-left:260px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:78px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    padding:0 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.mobile-menu{
+    display:none;
+    background:transparent;
+    font-size:22px;
+}
+
+.page-heading h1{
+    font-size:20px;
+}
+
+.page-heading p{
+    color:var(--muted);
+    margin-top:4px;
+    font-size:11px;
+}
+
+.topbar-actions{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.icon-btn{
+    width:38px;
+    height:38px;
+    position:relative;
+    display:grid;
+    place-items:center;
+    border:1px solid var(--border);
+    background:white;
+    border-radius:10px;
+}
+
+.notification-dot{
+    position:absolute;
+    top:7px;
+    right:8px;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#ef4444;
+}
+
+.profile-menu{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    cursor:pointer;
+}
+
+.profile-text strong,
+.profile-text span{
+    display:block;
+}
+
+.profile-text strong{
+    font-size:11px;
+}
+
+.profile-text span{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:2px;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    padding:28px 32px 50px;
+    max-width:1600px;
+    margin:auto;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* ================= WELCOME ================= */
+
+.welcome-card{
+    min-height:180px;
+    padding:28px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-radius:var(--radius);
+    background:linear-gradient(135deg,#4f46e5,#6366f1);
+    color:white;
+    box-shadow:0 15px 40px rgba(79,70,229,.18);
+}
+
+.eyebrow{
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1.3px;
+    opacity:.8;
+}
+
+.welcome-card h2{
+    margin:9px 0 7px;
+    font-size:25px;
+}
+
+.welcome-card p:last-child{
+    font-size:12px;
+    opacity:.85;
+}
+
+.welcome-icon{
+    width:150px;
+    height:150px;
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-size:58px;
+}
+
+/* ================= CARDS ================= */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-top:18px;
+}
+
+.stat-card{
+    padding:20px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.stat-icon{
+    width:45px;
+    height:45px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:800;
+}
+
+.blue{background:#eef2ff;color:#4f46e5}
+.green{background:#ecfdf3;color:#16a34a}
+.orange{background:#fff7ed;color:#ea580c}
+.red{background:#fef2f2;color:#dc2626}
+.purple{background:#f3e8ff;color:#9333ea}
+.cyan{background:#ecfeff;color:#0891b2}
+
+.stat-card span,
+.stat-card small{
+    display:block;
+    color:var(--muted);
+}
+
+.stat-card span{
+    font-size:10px;
+}
+
+.stat-card strong{
+    display:block;
+    margin:3px 0;
+    font-size:22px;
+}
+
+.stat-card small{
+    font-size:9px;
+}
+
+/* ================= PANELS ================= */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:18px;
+    margin-top:18px;
+}
+
+.panel{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.panel-header{
+    padding:19px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.panel-header h3{
+    font-size:14px;
+}
+
+.panel-header p{
+    color:var(--muted);
+    margin-top:4px;
+    font-size:10px;
+}
+
+.table-container{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    min-width:700px;
+    border-collapse:collapse;
+}
+
+th{
+    background:#fafbfc;
+    color:#7b8495;
+    font-size:8px;
+    letter-spacing:.7px;
+    text-align:left;
+    padding:12px 20px;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:14px 20px;
+    border-bottom:1px solid #f0f1f4;
+    font-size:10px;
+    white-space:nowrap;
+}
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:8px;
+    font-weight:700;
+}
+
+.status.active{
+    background:#ecfdf3;
+    color:#15803d;
+}
+
+.status.pending{
+    background:#fff7ed;
+    color:#c2410c;
+}
+
+.status.completed{
+    background:#eef2ff;
+    color:#4338ca;
+}
+
+.status.danger{
+    background:#fef2f2;
+    color:#dc2626;
+}
+
+/* ================= BUTTONS ================= */
+
+.primary-btn,
+.secondary-btn,
+.danger-btn{
+    min-height:40px;
+    padding:0 15px;
+    border-radius:9px;
+    font-size:10px;
+    font-weight:700;
+}
+
+.primary-btn{
+    background:var(--primary);
+    color:white;
+}
+
+.primary-btn:hover{
+    background:var(--primary-dark);
+}
+
+.secondary-btn{
+    background:white;
+    color:var(--text);
+    border:1px solid var(--border);
+}
+
+.danger-btn{
+    background:#fef2f2;
+    color:#dc2626;
+}
+
+.small-btn{
+    min-height:30px;
+    padding:0 9px;
+    border-radius:7px;
+    font-size:8px;
+    font-weight:700;
+}
+
+/* ================= SECTION ================= */
+
+.section-actions{
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.section-actions h2{
+    font-size:20px;
+}
+
+.section-actions p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:5px;
+}
+
+.action-group{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.search-input,
+.select-input,
+.form-input,
+.form-textarea{
+    height:40px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:white;
+    color:var(--text);
+    font-size:10px;
+}
+
+.form-textarea{
+    width:100%;
+    height:90px;
+    padding-top:12px;
+    resize:vertical;
+}
+
+/* ================= MANAGEMENT CARDS ================= */
+
+.management-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.management-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:var(--shadow);
+    transition:.2s;
+}
+
+.management-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(20,30,50,.1);
+}
+
+.management-icon{
+    width:45px;
+    height:45px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    font-size:19px;
+    background:#eef2ff;
+    color:var(--primary);
+}
+
+.management-card h3{
+    margin-top:15px;
+    font-size:14px;
+}
+
+.management-card p{
+    margin:7px 0 17px;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
+}
+
+/* ================= PROJECT ================= */
+
+.project-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.project-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px;
+    box-shadow:var(--shadow);
+    transition:.2s;
+}
+
+.project-card:hover{
+    transform:translateY(-3px);
+}
+
+.project-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.project-card h3{
+    font-size:14px;
+}
+
+.project-card p{
+    color:var(--muted);
+    font-size:9px;
+    margin:6px 0 15px;
+}
+
+.project-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.project-info div{
+    background:#f8fafc;
+    padding:10px;
+    border-radius:8px;
+}
+
+.project-info span{
+    display:block;
+    color:var(--muted);
+    font-size:8px;
+}
+
+.project-info strong{
+    display:block;
+    margin-top:3px;
+    font-size:10px;
+}
+
+.progress{
+    height:7px;
+    background:#eef0f5;
+    border-radius:5px;
+    overflow:hidden;
+}
+
+.progress i{
+    display:block;
+    height:100%;
+    background:var(--primary);
+}
+
+/* ================= FORMS ================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:6px;
+    color:#4b5563;
+    font-size:9px;
+    font-weight:700;
+}
+
+.form-input,
+.select-input{
+    width:100%;
+}
+
+.form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:10px;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-header{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.profile-cover{
+    height:130px;
+    background:linear-gradient(135deg,#312e81,#818cf8);
+}
+
+.profile-main{
+    min-height:110px;
+    padding:0 25px 20px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.profile-avatar{
+    width:90px;
+    height:90px;
+    margin-top:-45px;
+    display:grid;
+    place-items:center;
+    border:5px solid white;
+    border-radius:50%;
+    background:#e0e7ff;
+    color:#3730a3;
+    font-size:24px;
+    font-weight:800;
+}
+
+.profile-title{
+    flex:1;
+}
+
+.profile-title h2{
+    font-size:19px;
+}
+
+.profile-title p{
+    color:var(--muted);
+    font-size:11px;
+    margin:5px 0 8px;
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:18px;
+}
+
+.details{
+    padding:0 20px 20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+.detail{
+    padding:13px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.detail.full{
+    grid-column:1/-1;
+}
+
+.detail span{
+    display:block;
+    color:var(--muted);
+    font-size:9px;
+}
+
+.detail strong{
+    display:block;
+    margin-top:4px;
+    font-size:10px;
+}
+
+/* ================= NOTIFICATIONS ================= */
+
+.notification-list{
+    display:grid;
+    gap:10px;
+}
+
+.notification{
+    padding:17px;
+    display:flex;
+    gap:13px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+}
+
+.notification.unread{
+    border-left:3px solid var(--primary);
+}
+
+.notification-icon{
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    border-radius:10px;
+    flex:0 0 38px;
+}
+
+.notification strong{
+    font-size:11px;
+}
+
+.notification p{
+    margin:4px 0;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.notification span{
+    color:#9ca3af;
+    font-size:8px;
+}
+
+/* ================= SETTINGS ================= */
+
+.settings-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.setting-row{
+    min-height:70px;
+    padding:12px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top:1px solid var(--border);
+}
+
+.setting-row strong,
+.setting-row span{
+    display:block;
+}
+
+.setting-row strong{
+    font-size:10px;
+}
+
+.setting-row span{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:3px;
+}
+
+.switch{
+    position:relative;
+    width:38px;
+    height:21px;
+}
+
+.switch input{
+    display:none;
+}
+
+.switch span{
+    position:absolute;
+    inset:0;
+    background:#d1d5db;
+    border-radius:20px;
+}
+
+.switch span:before{
+    content:"";
+    position:absolute;
+    width:15px;
+    height:15px;
+    left:3px;
+    top:3px;
+    background:white;
+    border-radius:50%;
+    transition:.2s;
+}
+
+.switch input:checked + span{
+    background:var(--primary);
+}
+
+.switch input:checked + span:before{
+    transform:translateX(17px);
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    padding:13px 18px;
+    background:#111827;
+    color:white;
+    border-radius:9px;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    font-size:10px;
+    transform:translateY(100px);
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    z-index:5000;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1200px){
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .management-grid,
+    .project-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main-content{
+        width:100%;
+        margin-left:0;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .topbar{
+        padding:0 18px;
+    }
+
+    .content{
+        padding:20px 18px 40px;
+    }
+
+    .profile-grid,
+    .settings-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    .stats-grid,
+    .management-grid,
+    .project-grid,
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .section-actions{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .action-group{
+        width:100%;
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search-input{
+        width:100%;
+    }
+
+    .welcome-icon{
+        display:none;
+    }
+
+    .profile-main{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .profile-main .primary-btn{
+        width:100%;
+    }
+
+    .details{
+        grid-template-columns:1fr;
+    }
+
+    .detail.full{
+        grid-column:auto;
+    }
+
+    .profile-text{
+        display:none;
+    }
+}
+</style>
+    <script src="auth.js"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+        <div class="brand-logo">EM</div>
+        <div>
+            <h2>EmployeeMS</h2>
+            <span>Admin Management</span>
+        </div>
+    </div>
+
+    <div class="user-mini">
+        <div class="avatar">VK</div>
+        <div>
+            <strong>Veer Kumar</strong>
+            <span>System Administrator</span>
+        </div>
+    </div>
+
+    <nav class="navigation">
+
+        <p class="nav-title">ADMIN MENU</p>
+
+        <button class="nav-item active" data-page="dashboard">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </button>
+
+        <button class="nav-item" data-page="employees">
+            <span class="nav-icon">♟</span>
+            Employees
+        </button>
+
+        <button class="nav-item" data-page="leaders">
+            <span class="nav-icon">★</span>
+            Team Leaders
+        </button>
+
+        <button class="nav-item" data-page="interns">
+            <span class="nav-icon">🎓</span>
+            Interns
+        </button>
+
+        <button class="nav-item" data-page="departments">
+            <span class="nav-icon">▦</span>
+            Departments
+        </button>
+
+        <button class="nav-item" data-page="projects">
+            <span class="nav-icon">🚀</span>
+            Projects
+        </button>
+
+        <button class="nav-item" data-page="teams">
+            <span class="nav-icon">👥</span>
+            Project Teams
+            <span class="nav-badge">4</span>
+        </button>
+
+        <button class="nav-item" data-page="leave">
+            <span class="nav-icon">▣</span>
+            Leave Management
+            <span class="nav-badge">7</span>
+        </button>
+
+        <button class="nav-item" data-page="attendance">
+            <span class="nav-icon">◷</span>
+            Attendance
+        </button>
+
+        <button class="nav-item" data-page="payroll">
+            <span class="nav-icon">₹</span>
+            Payroll
+        </button>
+
+        <button class="nav-item" data-page="reports">
+            <span class="nav-icon">▤</span>
+            Reports
+        </button>
+
+        <p class="nav-title">SYSTEM</p>
+
+        <button class="nav-item" data-page="notifications">
+            <span class="nav-icon">♢</span>
+            Notifications
+            <span class="nav-badge">9</span>
+        </button>
+
+        <button class="nav-item" data-page="profile">
+            <span class="nav-icon">◎</span>
+            My Profile
+        </button>
+
+        <button class="nav-item" data-page="settings">
+            <span class="nav-icon">⚙</span>
+            Settings
+        </button>
+
+    </nav>
+
+    <button class="logout-btn" id="logoutBtn">
+        <span>↪</span>
+        Logout
+    </button>
+
+</aside>
+
+<!-- ================= MAIN ================= -->
+
+<main class="main-content">
+
+<header class="topbar">
+
+    <button class="mobile-menu" id="mobileMenu">☰</button>
+
+    <div class="page-heading">
+        <h1 id="pageTitle">Admin Dashboard</h1>
+        <p id="pageSubtitle">Complete system overview and management</p>
+    </div>
+
+    <div class="topbar-actions">
+
+        <button class="icon-btn" id="notificationBtn">
+            ♢
+            <span class="notification-dot"></span>
+        </button>
+
+        <div class="profile-menu" id="profileMenu">
+
+            <div class="avatar">
+                VK
+            </div>
+
+            <div class="profile-text">
+                <strong>Veer Kumar</strong>
+                <span>Administrator</span>
+            </div>
+
+            <span>⌄</span>
+
+        </div>
+
+    </div>
+
+</header>
+
+<div class="content">
+
+<!-- ================= DASHBOARD ================= -->
+
+<section class="page active" id="dashboard">
+
+    <div class="welcome-card">
+
+        <div>
+            <p class="eyebrow">ADMIN CONTROL CENTER</p>
+
+            <h2>Welcome back, Veer 👋</h2>
+
+            <p>
+                Manage employees, teams, projects and the complete organization.
+            </p>
+        </div>
+
+        <div class="welcome-icon">👑</div>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon blue">♟</div>
+            <div>
+                <span>Total Employees</span>
+                <strong>128</strong>
+                <small>+8 this month</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon purple">★</div>
+            <div>
+                <span>Team Leaders</span>
+                <strong>12</strong>
+                <small>11 active</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon cyan">🎓</div>
+            <div>
+                <span>Interns</span>
+                <strong>24</strong>
+                <small>5 new interns</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green">🚀</div>
+            <div>
+                <span>Active Projects</span>
+                <strong>18</strong>
+                <small>4 launching soon</small>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon orange">▣</div>
+            <div>
+                <span>Pending Leaves</span>
+                <strong>7</strong>
+                <small>Need approval</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green">✓</div>
+            <div>
+                <span>Present Today</span>
+                <strong>116</strong>
+                <small>90.6% attendance</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon blue">₹</div>
+            <div>
+                <span>Payroll Status</span>
+                <strong>92%</strong>
+                <small>Processed</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon red">!</div>
+            <div>
+                <span>System Alerts</span>
+                <strong>9</strong>
+                <small>Needs attention</small>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h3>Recent Project Teams</h3>
+                    <p>Latest team assignments</p>
+                </div>
+
+                <button class="primary-btn" data-page-link="teams">
+                    Manage Teams →
+                </button>
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>PROJECT</th>
+                            <th>TEAM LEADER</th>
+                            <th>MEMBERS</th>
+                            <th>PROGRESS</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td><strong>EmployeeMS 2.0</strong></td>
+                            <td>Aarav Sharma</td>
+                            <td>12</td>
+                            <td>78%</td>
+                            <td><span class="status active">Active</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Mobile Application</strong></td>
+                            <td>Priya Mehta</td>
+                            <td>8</td>
+                            <td>54%</td>
+                            <td><span class="status active">Active</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>AI Analytics</strong></td>
+                            <td>Rahul Verma</td>
+                            <td>6</td>
+                            <td>32%</td>
+                            <td><span class="status pending">Planning</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h3>System Activity</h3>
+                    <p>Latest administrator activities</p>
+                </div>
+            </div>
+
+            <div style="padding:0 20px 20px;">
+
+                <div class="notification unread">
+                    <div class="notification-icon orange">🚀</div>
+                    <div>
+                        <strong>New project created</strong>
+                        <p>AI Analytics project was created.</p>
+                        <span>15 minutes ago</span>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="notification">
+                    <div class="notification-icon blue">👥</div>
+                    <div>
+                        <strong>Team leader assigned</strong>
+                        <p>Priya Mehta assigned to Mobile Application.</p>
+                        <span>1 hour ago</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= EMPLOYEES ================= -->
+
+<section class="page" id="employees">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Employee Management</h2>
+            <p>Manage all employees in the organization.</p>
+        </div>
+
+        <div class="action-group">
+            <input class="search-input" id="employeeSearch"
+                   placeholder="Search employee...">
+
+            <button class="primary-btn" id="addEmployeeBtn">
+                + Add Employee
+            </button>
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="table-container">
+
+            <table id="employeeTable">
+
+                <thead>
+                    <tr>
+                        <th>EMPLOYEE</th>
+                        <th>EMP ID</th>
+                        <th>EMAIL</th>
+                        <th>ROLE</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+
+                <tbody id="employeeTableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= TEAM LEADERS ================= -->
+
+<section class="page" id="leaders">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Team Leader Management</h2>
+            <p>Create, assign and manage team leaders.</p>
+        </div>
+
+        <button class="primary-btn" id="addLeaderBtn">
+            + Add Team Leader
+        </button>
+
+    </div>
+
+    <div class="management-grid">
+
+        <div class="management-card">
+            <div class="management-icon">★</div>
+            <h3>Aarav Sharma</h3>
+            <p>Senior Software Engineer<br>IT Department<br>Managing 24 employees</p>
+            <span class="status active">Active</span>
+            <br><br>
+            <button class="secondary-btn edit-leader">Manage</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">★</div>
+            <h3>Priya Mehta</h3>
+            <p>Project Manager<br>IT Department<br>Managing 18 employees</p>
+            <span class="status active">Active</span>
+            <br><br>
+            <button class="secondary-btn edit-leader">Manage</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">★</div>
+            <h3>Rahul Verma</h3>
+            <p>Engineering Lead<br>R&D Department<br>Managing 15 employees</p>
+            <span class="status active">Active</span>
+            <br><br>
+            <button class="secondary-btn edit-leader">Manage</button>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= INTERNS ================= -->
+
+<section class="page" id="interns">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Intern Management</h2>
+            <p>Manage interns, mentors and internship projects.</p>
+        </div>
+
+        <button class="primary-btn" id="addInternBtn">
+            + Add Intern
+        </button>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>INTERN</th>
+                        <th>INTERN ID</th>
+                        <th>COLLEGE</th>
+                        <th>MENTOR</th>
+                        <th>PROJECT</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><strong>Aditya Kumar</strong></td>
+                        <td>INT-2026-01</td>
+                        <td>AKTU</td>
+                        <td>Aarav Sharma</td>
+                        <td>EmployeeMS</td>
+                        <td><span class="status active">Active</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Neha Singh</strong></td>
+                        <td>INT-2026-02</td>
+                        <td>DU</td>
+                        <td>Priya Mehta</td>
+                        <td>Mobile App</td>
+                        <td><span class="status active">Active</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Rohan Gupta</strong></td>
+                        <td>INT-2026-03</td>
+                        <td>AKTU</td>
+                        <td>Rahul Verma</td>
+                        <td>AI Analytics</td>
+                        <td><span class="status pending">Pending</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= DEPARTMENTS ================= -->
+
+<section class="page" id="departments">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Department Management</h2>
+            <p>Create and manage organization departments.</p>
+        </div>
+
+        <button class="primary-btn" id="addDepartmentBtn">
+            + Add Department
+        </button>
+
+    </div>
+
+    <div class="management-grid">
+
+        <div class="management-card">
+            <div class="management-icon">💻</div>
+            <h3>Information Technology</h3>
+            <p>Employees: 52<br>Team Leaders: 5<br>Projects: 8</p>
+            <button class="secondary-btn department-btn">Manage Department</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">💰</div>
+            <h3>Finance</h3>
+            <p>Employees: 21<br>Team Leaders: 2<br>Projects: 3</p>
+            <button class="secondary-btn department-btn">Manage Department</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">👔</div>
+            <h3>Human Resources</h3>
+            <p>Employees: 18<br>Team Leaders: 2<br>Projects: 2</p>
+            <button class="secondary-btn department-btn">Manage Department</button>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= PROJECTS ================= -->
+
+<section class="page" id="projects">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Project Management</h2>
+            <p>Create and control every organization project.</p>
+        </div>
+
+        <button class="primary-btn" id="newProjectBtn">
+            + Create New Project
+        </button>
+
+    </div>
+
+    <div class="project-grid">
+
+        <div class="project-card">
+
+            <div class="project-top">
+                <h3>EmployeeMS 2.0</h3>
+                <span class="status active">Active</span>
+            </div>
+
+            <p>Complete employee management system upgrade.</p>
+
+            <div class="project-info">
+                <div>
+                    <span>Team Leader</span>
+                    <strong>Aarav Sharma</strong>
+                </div>
+                <div>
+                    <span>Members</span>
+                    <strong>12</strong>
+                </div>
+            </div>
+
+            <span style="font-size:9px;color:#6b7280;">Progress 78%</span>
+
+            <div class="progress">
+                <i style="width:78%"></i>
+            </div>
+
+            <br>
+
+            <button class="secondary-btn project-manage">
+                Manage Project
+            </button>
+
+        </div>
+
+        <div class="project-card">
+
+            <div class="project-top">
+                <h3>Mobile Application</h3>
+                <span class="status active">Active</span>
+            </div>
+
+            <p>Mobile employee portal and attendance application.</p>
+
+            <div class="project-info">
+                <div>
+                    <span>Team Leader</span>
+                    <strong>Priya Mehta</strong>
+                </div>
+                <div>
+                    <span>Members</span>
+                    <strong>8</strong>
+                </div>
+            </div>
+
+            <span style="font-size:9px;color:#6b7280;">Progress 54%</span>
+
+            <div class="progress">
+                <i style="width:54%"></i>
+            </div>
+
+            <br>
+
+            <button class="secondary-btn project-manage">
+                Manage Project
+            </button>
+
+        </div>
+
+        <div class="project-card">
+
+            <div class="project-top">
+                <h3>AI Analytics</h3>
+                <span class="status pending">Planning</span>
+            </div>
+
+            <p>AI-based employee performance analytics system.</p>
+
+            <div class="project-info">
+                <div>
+                    <span>Team Leader</span>
+                    <strong>Rahul Verma</strong>
+                </div>
+                <div>
+                    <span>Members</span>
+                    <strong>6</strong>
+                </div>
+            </div>
+
+            <span style="font-size:9px;color:#6b7280;">Progress 32%</span>
+
+            <div class="progress">
+                <i style="width:32%"></i>
+            </div>
+
+            <br>
+
+            <button class="secondary-btn project-manage">
+                Manage Project
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= PROJECT TEAMS ================= -->
+
+<section class="page" id="teams">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Project Team Management</h2>
+            <p>Create complete teams and assign leaders and members.</p>
+        </div>
+
+        <button class="primary-btn" id="createTeamBtn">
+            + Create Project Team
+        </button>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+                <h3>All Project Teams</h3>
+                <p>Admin has complete control over project teams.</p>
+            </div>
+
+            <select class="select-input" id="teamFilter">
+                <option>All Projects</option>
+                <option>EmployeeMS 2.0</option>
+                <option>Mobile Application</option>
+                <option>AI Analytics</option>
+            </select>
+
+        </div>
+
+        <div class="table-container">
+
+            <table id="teamTable">
+
+                <thead>
+                    <tr>
+                        <th>PROJECT</th>
+                        <th>TEAM LEADER</th>
+                        <th>EMPLOYEES</th>
+                        <th>INTERNS</th>
+                        <th>TOTAL</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><strong>EmployeeMS 2.0</strong></td>
+                        <td>Aarav Sharma</td>
+                        <td>10</td>
+                        <td>2</td>
+                        <td>12</td>
+                        <td>
+                            <button class="small-btn secondary-btn manage-team">
+                                Manage
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Mobile Application</strong></td>
+                        <td>Priya Mehta</td>
+                        <td>7</td>
+                        <td>1</td>
+                        <td>8</td>
+                        <td>
+                            <button class="small-btn secondary-btn manage-team">
+                                Manage
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>AI Analytics</strong></td>
+                        <td>Rahul Verma</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>6</td>
+                        <td>
+                            <button class="small-btn secondary-btn manage-team">
+                                Manage
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="management-grid">
+
+        <div class="management-card">
+            <div class="management-icon">★</div>
+            <h3>Assign Team Leader</h3>
+            <p>Select or change the team leader of any project.</p>
+            <button class="primary-btn assign-leader">
+                Assign Leader
+            </button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">👥</div>
+            <h3>Add Team Members</h3>
+            <p>Add employees or interns to any project team.</p>
+            <button class="primary-btn add-member">
+                Add Members
+            </button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">🔄</div>
+            <h3>Transfer Members</h3>
+            <p>Move employees and interns between project teams.</p>
+            <button class="primary-btn transfer-member">
+                Transfer
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= LEAVE ================= -->
+
+<section class="page" id="leave">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Leave Management</h2>
+            <p>Approve or reject employee and intern leave requests.</p>
+        </div>
+
+        <select class="select-input">
+            <option>All Requests</option>
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+        </select>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>USER</th>
+                        <th>TYPE</th>
+                        <th>DATES</th>
+                        <th>DAYS</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><strong>Rahul Verma</strong></td>
+                        <td>Casual Leave</td>
+                        <td>5-7 Sep</td>
+                        <td>3</td>
+                        <td><span class="status pending">Pending</span></td>
+                        <td>
+                            <button class="small-btn primary-btn approve">Approve</button>
+                            <button class="small-btn danger-btn reject">Reject</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Priya Mehta</strong></td>
+                        <td>Sick Leave</td>
+                        <td>8 Sep</td>
+                        <td>1</td>
+                        <td><span class="status pending">Pending</span></td>
+                        <td>
+                            <button class="small-btn primary-btn approve">Approve</button>
+                            <button class="small-btn danger-btn reject">Reject</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= ATTENDANCE ================= -->
+
+<section class="page" id="attendance">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Attendance Management</h2>
+            <p>Monitor organization-wide employee attendance.</p>
+        </div>
+
+        <input type="date" class="form-input" style="width:160px;">
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon green">✓</div>
+            <div>
+                <span>Present</span>
+                <strong>116</strong>
+                <small>90.6%</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon orange">◷</div>
+            <div>
+                <span>Late</span>
+                <strong>6</strong>
+                <small>Needs attention</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon red">!</div>
+            <div>
+                <span>Absent</span>
+                <strong>4</strong>
+                <small>Today</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon blue">▣</div>
+            <div>
+                <span>On Leave</span>
+                <strong>2</strong>
+                <small>Approved</small>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="panel">
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>EMPLOYEE</th>
+                        <th>DEPARTMENT</th>
+                        <th>CHECK IN</th>
+                        <th>CHECK OUT</th>
+                        <th>WORK HOURS</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><strong>Rahul Verma</strong></td>
+                        <td>IT</td>
+                        <td>09:02 AM</td>
+                        <td>06:04 PM</td>
+                        <td>8h 32m</td>
+                        <td><span class="status active">Present</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Priya Mehta</strong></td>
+                        <td>IT</td>
+                        <td>09:27 AM</td>
+                        <td>06:10 PM</td>
+                        <td>8h 03m</td>
+                        <td><span class="status pending">Late</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Vikram Singh</strong></td>
+                        <td>Finance</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td>0h</td>
+                        <td><span class="status danger">Absent</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= PAYROLL ================= -->
+
+<section class="page" id="payroll">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Payroll Management</h2>
+            <p>Manage salary, deductions and payroll processing.</p>
+        </div>
+
+        <div class="action-group">
+            <button class="secondary-btn payroll-action" data-action="Salary structure">
+                Salary Structure
+            </button>
+            <button class="secondary-btn payroll-action" data-action="Bonus and deduction">
+                Bonus &amp; Deduction
+            </button>
+            <button class="secondary-btn payroll-action" data-action="Payslip generation">
+                Generate Payslips
+            </button>
+            <button class="primary-btn" id="processPayroll">
+                Process Payroll
+            </button>
+        </div>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon blue">₹</div>
+            <div>
+                <span>Total Payroll</span>
+                <strong>₹84.6L</strong>
+                <small>This month</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green">✓</div>
+            <div>
+                <span>Processed</span>
+                <strong>92%</strong>
+                <small>118 employees</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon orange">◷</div>
+            <div>
+                <span>Pending</span>
+                <strong>10</strong>
+                <small>Employees</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon red">₹</div>
+            <div>
+                <span>Deductions</span>
+                <strong>₹7.2L</strong>
+                <small>This month</small>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h3>User Roles &amp; Permissions</h3>
+                    <p>Control which modules each role can access.</p>
+                </div>
+                <button class="secondary-btn admin-setting-action" data-action="Role and permission manager">Manage Roles</button>
+            </div>
+            <div class="setting-row">
+                <div>
+                    <strong>Role-based access</strong>
+                    <span>Admin, HR, Manager, Team Leader, Employee and Intern permissions.</span>
+                </div>
+                <span class="status active">Enabled</span>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h3>Company Settings</h3>
+                    <p>Manage organization name, office, working days and policies.</p>
+                </div>
+                <button class="secondary-btn admin-setting-action" data-action="Company settings editor">Edit Company</button>
+            </div>
+            <div class="setting-row">
+                <div>
+                    <strong>EmployeeMS</strong>
+                    <span>New Delhi, India · Monday to Friday · Asia/Kolkata</span>
+                </div>
+                <span class="status active">Configured</span>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="panel">
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>EMPLOYEE</th>
+                        <th>BASIC</th>
+                        <th>ALLOWANCE</th>
+                        <th>DEDUCTION</th>
+                        <th>NET SALARY</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><strong>Rahul Verma</strong></td>
+                        <td>₹65,000</td>
+                        <td>₹8,500</td>
+                        <td>₹7,100</td>
+                        <td><strong>₹66,400</strong></td>
+                        <td><span class="status active">Processed</span></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Priya Mehta</strong></td>
+                        <td>₹58,000</td>
+                        <td>₹6,500</td>
+                        <td>₹6,300</td>
+                        <td><strong>₹58,200</strong></td>
+                        <td><span class="status active">Processed</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= REPORTS ================= -->
+
+<section class="page" id="reports">
+
+    <div class="section-actions">
+        <div>
+            <h2>Reports & Analytics</h2>
+            <p>Generate organization-wide management reports.</p>
+        </div>
+    </div>
+
+    <div class="management-grid">
+
+        <div class="management-card">
+            <div class="management-icon">♟</div>
+            <h3>Employee Report</h3>
+            <p>Complete employee list, departments and designations.</p>
+            <button class="secondary-btn report-btn">Generate Report</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">👥</div>
+            <h3>Team Report</h3>
+            <p>Project teams, team leaders and members.</p>
+            <button class="secondary-btn report-btn">Generate Report</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">🚀</div>
+            <h3>Project Report</h3>
+            <p>Project progress, members and project status.</p>
+            <button class="secondary-btn report-btn">Generate Report</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">◷</div>
+            <h3>Attendance Report</h3>
+            <p>Monthly attendance, late and absent employees.</p>
+            <button class="secondary-btn report-btn">Generate Report</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">▣</div>
+            <h3>Leave Report</h3>
+            <p>Leave requests, approvals and leave balances.</p>
+            <button class="secondary-btn report-btn">Generate Report</button>
+        </div>
+
+        <div class="management-card">
+            <div class="management-icon">₹</div>
+            <h3>Payroll Report</h3>
+            <p>Salary, deductions and payroll processing summary.</p>
+            <button class="secondary-btn report-btn">Generate Report</button>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= NOTIFICATIONS ================= -->
+
+<section class="page" id="notifications">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>Notifications</h2>
+            <p>System-wide alerts and activities.</p>
+        </div>
+
+        <button class="secondary-btn" id="markAllRead">
+            Mark All Read
+        </button>
+
+    </div>
+
+    <div class="notification-list">
+
+        <div class="notification unread">
+
+            <div class="notification-icon orange">▣</div>
+
+            <div>
+                <strong>New Leave Request</strong>
+                <p>Rahul Verma submitted a Casual Leave request.</p>
+                <span>10 minutes ago</span>
+            </div>
+
+        </div>
+
+        <div class="notification unread">
+
+            <div class="notification-icon blue">🚀</div>
+
+            <div>
+                <strong>New Project Created</strong>
+                <p>AI Analytics project has been created.</p>
+                <span>35 minutes ago</span>
+            </div>
+
+        </div>
+
+        <div class="notification">
+
+            <div class="notification-icon green">✓</div>
+
+            <div>
+                <strong>Payroll Processed</strong>
+                <p>December payroll has been processed successfully.</p>
+                <span>2 hours ago</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= PROFILE ================= -->
+
+<section class="page" id="profile">
+
+    <div class="profile-header">
+
+        <div class="profile-cover"></div>
+
+        <div class="profile-main">
+
+            <div class="profile-avatar">
+                VK
+            </div>
+
+            <div class="profile-title">
+
+                <h2>Veer Kumar</h2>
+
+                <p>
+                    System Administrator • Employee Management System
+                </p>
+
+                <span class="status active">● Active</span>
+
+            </div>
+
+            <button class="primary-btn" id="editProfile">
+                ✎ Edit Profile
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="profile-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h3>Personal Information</h3>
+                    <p>Administrator personal details</p>
+                </div>
+            </div>
+
+            <div class="details">
+
+                <div class="detail">
+                    <span>Full Name</span>
+                    <strong>Veer Kumar</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Admin ID</span>
+                    <strong>ADM-2026-001</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Email</span>
+                    <strong>admin@employeems.com</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Phone</span>
+                    <strong>+91 98765 43210</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Role</span>
+                    <strong>System Administrator</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Department</span>
+                    <strong>Administration</strong>
+                </div>
+
+                <div class="detail full">
+                    <span>Work Location</span>
+                    <strong>New Delhi, India</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h3>Admin Permissions</h3>
+                    <p>System access permissions</p>
+                </div>
+            </div>
+
+            <div style="padding:0 20px 20px;">
+
+                <div class="setting-row">
+                    <div>
+                        <strong>Employee Management</strong>
+                        <span>Create, edit and delete employees</span>
+                    </div>
+                    <span class="status active">Allowed</span>
+                </div>
+
+                <div class="setting-row">
+                    <div>
+                        <strong>Project Management</strong>
+                        <span>Create and manage projects</span>
+                    </div>
+                    <span class="status active">Allowed</span>
+                </div>
+
+                <div class="setting-row">
+                    <div>
+                        <strong>Payroll Management</strong>
+                        <span>Process organization payroll</span>
+                    </div>
+                    <span class="status active">Allowed</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= SETTINGS ================= -->
+
+<section class="page" id="settings">
+
+    <div class="section-actions">
+
+        <div>
+            <h2>System Settings</h2>
+            <p>Configure administrator and system preferences.</p>
+        </div>
+
+    </div>
+
+    <div class="settings-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h3>Administrator Settings</h3>
+                    <p>Account preferences</p>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Email Notifications</strong>
+                    <span>Receive important admin notifications.</span>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span></span>
+                </label>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Leave Alerts</strong>
+                    <span>Notify when new leave requests arrive.</span>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span></span>
+                </label>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Payroll Alerts</strong>
+                    <span>Notify when payroll is processed.</span>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span></span>
+                </label>
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h3>Security</h3>
+                    <p>System security controls</p>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Two Factor Authentication</strong>
+                    <span>Protect administrator account.</span>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span></span>
+                </label>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Login Alerts</strong>
+                    <span>Receive new login notifications.</span>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span></span>
+                </label>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Session Security</strong>
+                    <span>Automatically expire inactive sessions.</span>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span></span>
+                </label>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const navItems = document.querySelectorAll(".nav-item");
+    const pages = document.querySelectorAll(".page");
+
+    const pageTitle = document.getElementById("pageTitle");
+    const pageSubtitle = document.getElementById("pageSubtitle");
+
+    const sidebar = document.getElementById("sidebar");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    const toast = document.getElementById("toast");
+
+    const pageInfo = {
+
+        dashboard:[
+            "Admin Dashboard",
+            "Complete system overview and management"
+        ],
+
+        employees:[
+            "Employee Management",
+            "Manage all employees in the organization"
+        ],
+
+        leaders:[
+            "Team Leader Management",
+            "Create, assign and manage team leaders"
+        ],
+
+        interns:[
+            "Intern Management",
+            "Manage interns, mentors and internship projects"
+        ],
+
+        departments:[
+            "Department Management",
+            "Create and manage organization departments"
+        ],
+
+        projects:[
+            "Project Management",
+            "Create and control every organization project"
+        ],
+
+        teams:[
+            "Project Team Management",
+            "Manage project leaders and team members"
+        ],
+
+        leave:[
+            "Leave Management",
+            "Approve or reject organization leave requests"
+        ],
+
+        attendance:[
+            "Attendance Management",
+            "Monitor organization-wide attendance"
+        ],
+
+        payroll:[
+            "Payroll Management",
+            "Manage salary and payroll processing"
+        ],
+
+        reports:[
+            "Reports & Analytics",
+            "Generate organization-wide management reports"
+        ],
+
+        notifications:[
+            "Notifications",
+            "System-wide alerts and activities"
+        ],
+
+        profile:[
+            "My Profile",
+            "Administrator profile and permissions"
+        ],
+
+        settings:[
+            "System Settings",
+            "Configure system preferences and security"
+        ]
+
+    };
+
+
+    /* ================= PAGE NAVIGATION ================= */
+
+    function showPage(pageId){
+
+        pages.forEach(page=>{
+            page.classList.remove("active");
+        });
+
+        navItems.forEach(item=>{
+            item.classList.remove("active");
+        });
+
+        const target = document.getElementById(pageId);
+
+        if(target){
+            target.classList.add("active");
+        }
+
+        const nav = document.querySelector(
+            '.nav-item[data-page="'+pageId+'"]'
+        );
+
+        if(nav){
+            nav.classList.add("active");
+        }
+
+        if(pageInfo[pageId]){
+
+            pageTitle.textContent = pageInfo[pageId][0];
+
+            pageSubtitle.textContent = pageInfo[pageId][1];
+
+        }
+
+        sidebar.classList.remove("open");
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+    }
+
+
+    navItems.forEach(item=>{
+
+        item.addEventListener("click",function(){
+
+            showPage(this.dataset.page);
+
+        });
+
+    });
+
+
+    /* ================= INTERNAL PAGE LINKS ================= */
+
+    document.querySelectorAll("[data-page-link]")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showPage(this.dataset.pageLink);
+
+        });
+
+    });
+
+
+    /* ================= TOAST ================= */
+
+    function showToast(message){
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        clearTimeout(window.toastTimer);
+
+        window.toastTimer = setTimeout(()=>{
+
+            toast.classList.remove("show");
+
+        },2500);
+
+    }
+
+
+    /* ================= MOBILE MENU ================= */
+
+    mobileMenu.addEventListener("click",function(){
+
+        sidebar.classList.toggle("open");
+
+    });
+
+
+    /* ================= NOTIFICATION ================= */
+
+    document.getElementById("notificationBtn")
+    .addEventListener("click",function(){
+
+        showPage("notifications");
+
+    });
+
+
+    /* ================= PROFILE ================= */
+
+    document.getElementById("profileMenu")
+    .addEventListener("click",function(){
+
+        showPage("profile");
+
+    });
+    
+    /* ================= LOAD EMPLOYEES FROM DATABASE ================= */
+
+    function loadEmployees() {
+
+        const employeeTableBody =
+            document.getElementById("employeeTableBody");
+
+        if (!employeeTableBody) {
+            return;
+        }
+
+        employeeTableBody.innerHTML =
+            "<tr><td colspan='6'>Loading employees...</td></tr>";
+
+        fetch("EmployeeDataServlet")
+            .then(response => response.text())
+            .then(data => {
+
+                employeeTableBody.innerHTML = data;
+
+            })
+            .catch(error => {
+
+                console.error("Employee loading error:", error);
+
+                employeeTableBody.innerHTML =
+                    "<tr><td colspan='6'>Unable to load employees.</td></tr>";
+            });
+    }
+
+
+    /* ================= EMPLOYEE SEARCH ================= */
+
+    const employeeSearch =
+        document.getElementById("employeeSearch");
+
+    if(employeeSearch){
+
+        employeeSearch.addEventListener("input",function(){
+
+            const value = this.value.toLowerCase();
+
+            document.querySelectorAll("#employeeTable tbody tr")
+            .forEach(row=>{
+
+                row.style.display =
+                    row.innerText.toLowerCase().includes(value)
+                    ? ""
+                    : "none";
+
+            });
+
+        });
+
+    }
+
+
+    /* ================= ADD BUTTONS ================= */
+
+    document.getElementById("addEmployeeBtn")
+    .addEventListener("click",function(){
+
+        showToast("Add Employee form opened");
+
+    });
+
+
+    document.getElementById("addLeaderBtn")
+    .addEventListener("click",function(){
+
+        showToast("Add Team Leader form opened");
+
+    });
+
+
+    document.getElementById("addInternBtn")
+    .addEventListener("click",function(){
+
+        showToast("Add Intern form opened");
+
+    });
+
+
+    document.getElementById("addDepartmentBtn")
+    .addEventListener("click",function(){
+
+        showToast("Add Department form opened");
+
+    });
+
+
+    document.getElementById("newProjectBtn")
+    .addEventListener("click",function(){
+
+        showToast("Create New Project form opened");
+
+    });
+
+
+    document.getElementById("createTeamBtn")
+    .addEventListener("click",function(){
+
+        showToast(
+            "Project Team creator opened: Select project, leader and members"
+        );
+
+    });
+
+
+    /* ================= TEAM ACTIONS ================= */
+
+    document.querySelectorAll(".manage-team")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast(
+                "Team management opened: Add, remove or transfer members"
+            );
+
+        });
+
+    });
+
+
+    document.querySelectorAll(".assign-leader")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast("Select a new Team Leader");
+
+        });
+
+    });
+
+
+    document.querySelectorAll(".add-member")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast("Select employees or interns to add");
+
+        });
+
+    });
+
+
+    document.querySelectorAll(".transfer-member")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast("Member transfer panel opened");
+
+        });
+
+    });
+
+
+    /* ================= PROJECT ================= */
+
+    document.querySelectorAll(".project-manage")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast(
+                "Project management: Edit team, leader, members and progress"
+            );
+
+        });
+
+    });
+
+
+    /* ================= LEAVE ================= */
+
+    document.querySelectorAll(".approve")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            const row = this.closest("tr");
+
+            row.querySelector(".status").textContent = "Approved";
+
+            row.querySelector(".status").className =
+                "status active";
+
+            showToast("Leave request approved");
+
+        });
+
+    });
+
+
+    document.querySelectorAll(".reject")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            const row = this.closest("tr");
+
+            row.querySelector(".status").textContent = "Rejected";
+
+            row.querySelector(".status").className =
+                "status danger";
+
+            showToast("Leave request rejected");
+
+        });
+
+    });
+
+
+    /* ================= DELETE ================= */
+
+    document.querySelectorAll(".delete-btn")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            if(confirm("Delete this employee?")){
+
+                this.closest("tr").remove();
+
+                showToast("Employee deleted");
+
+            }
+
+        });
+
+    });
+
+
+    /* ================= VIEW ================= */
+
+    document.querySelectorAll(".view-btn")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast("Employee edit panel opened");
+
+        });
+
+    });
+
+
+    /* ================= REPORTS ================= */
+
+    document.querySelectorAll(".report-btn")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast("Report generated successfully");
+
+        });
+
+    });
+
+
+    /* ================= MARK READ ================= */
+
+    document.getElementById("markAllRead")
+    .addEventListener("click",function(){
+
+        document.querySelectorAll(".notification.unread")
+        .forEach(item=>{
+
+            item.classList.remove("unread");
+
+        });
+
+        document.querySelectorAll(".nav-badge")
+        .forEach(badge=>{
+
+            if(badge.parentElement.dataset.page === "notifications"){
+
+                badge.style.display = "none";
+
+            }
+
+        });
+
+        showToast("All notifications marked as read");
+
+    });
+
+
+    /* ================= PAYROLL ================= */
+
+    document.getElementById("processPayroll")
+    .addEventListener("click",function(){
+
+        if(confirm("Start payroll processing for this month?")){
+
+            showToast(
+                "Payroll processing started successfully"
+            );
+
+        }
+
+    });
+
+    document.querySelectorAll(".payroll-action")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast(this.dataset.action + " opened");
+
+        });
+
+    });
+
+    document.querySelectorAll(".admin-setting-action")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast(this.dataset.action + " opened");
+
+        });
+
+    });
+
+
+    /* ================= PROFILE ================= */
+
+    document.getElementById("editProfile")
+    .addEventListener("click",function(){
+
+        showToast("Profile edit mode enabled");
+
+    });
+
+
+    /* ================= LEADER MANAGEMENT ================= */
+
+    document.querySelectorAll(".edit-leader")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast(
+                "Team Leader management panel opened"
+            );
+
+        });
+
+    });
+
+
+    /* ================= DEPARTMENT ================= */
+
+    document.querySelectorAll(".department-btn")
+    .forEach(button=>{
+
+        button.addEventListener("click",function(){
+
+            showToast(
+                "Department management panel opened"
+            );
+
+        });
+
+    });
+
+
+    /* ================= LOGOUT ================= */
+
+    document.getElementById("logoutBtn")
+    .addEventListener("click",function(){
+
+        if(confirm("Are you sure you want to logout?")){
+
+            showToast("Logging out...");
+            localStorage.removeItem("currentPayFlowUser");
+
+            setTimeout(()=>{
+
+                /*
+                 * Later connect this with:
+                 * HOME.html
+                 * Servlet session logout
+                 */
+
+                window.location.href = "HOME.html";
+
+            },1000);
+
+        }
+
+    });
+
+
+    /* ================= SETTINGS ================= */
+
+    document.querySelectorAll(".switch input")
+    .forEach(toggle=>{
+
+        toggle.addEventListener("change",function(){
+
+            showToast(
+                this.checked
+                ? "Setting enabled"
+                : "Setting disabled"
+            );
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
+```

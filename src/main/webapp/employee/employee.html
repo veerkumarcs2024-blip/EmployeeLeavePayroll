@@ -1,0 +1,4282 @@
+<!-- employee.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <meta
+        name="description"
+        content="PayFlow HR Employee Portal"
+    >
+    <title>PayFlow HR | Employee Portal</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-soft: #ccfbf1;
+            --dark: #102a2d;
+            --text: #475f61;
+            --muted: #789091;
+            --background: #f4f8f8;
+            --white: #ffffff;
+            --border: #e1ebeb;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --blue: #2563eb;
+            --purple: #8b5cf6;
+            --shadow: 0 8px 30px rgba(15, 118, 110, 0.07);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                "Segoe UI",
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
+            background: var(--background);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================
+           APP
+        ========================= */
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #082b2d, #0b3b3d);
+            color: white;
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-light)
+                );
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-name span {
+            color: #2dd4bf;
+        }
+
+        .employee-mini-profile {
+            margin: 22px 16px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .mini-avatar,
+        .top-avatar,
+        .large-avatar {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-light)
+                );
+        }
+
+        .mini-avatar {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .mini-info {
+            min-width: 0;
+        }
+
+        .mini-info strong {
+            display: block;
+            font-size: 13px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-info span {
+            display: block;
+            margin-top: 3px;
+            font-size: 10px;
+            color: #9ab8b9;
+        }
+
+        .sidebar-label {
+            padding: 0 20px;
+            margin: 5px 0 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #709394;
+            font-weight: 700;
+        }
+
+        .sidebar-nav {
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #9ab8b9;
+            padding: 12px 13px;
+            margin-bottom: 4px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(20, 184, 166, 0.15);
+            color: #5eead4;
+        }
+
+        .nav-icon {
+            width: 22px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .logout-btn {
+            width: 100%;
+            border: none;
+            background: rgba(239, 68, 68, 0.08);
+            color: #fca5a5;
+            border-radius: 11px;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.16);
+            color: #fecaca;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 75px;
+            padding: 0 32px;
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            backdrop-filter: blur(15px);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mobile-menu {
+            display: none;
+            border: none;
+            background: var(--primary-soft);
+            color: var(--primary);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+
+        .page-title h1 {
+            font-size: 20px;
+            color: var(--dark);
+        }
+
+        .page-title p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn {
+            width: 39px;
+            height: 39px;
+            border-radius: 11px;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            position: relative;
+            font-size: 17px;
+        }
+
+        .notification-dot {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ef4444;
+            top: 7px;
+            right: 7px;
+            border: 2px solid white;
+        }
+
+        .top-profile {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding-left: 10px;
+            border-left: 1px solid var(--border);
+        }
+
+        .top-avatar {
+            width: 37px;
+            height: 37px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .top-profile strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .top-profile span {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 30px;
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome-card {
+            background:
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(255, 255, 255, 0.17),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #0f766e,
+                    #0d9488,
+                    #115e59
+                );
+            border-radius: 22px;
+            padding: 28px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .welcome-card::after {
+            content: "";
+            width: 180px;
+            height: 180px;
+            border: 35px solid rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+            position: absolute;
+            right: 60px;
+            top: -80px;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-content small {
+            color: #a7f3d0;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .welcome-content h2 {
+            font-size: 27px;
+            margin: 7px 0;
+        }
+
+        .welcome-content p {
+            color: #c5eeea;
+            font-size: 13px;
+            max-width: 600px;
+        }
+
+        .date-display {
+            position: relative;
+            z-index: 2;
+            padding: 13px 18px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.11);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            text-align: right;
+        }
+
+        .date-display strong {
+            display: block;
+            font-size: 18px;
+        }
+
+        .date-display span {
+            font-size: 11px;
+            color: #c5eeea;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card,
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card {
+            border-radius: 17px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .stat-icon.teal {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .stat-icon.blue {
+            color: var(--blue);
+            background: #dbeafe;
+        }
+
+        .stat-icon.orange {
+            color: var(--warning);
+            background: #fef3c7;
+        }
+
+        .stat-icon.green {
+            color: var(--success);
+            background: #dcfce7;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .stat-card h3 {
+            font-size: 25px;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .stat-card p strong {
+            color: var(--success);
+        }
+
+        .card {
+            border-radius: 18px;
+            padding: 22px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            color: var(--dark);
+        }
+
+        .card-header p {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .view-all {
+            border: none;
+            background: transparent;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           ATTENDANCE
+        ========================= */
+
+        .attendance-chart {
+            height: 205px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            padding: 10px 5px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .attendance-day {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .attendance-bar {
+            width: 70%;
+            max-width: 30px;
+            min-height: 10px;
+            border-radius: 7px 7px 3px 3px;
+            background:
+                linear-gradient(
+                    180deg,
+                    #2dd4bf,
+                    #0f766e
+                );
+        }
+
+        .attendance-bar.absent {
+            background: #fecaca;
+        }
+
+        .attendance-day span {
+            font-size: 9px;
+            color: var(--muted);
+        }
+
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .attendance-summary div {
+            text-align: center;
+            padding: 10px;
+            background: #f8fafb;
+            border-radius: 10px;
+        }
+
+        .attendance-summary strong {
+            display: block;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .attendance-summary span {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        /* =========================
+           LEAVE
+        ========================= */
+
+        .leave-balance {
+            display: grid;
+            gap: 15px;
+        }
+
+        .leave-type {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .leave-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .leave-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            flex-shrink: 0;
+        }
+
+        .leave-dot.blue {
+            background: #3b82f6;
+        }
+
+        .leave-dot.orange {
+            background: #f59e0b;
+        }
+
+        .leave-dot.purple {
+            background: var(--purple);
+        }
+
+        .leave-info strong {
+            display: block;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .leave-info span {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        .leave-count {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .progress {
+            height: 6px;
+            background: #edf3f3;
+            border-radius: 10px;
+            margin-top: 7px;
+            overflow: hidden;
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            background:
+                linear-gradient(
+                    90deg,
+                    #0f766e,
+                    #2dd4bf
+                );
+            border-radius: inherit;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 10px;
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 10px;
+            color: var(--text);
+            font-size: 12px;
+            border-bottom: 1px solid #edf2f2;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfb;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .status.approved {
+            color: #166534;
+            background: #dcfce7;
+        }
+
+        .status.pending {
+            color: #92400e;
+            background: #fef3c7;
+        }
+
+        .status.rejected {
+            color: #991b1b;
+            background: #fee2e2;
+        }
+
+        /* =========================
+           FORMS
+        ========================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #385557;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            background: #fbfdfd;
+            border-radius: 11px;
+            padding: 11px 13px;
+            outline: none;
+            color: var(--dark);
+            font-size: 12px;
+        }
+
+        .form-group textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-light);
+            box-shadow:
+                0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 17px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-light)
+                );
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #edf4f4;
+            color: #496465;
+        }
+
+        /* =========================
+           PROFILE
+        ========================= */
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+        }
+
+        .profile-card {
+            text-align: center;
+        }
+
+        .large-avatar {
+            width: 90px;
+            height: 90px;
+            margin: 5px auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .profile-card h2 {
+            font-size: 18px;
+        }
+
+        .profile-card p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .profile-tag {
+            display: inline-block;
+            margin-top: 13px;
+            padding: 5px 12px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-item {
+            padding: 14px;
+            background: #f8fbfb;
+            border-radius: 11px;
+        }
+
+        .detail-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            margin-bottom: 5px;
+        }
+
+        .detail-item strong {
+            color: var(--dark);
+            font-size: 12px;
+        }
+
+        /* =========================
+           PAYROLL
+        ========================= */
+
+        .salary-card {
+            background:
+                radial-gradient(
+                    circle at 85% 10%,
+                    rgba(255, 255, 255, 0.2),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #123f41,
+                    #0f766e
+                );
+            border-radius: 18px;
+            color: white;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .salary-card small {
+            color: #a7f3d0;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .salary-card h2 {
+            font-size: 32px;
+            margin: 8px 0 3px;
+        }
+
+        .salary-card p {
+            color: #c4e7e3;
+            font-size: 11px;
+        }
+
+        .salary-breakdown {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .salary-breakdown div {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 11px;
+            border-radius: 10px;
+        }
+
+        .salary-breakdown span {
+            display: block;
+            color: #a9c8c9;
+            font-size: 9px;
+        }
+
+        .salary-breakdown strong {
+            display: block;
+            color: white;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .payslip-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .payslip-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            gap: 10px;
+        }
+
+        .payslip-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 9px;
+            background: #fee2e2;
+            color: #dc2626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .payslip-left strong {
+            display: block;
+            color: var(--dark);
+            font-size: 11px;
+        }
+
+        .payslip-left span {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        .download-btn {
+            border: none;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           NOTIFICATIONS
+        ========================= */
+
+        .notification-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 13px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: white;
+        }
+
+        .notification-icon {
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .notification-item h4 {
+            font-size: 12px;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .notification-item p {
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .notification-item time {
+            display: block;
+            color: #a1afb0;
+            font-size: 9px;
+            margin-top: 5px;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            max-width: 340px;
+            padding: 13px 17px;
+            border-radius: 12px;
+            color: white;
+            background: #123c3c;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 3000;
+            font-size: 12px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: #15803d;
+        }
+
+        .toast.error {
+            background: #b91c1c;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .top-profile div {
+                display: none;
+            }
+
+            .content {
+                padding: 18px 14px;
+            }
+
+            .welcome-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                padding: 23px;
+            }
+
+            .date-display {
+                text-align: left;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid,
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .salary-breakdown {
+                grid-template-columns: 1fr;
+            }
+
+            .attendance-chart {
+                gap: 5px;
+            }
+
+            .attendance-bar {
+                width: 65%;
+            }
+
+            .page-title h1 {
+                font-size: 17px;
+            }
+
+            .page-title p {
+                display: none;
+            }
+
+            .welcome-content h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+            <a href="#" class="brand">
+                <span class="brand-logo">PF</span>
+                <span class="brand-name">PayFlow<span>.</span></span>
+            </a>
+        </div>
+
+        <div class="employee-mini-profile">
+            <div class="mini-avatar" id="miniAvatar">EM</div>
+
+            <div class="mini-info">
+                <strong id="sidebarEmployeeName">Employee</strong>
+                <span>Employee Portal</span>
+            </div>
+        </div>
+
+        <div class="sidebar-label">
+            Employee Menu
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-section="dashboard">
+                <span class="nav-icon">▦</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" data-section="profile">
+                <span class="nav-icon">👤</span>
+                My Profile
+            </button>
+
+            <button class="nav-item" data-section="attendance">
+                <span class="nav-icon">◷</span>
+                Attendance
+            </button>
+
+            <button class="nav-item" data-section="leave">
+                <span class="nav-icon">📅</span>
+                Leave Management
+            </button>
+
+            <button class="nav-item" data-section="payroll">
+                <span class="nav-icon">₹</span>
+                Payroll & Payslips
+            </button>
+
+            <button class="nav-item" data-section="notifications">
+                <span class="nav-icon">🔔</span>
+                Notifications
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="logout-btn" id="logoutButton">
+                ↪ Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="mobile-menu"
+                    id="mobileMenuButton"
+                    aria-label="Open menu"
+                >
+                    ☰
+                </button>
+
+                <div class="page-title">
+                    <h1 id="pageTitle">
+                        Employee Dashboard
+                    </h1>
+
+                    <p id="pageSubtitle">
+                        Manage your work, leave and payroll
+                    </p>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+
+                <button
+                    class="notification-btn"
+                    id="notificationButton"
+                    aria-label="Notifications"
+                >
+                    🔔
+                    <span
+                        class="notification-dot"
+                        id="notificationDot"
+                    ></span>
+                </button>
+
+                <div class="top-profile">
+
+                    <div
+                        class="top-avatar"
+                        id="topAvatar"
+                    >
+                        EM
+                    </div>
+
+                    <div>
+                        <strong id="topEmployeeName">
+                            Employee
+                        </strong>
+
+                        <span id="topEmployeeRole">
+                            Employee
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- DASHBOARD -->
+
+            <section
+                id="dashboard"
+                class="dashboard-section active"
+            >
+
+                <div class="welcome-card">
+
+                    <div class="welcome-content">
+
+                        <small>
+                            Employee Portal
+                        </small>
+
+                        <h2>
+                            Welcome back,
+                            <span id="welcomeName">
+                                Employee
+                            </span>
+                            👋
+                        </h2>
+
+                        <p>
+                            Here's your latest attendance,
+                            leave and payroll information at a glance.
+                        </p>
+                    </div>
+
+                    <div class="date-display">
+                        <strong id="currentDate">
+                            22 Aug 2026
+                        </strong>
+
+                        <span>
+                            Current working day
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">
+                                PRESENT DAYS
+                            </span>
+
+                            <span class="stat-icon teal">
+                                ✓
+                            </span>
+                        </div>
+
+                        <h3 id="dashboardPresentDays">
+                            21
+                        </h3>
+
+                        <p>
+                            <strong id="dashboardAttendanceRate">
+                                87.5%
+                            </strong>
+                            attendance this month
+                        </p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">
+                                LEAVE BALANCE
+                            </span>
+
+                            <span class="stat-icon blue">
+                                📅
+                            </span>
+                        </div>
+
+                        <h3>
+                            <span id="dashboardLeaveBalance">
+                                18
+                            </span>
+                            <small
+                                style="
+                                    font-size:12px;
+                                    color:#789091;
+                                "
+                            >
+                                days
+                            </small>
+                        </h3>
+
+                        <p>
+                            Across available leave types
+                        </p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">
+                                PENDING REQUESTS
+                            </span>
+
+                            <span class="stat-icon orange">
+                                ⏳
+                            </span>
+                        </div>
+
+                        <h3 id="pendingLeaveCount">
+                            0
+                        </h3>
+
+                        <p>
+                            Leave requests awaiting approval
+                        </p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">
+                                NET SALARY
+                            </span>
+
+                            <span class="stat-icon green">
+                                ₹
+                            </span>
+                        </div>
+
+                        <h3 id="dashboardNetSalary">
+                            ₹62,450
+                        </h3>
+
+                        <p id="dashboardPayrollMonth">
+                            August 2026 payroll
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="two-column">
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h3>
+                                    Attendance Overview
+                                </h3>
+
+                                <p>
+                                    Your working days this month
+                                </p>
+                            </div>
+
+                            <button
+                                class="view-all"
+                                data-go-section="attendance"
+                            >
+                                View Details →
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="attendance-chart"
+                            id="dashboardAttendanceChart"
+                        ></div>
+
+                        <div
+                            class="attendance-summary"
+                            id="attendanceSummary"
+                        ></div>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h3>
+                                    Leave Balance
+                                </h3>
+
+                                <p>
+                                    Available leave days
+                                </p>
+                            </div>
+
+                            <button
+                                class="view-all"
+                                data-go-section="leave"
+                            >
+                                Apply Leave →
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="leave-balance"
+                            id="dashboardLeaveBalanceList"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>
+                                Recent Leave Requests
+                            </h3>
+
+                            <p>
+                                Latest leave applications
+                            </p>
+                        </div>
+
+                        <button
+                            class="view-all"
+                            data-go-section="leave"
+                        >
+                            View All →
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Leave Type</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Days</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="dashboardLeaveTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- PROFILE -->
+
+            <section
+                id="profile"
+                class="dashboard-section"
+            >
+
+                <div class="profile-grid">
+
+                    <div class="card profile-card">
+
+                        <div
+                            class="large-avatar"
+                            id="largeAvatar"
+                        >
+                            EM
+                        </div>
+
+                        <h2 id="profileName">
+                            Employee
+                        </h2>
+
+                        <p id="profileDesignation">
+                            Software Engineer
+                        </p>
+
+                        <span class="profile-tag">
+                            ACTIVE EMPLOYEE
+                        </span>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h3>
+                                    Personal & Employment Information
+                                </h3>
+
+                                <p>
+                                    Your registered employee details
+                                </p>
+                            </div>
+
+                            <button
+                                class="btn btn-secondary"
+                                id="editProfileButton"
+                            >
+                                Edit Profile
+                            </button>
+
+                        </div>
+
+                        <div class="detail-grid">
+
+                            <div class="detail-item">
+                                <span>Full Name</span>
+                                <strong id="profileFullName">
+                                    Employee
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Employee ID</span>
+                                <strong id="profileEmployeeId">
+                                    EMP-2026-0148
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Work Email</span>
+                                <strong id="profileEmail">
+                                    employee@company.com
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Phone Number</span>
+                                <strong id="profilePhone">
+                                    +91 98765 43210
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Department</span>
+                                <strong id="profileDepartment">
+                                    Information Technology
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Work Location</span>
+                                <strong id="profileWorkLocation">
+                                    New Delhi, India
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Designation</span>
+                                <strong id="profileDesignationDetail">
+                                    Software Engineer
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Manager</span>
+                                <strong id="profileManager">
+                                    Rahul Sharma
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Joining Date</span>
+                                <strong id="profileJoiningDate">
+                                    15 January 2024
+                                </strong>
+                            </div>
+
+                            <div class="detail-item">
+                                <span>Employment Type</span>
+                                <strong id="profileEmploymentType">
+                                    Full Time
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- ATTENDANCE -->
+
+            <section
+                id="attendance"
+                class="dashboard-section"
+            >
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>
+                                Attendance
+                            </h3>
+
+                            <p>
+                                Monthly attendance records
+                            </p>
+                        </div>
+
+                        <select id="attendanceMonth">
+                            <option value="2026-08">
+                                August 2026
+                            </option>
+
+                            <option value="2026-07">
+                                July 2026
+                            </option>
+
+                            <option value="2026-06">
+                                June 2026
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div
+                        class="stats-grid"
+                        id="attendanceStats"
+                    ></div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Day</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Working Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="attendanceTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- LEAVE -->
+
+            <section
+                id="leave"
+                class="dashboard-section"
+            >
+
+                <div class="two-column">
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h3>
+                                    Apply for Leave
+                                </h3>
+
+                                <p>
+                                    Submit a new leave request
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <form id="leaveForm">
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label for="leaveType">
+                                        Leave Type
+                                    </label>
+
+                                    <select
+                                        id="leaveType"
+                                        required
+                                    >
+                                        <option value="">
+                                            Select Leave Type
+                                        </option>
+
+                                        <option value="Casual Leave">
+                                            Casual Leave
+                                        </option>
+
+                                        <option value="Sick Leave">
+                                            Sick Leave
+                                        </option>
+
+                                        <option value="Earned Leave">
+                                            Earned Leave
+                                        </option>
+
+                                        <option value="Unpaid Leave">
+                                            Unpaid Leave
+                                        </option>
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="leaveDuration">
+                                        Duration
+                                    </label>
+
+                                    <select
+                                        id="leaveDuration"
+                                        required
+                                    >
+                                        <option value="Full Day">
+                                            Full Day
+                                        </option>
+
+                                        <option value="Half Day">
+                                            Half Day
+                                        </option>
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="startDate">
+                                        Start Date
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="startDate"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="endDate">
+                                        End Date
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="endDate"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group full">
+
+                                    <label for="leaveReason">
+                                        Reason
+                                    </label>
+
+                                    <textarea
+                                        id="leaveReason"
+                                        placeholder="Explain the reason for your leave..."
+                                        required
+                                    ></textarea>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-actions">
+
+                                <button
+                                    type="reset"
+                                    class="btn btn-secondary"
+                                >
+                                    Clear
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                >
+                                    Submit Request →
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h3>
+                                    Leave Balance
+                                </h3>
+
+                                <p>
+                                    Current available balance
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="leave-balance"
+                            id="leaveBalanceList"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>
+                                Leave History
+                            </h3>
+
+                            <p>
+                                Your previous leave applications
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Leave Type</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Days</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="leaveHistoryTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- PAYROLL -->
+
+            <section
+                id="payroll"
+                class="dashboard-section"
+            >
+
+                <div class="two-column">
+
+                    <div class="salary-card">
+
+                        <small id="salaryMonth">
+                            August 2026 Net Salary
+                        </small>
+
+                        <h2 id="salaryNet">
+                            ₹62,450
+                        </h2>
+
+                        <p id="salaryProcessedDate">
+                            Salary processed on 31 August 2026
+                        </p>
+
+                        <div class="salary-breakdown">
+
+                            <div>
+                                <span>Basic Salary</span>
+                                <strong id="salaryBasic">
+                                    ₹45,000
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>Allowances</span>
+                                <strong id="salaryAllowances">
+                                    ₹25,000
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>Deductions</span>
+                                <strong id="salaryDeductions">
+                                    ₹7,550
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h3>
+                                    Payroll Summary
+                                </h3>
+
+                                <p>
+                                    Current salary information
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="detail-grid"
+                            id="payrollSummary"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>
+                                My Payslips
+                            </h3>
+
+                            <p>
+                                View your monthly salary documents
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="payslip-list"
+                        id="payslipList"
+                    ></div>
+
+                </div>
+
+            </section>
+
+            <!-- NOTIFICATIONS -->
+
+            <section
+                id="notifications"
+                class="dashboard-section"
+            >
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>
+                                Notifications
+                            </h3>
+
+                            <p>
+                                Important updates from HR and management
+                            </p>
+                        </div>
+
+                        <button
+                            class="view-all"
+                            id="markNotificationsRead"
+                        >
+                            Mark All Read
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="notification-list"
+                        id="notificationList"
+                    ></div>
+
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+></div>
+
+<script>
+    /*
+     * ============================================================
+     * EMPLOYEE DATA CONNECTION LAYER
+     * ============================================================
+     *
+     * THIS IS THE ONLY PART YOU NEED TO CONNECT TO YOUR BACKEND.
+     *
+     * The UI below does not know:
+     * - how your login works
+     * - which database you use
+     * - which API framework you use
+     * - how employee records are stored
+     *
+     * Replace these functions with your own API/database calls.
+     *
+     * Example:
+     *
+     * async getEmployee() {
+     *     const response = await fetch("/api/employee/me");
+     *     return response.json();
+     * }
+     *
+     * ============================================================
+     */
+
+    const EMPLOYEE_API = {
+        /*
+         * Replace this object with your authenticated
+         * employee information.
+         */
+        async getEmployee() {
+            let currentUser = {};
+
+            try {
+                currentUser = JSON.parse(
+                    localStorage.getItem("currentPayFlowUser") || "{}"
+                );
+            } catch {
+                currentUser = {};
+            }
+
+            return {
+                id: currentUser.employeeId || "EMP-2026-0148",
+                name: currentUser.name || "Employee",
+                email: currentUser.email || "employee@company.com",
+                department: "Information Technology",
+                designation: "Software Engineer",
+                manager: "Rahul Sharma",
+                joiningDate: "15 January 2024",
+                employmentType: "Full Time",
+                phone: "+91 98765 43210",
+                workLocation: "New Delhi, India",
+                role: currentUser.role || "Employee"
+            };
+        },
+
+        /*
+         * Return attendance data from your backend here.
+         */
+        async getAttendance() {
+            return [
+                {
+                    date: "22 Aug 2026",
+                    day: "Saturday",
+                    checkIn: "09:12 AM",
+                    checkOut: "06:03 PM",
+                    hours: "8h 51m",
+                    status: "Present"
+                },
+                {
+                    date: "21 Aug 2026",
+                    day: "Friday",
+                    checkIn: "09:04 AM",
+                    checkOut: "06:15 PM",
+                    hours: "9h 11m",
+                    status: "Present"
+                },
+                {
+                    date: "20 Aug 2026",
+                    day: "Thursday",
+                    checkIn: "09:18 AM",
+                    checkOut: "06:00 PM",
+                    hours: "8h 42m",
+                    status: "Present"
+                },
+                {
+                    date: "19 Aug 2026",
+                    day: "Wednesday",
+                    checkIn: "—",
+                    checkOut: "—",
+                    hours: "—",
+                    status: "Absent"
+                },
+                {
+                    date: "18 Aug 2026",
+                    day: "Tuesday",
+                    checkIn: "09:06 AM",
+                    checkOut: "06:10 PM",
+                    hours: "9h 04m",
+                    status: "Present"
+                }
+            ];
+        },
+
+        /*
+         * Return the employee's leave balances here.
+         */
+        async getLeaveBalance() {
+            return [
+                {
+                    type: "Casual Leave",
+                    available: 6,
+                    used: 12,
+                    total: 18,
+                    color: "teal"
+                },
+                {
+                    type: "Sick Leave",
+                    available: 8,
+                    used: 2,
+                    total: 10,
+                    color: "blue"
+                },
+                {
+                    type: "Earned Leave",
+                    available: 11,
+                    used: 4,
+                    total: 15,
+                    color: "orange"
+                },
+                {
+                    type: "Unpaid Leave",
+                    available: "∞",
+                    used: 0,
+                    total: null,
+                    color: "purple"
+                }
+            ];
+        },
+
+        /*
+         * Return leave requests for this employee.
+         */
+        async getLeaveRequests() {
+            return [
+                {
+                    id: 1,
+                    type: "Casual Leave",
+                    startDate: "25 Aug 2026",
+                    endDate: "26 Aug 2026",
+                    days: 2,
+                    reason: "Personal work",
+                    status: "Approved"
+                },
+                {
+                    id: 2,
+                    type: "Sick Leave",
+                    startDate: "12 Aug 2026",
+                    endDate: "12 Aug 2026",
+                    days: 1,
+                    reason: "Medical appointment",
+                    status: "Approved"
+                }
+            ];
+        },
+
+        /*
+         * Connect this function to your POST leave API.
+         */
+        async submitLeaveRequest(request) {
+            console.log(
+                "CONNECT THIS TO YOUR BACKEND:",
+                request
+            );
+
+            return {
+                success: true,
+                message: "Leave request submitted successfully."
+            };
+        },
+
+        /*
+         * Return payroll data here.
+         */
+        async getPayroll() {
+            return {
+                month: "August 2026",
+                netSalary: "₹62,450",
+                basicSalary: "₹45,000",
+                allowances: "₹25,000",
+                deductions: "₹7,550",
+                grossSalary: "₹70,000",
+                taxDeduction: "₹4,500",
+                providentFund: "₹3,050",
+                processedDate: "31 August 2026",
+                payslips: [
+                    {
+                        month: "August 2026",
+                        netSalary: "₹62,450"
+                    },
+                    {
+                        month: "July 2026",
+                        netSalary: "₹62,450"
+                    },
+                    {
+                        month: "June 2026",
+                        netSalary: "₹61,850"
+                    }
+                ]
+            };
+        },
+
+        /*
+         * Return notifications here.
+         */
+        async getNotifications() {
+            return [
+                {
+                    icon: "✓",
+                    title: "Leave Request Approved",
+                    message:
+                        "Your casual leave request for 25–26 August 2026 has been approved by Rahul Sharma.",
+                    time: "Today · 10:15 AM",
+                    unread: true
+                },
+                {
+                    icon: "₹",
+                    title: "Payslip Available",
+                    message:
+                        "Your August 2026 payslip is now available in the Payroll section.",
+                    time: "Yesterday · 04:20 PM",
+                    unread: true
+                },
+                {
+                    icon: "📅",
+                    title: "Leave Balance Updated",
+                    message:
+                        "Your monthly leave balance has been updated according to company policy.",
+                    time: "20 Aug 2026 · 09:00 AM",
+                    unread: true
+                },
+                {
+                    icon: "⏱️",
+                    title: "Attendance Reminder",
+                    message:
+                        "Please make sure your attendance records are accurate before the monthly payroll cutoff.",
+                    time: "18 Aug 2026 · 11:30 AM",
+                    unread: false
+                }
+            ];
+        },
+
+        /*
+         * Connect this to your authentication/logout system.
+         */
+        async logout() {
+            localStorage.removeItem("currentPayFlowUser");
+            sessionStorage.removeItem("payflowLoggedInEmployee");
+            window.location.href = "HOME.html";
+        }
+    };
+
+    /*
+     * ============================================================
+     * APPLICATION STATE
+     * ============================================================
+     */
+
+    const state = {
+        employee: null,
+        attendance: [],
+        leaveBalance: [],
+        leaveRequests: [],
+        payroll: null,
+        notifications: [],
+        activeSection: "dashboard"
+    };
+
+    const sectionTitles = {
+        dashboard: {
+            title: "Employee Dashboard",
+            subtitle:
+                "Manage your work, leave and payroll"
+        },
+
+        profile: {
+            title: "My Profile",
+            subtitle:
+                "View your personal and employment information"
+        },
+
+        attendance: {
+            title: "Attendance",
+            subtitle:
+                "Track your monthly attendance records"
+        },
+
+        leave: {
+            title: "Leave Management",
+            subtitle:
+                "Apply for leave and track your requests"
+        },
+
+        payroll: {
+            title: "Payroll & Payslips",
+            subtitle:
+                "View salary details and monthly payslips"
+        },
+
+        notifications: {
+            title: "Notifications",
+            subtitle:
+                "Stay updated with HR and payroll information"
+        }
+    };
+
+    /*
+     * ============================================================
+     * HELPERS
+     * ============================================================
+     */
+
+    function getInitials(name) {
+        if (!name) {
+            return "EM";
+        }
+
+        return name
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((part) => part[0].toUpperCase())
+            .join("");
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+
+        toast.textContent = message;
+        toast.className = `toast ${type} show`;
+
+        window.setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3000);
+    }
+
+    function getStatusClass(status) {
+        const normalized = String(status)
+            .toLowerCase()
+            .replaceAll(" ", "-");
+
+        if (normalized === "approved") {
+            return "approved";
+        }
+
+        if (normalized === "pending") {
+            return "pending";
+        }
+
+        return "rejected";
+    }
+
+    /*
+     * ============================================================
+     * NAVIGATION
+     * ============================================================
+     */
+
+    function showSection(sectionName) {
+        const target =
+            document.getElementById(sectionName);
+
+        if (!target) {
+            return;
+        }
+
+        document
+            .querySelectorAll(".dashboard-section")
+            .forEach((section) => {
+                section.classList.remove("active");
+            });
+
+        target.classList.add("active");
+
+        document
+            .querySelectorAll(".nav-item")
+            .forEach((item) => {
+                item.classList.remove("active");
+            });
+
+        const activeButton =
+            document.querySelector(
+                `.nav-item[data-section="${sectionName}"]`
+            );
+
+        if (activeButton) {
+            activeButton.classList.add("active");
+        }
+
+        state.activeSection = sectionName;
+
+        const metadata =
+            sectionTitles[sectionName];
+
+        if (metadata) {
+            document.getElementById(
+                "pageTitle"
+            ).textContent = metadata.title;
+
+            document.getElementById(
+                "pageSubtitle"
+            ).textContent = metadata.subtitle;
+        }
+
+        closeSidebar();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+    function toggleSidebar() {
+        document
+            .getElementById("sidebar")
+            .classList.toggle("open");
+    }
+
+    function closeSidebar() {
+        document
+            .getElementById("sidebar")
+            .classList.remove("open");
+    }
+
+    /*
+     * ============================================================
+     * EMPLOYEE
+     * ============================================================
+     */
+
+    function renderEmployee() {
+        const employee = state.employee;
+
+        if (!employee) {
+            return;
+        }
+
+        const name =
+            employee.name || "Employee";
+
+        const initials =
+            getInitials(name);
+
+        document.getElementById(
+            "welcomeName"
+        ).textContent = name;
+
+        document.getElementById(
+            "sidebarEmployeeName"
+        ).textContent = name;
+
+        document.getElementById(
+            "topEmployeeName"
+        ).textContent = name;
+
+        document.getElementById(
+            "topEmployeeRole"
+        ).textContent =
+            employee.role || "Employee";
+
+        document.getElementById(
+            "profileName"
+        ).textContent = name;
+
+        document.getElementById(
+            "profileFullName"
+        ).textContent = name;
+
+        document.getElementById(
+            "profileEmail"
+        ).textContent =
+            employee.email || "—";
+
+        document.getElementById(
+            "profilePhone"
+        ).textContent = employee.phone || "Not provided";
+
+        document.getElementById(
+            "profileEmployeeId"
+        ).textContent =
+            employee.id || "—";
+
+        document.getElementById(
+            "profileDepartment"
+        ).textContent =
+            employee.department || "—";
+
+        document.getElementById(
+            "profileWorkLocation"
+        ).textContent = employee.workLocation || "Not provided";
+
+        document.getElementById(
+            "profileDesignation"
+        ).textContent =
+            employee.designation || "—";
+
+        document.getElementById(
+            "profileDesignationDetail"
+        ).textContent =
+            employee.designation || "—";
+
+        document.getElementById(
+            "profileManager"
+        ).textContent =
+            employee.manager || "—";
+
+        document.getElementById(
+            "profileJoiningDate"
+        ).textContent =
+            employee.joiningDate || "—";
+
+        document.getElementById(
+            "profileEmploymentType"
+        ).textContent =
+            employee.employmentType || "—";
+
+        document.getElementById(
+            "miniAvatar"
+        ).textContent = initials;
+
+        document.getElementById(
+            "topAvatar"
+        ).textContent = initials;
+
+        document.getElementById(
+            "largeAvatar"
+        ).textContent = initials;
+    }
+
+    /*
+     * ============================================================
+     * DASHBOARD
+     * ============================================================
+     */
+
+    function renderDashboardStats() {
+        const present =
+            state.attendance.filter(
+                (item) =>
+                    item.status === "Present"
+            ).length;
+
+        const absent =
+            state.attendance.filter(
+                (item) =>
+                    item.status === "Absent"
+            ).length;
+
+        const totalLeave =
+            state.leaveBalance.reduce(
+                (sum, item) => {
+                    if (
+                        typeof item.available !==
+                        "number"
+                    ) {
+                        return sum;
+                    }
+
+                    return sum + item.available;
+                },
+                0
+            );
+
+        const pending =
+            state.leaveRequests.filter(
+                (item) =>
+                    item.status === "Pending"
+            ).length;
+
+        const attendanceRate =
+            state.attendance.length > 0
+                ? (
+                    present /
+                    state.attendance.length *
+                    100
+                ).toFixed(1)
+                : "0.0";
+
+        document.getElementById(
+            "dashboardPresentDays"
+        ).textContent = present;
+
+        document.getElementById(
+            "dashboardAttendanceRate"
+        ).textContent =
+            `${attendanceRate}%`;
+
+        document.getElementById(
+            "dashboardLeaveBalance"
+        ).textContent = totalLeave;
+
+        document.getElementById(
+            "pendingLeaveCount"
+        ).textContent = pending;
+
+        document.getElementById(
+            "dashboardNetSalary"
+        ).textContent =
+            state.payroll?.netSalary || "—";
+
+        document.getElementById(
+            "dashboardPayrollMonth"
+        ).textContent =
+            state.payroll
+                ? `${state.payroll.month} payroll`
+                : "Payroll";
+    }
+
+    function renderAttendanceChart() {
+        const chart =
+            document.getElementById(
+                "dashboardAttendanceChart"
+            );
+
+        const sampleDays = [
+            {
+                day: "Mon",
+                height: "75%",
+                absent: false
+            },
+            {
+                day: "Tue",
+                height: "90%",
+                absent: false
+            },
+            {
+                day: "Wed",
+                height: "82%",
+                absent: false
+            },
+            {
+                day: "Thu",
+                height: "95%",
+                absent: false
+            },
+            {
+                day: "Fri",
+                height: "88%",
+                absent: false
+            },
+            {
+                day: "Sat",
+                height: "25%",
+                absent: true
+            },
+            {
+                day: "Sun",
+                height: "10%",
+                absent: true
+            }
+        ];
+
+        chart.innerHTML = sampleDays
+            .map(
+                (item) => `
+                    <div class="attendance-day">
+                        <div
+                            class="attendance-bar ${
+                                item.absent
+                                    ? "absent"
+                                    : ""
+                            }"
+                            style="height:${item.height};"
+                        ></div>
+                        <span>
+                            ${escapeHtml(item.day)}
+                        </span>
+                    </div>
+                `
+            )
+            .join("");
+
+        const present =
+            state.attendance.filter(
+                (item) =>
+                    item.status === "Present"
+            ).length;
+
+        const absent =
+            state.attendance.filter(
+                (item) =>
+                    item.status === "Absent"
+            ).length;
+
+        const leave =
+            Math.max(
+                0,
+                24 -
+                present -
+                absent
+            );
+
+        document.getElementById(
+            "attendanceSummary"
+        ).innerHTML = `
+            <div>
+                <strong>${present}</strong>
+                <span>Present</span>
+            </div>
+
+            <div>
+                <strong>${absent}</strong>
+                <span>Absent</span>
+            </div>
+
+            <div>
+                <strong>${leave}</strong>
+                <span>On Leave</span>
+            </div>
+        `;
+    }
+
+    /*
+     * ============================================================
+     * LEAVE BALANCE
+     * ============================================================
+     */
+
+    function renderLeaveBalance() {
+        const containers = [
+            document.getElementById(
+                "dashboardLeaveBalanceList"
+            ),
+            document.getElementById(
+                "leaveBalanceList"
+            )
+        ];
+
+        const html =
+            state.leaveBalance
+                .map((leave) => {
+                    if (
+                        leave.available ===
+                        "∞"
+                    ) {
+                        return `
+                            <div>
+                                <div class="leave-type">
+                                    <div class="leave-info">
+                                        <span class="leave-dot ${leave.color === "teal" ? "" : leave.color}"></span>
+
+                                        <div>
+                                            <strong>
+                                                ${escapeHtml(leave.type)}
+                                            </strong>
+
+                                            <span>
+                                                As required
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <span class="leave-count">
+                                        ∞
+                                    </span>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    const percentage =
+                        leave.total > 0
+                            ? Math.round(
+                                leave.used /
+                                leave.total *
+                                100
+                            )
+                            : 0;
+
+                    return `
+                        <div>
+                            <div class="leave-type">
+                                <div class="leave-info">
+
+                                    <span
+                                        class="leave-dot ${
+                                            leave.color === "teal"
+                                                ? ""
+                                                : leave.color
+                                        }"
+                                    ></span>
+
+                                    <div>
+                                        <strong>
+                                            ${escapeHtml(leave.type)}
+                                        </strong>
+
+                                        <span>
+                                            ${escapeHtml(
+                                                leave.used
+                                            )} used of
+                                            ${escapeHtml(
+                                                leave.total
+                                            )} days
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <span class="leave-count">
+                                    ${escapeHtml(
+                                        leave.available
+                                    )}
+                                </span>
+                            </div>
+
+                            <div class="progress">
+                                <span
+                                    style="width:${percentage}%"
+                                ></span>
+                            </div>
+                        </div>
+                    `;
+                })
+                .join("");
+
+        containers.forEach((container) => {
+            container.innerHTML = html;
+        });
+    }
+
+    /*
+     * ============================================================
+     * LEAVE REQUESTS
+     * ============================================================
+     */
+
+    function renderLeaveRequests() {
+        const rows =
+            state.leaveRequests
+                .slice()
+                .reverse()
+                .map(
+                    (request) => `
+                        <tr>
+                            <td>
+                                ${escapeHtml(
+                                    request.type
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    request.startDate
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    request.endDate
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    request.days
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    request.reason
+                                )}
+                            </td>
+
+                            <td>
+                                <span
+                                    class="status ${getStatusClass(
+                                        request.status
+                                    )}"
+                                >
+                                    ${escapeHtml(
+                                        request.status
+                                    )}
+                                </span>
+                            </td>
+                        </tr>
+                    `
+                )
+                .join("");
+
+        const emptyRow = `
+            <tr>
+                <td
+                    colspan="6"
+                    style="
+                        text-align:center;
+                        color:#789091;
+                        padding:25px;
+                    "
+                >
+                    No leave requests found.
+                </td>
+            </tr>
+        `;
+
+        document.getElementById(
+            "leaveHistoryTable"
+        ).innerHTML =
+            rows || emptyRow;
+
+        document.getElementById(
+            "dashboardLeaveTable"
+        ).innerHTML =
+            state.leaveRequests.length
+                ? state.leaveRequests
+                    .slice()
+                    .reverse()
+                    .slice(0, 2)
+                    .map(
+                        (request) => `
+                            <tr>
+                                <td>
+                                    ${escapeHtml(
+                                        request.type
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        request.startDate
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        request.endDate
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        request.days
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        request.reason
+                                    )}
+                                </td>
+
+                                <td>
+                                    <span
+                                        class="status ${getStatusClass(
+                                            request.status
+                                        )}"
+                                    >
+                                        ${escapeHtml(
+                                            request.status
+                                        )}
+                                    </span>
+                                </td>
+                            </tr>
+                        `
+                    )
+                    .join("")
+                : emptyRow;
+    }
+
+    /*
+     * ============================================================
+     * ATTENDANCE
+     * ============================================================
+     */
+
+    function renderAttendance() {
+        const present =
+            state.attendance.filter(
+                (item) =>
+                    item.status === "Present"
+            ).length;
+
+        const absent =
+            state.attendance.filter(
+                (item) =>
+                    item.status === "Absent"
+            ).length;
+
+        const workingDays =
+            Math.max(
+                state.attendance.length,
+                24
+            );
+
+        const leave =
+            Math.max(
+                0,
+                workingDays -
+                present -
+                absent
+            );
+
+        const rate =
+            workingDays > 0
+                ? (
+                    present /
+                    workingDays *
+                    100
+                ).toFixed(1)
+                : "0.0";
+
+        document.getElementById(
+            "attendanceStats"
+        ).innerHTML = `
+            <div class="stat-card">
+                <span class="stat-label">
+                    WORKING DAYS
+                </span>
+
+                <h3>
+                    ${workingDays}
+                </h3>
+
+                <p>
+                    This month
+                </p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-label">
+                    PRESENT
+                </span>
+
+                <h3>
+                    ${present}
+                </h3>
+
+                <p>
+                    <strong>
+                        ${rate}%
+                    </strong>
+                    attendance
+                </p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-label">
+                    ABSENT
+                </span>
+
+                <h3>
+                    ${absent}
+                </h3>
+
+                <p>
+                    Unplanned absence
+                </p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-label">
+                    ON LEAVE
+                </span>
+
+                <h3>
+                    ${leave}
+                </h3>
+
+                <p>
+                    Approved leave
+                </p>
+            </div>
+        `;
+
+        const rows =
+            state.attendance
+                .map(
+                    (item) => `
+                        <tr>
+                            <td>
+                                ${escapeHtml(item.date)}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(item.day)}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    item.checkIn
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    item.checkOut
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(item.hours)}
+                            </td>
+
+                            <td>
+                                <span
+                                    class="status ${
+                                        item.status ===
+                                        "Present"
+                                            ? "approved"
+                                            : "rejected"
+                                    }"
+                                >
+                                    ${escapeHtml(
+                                        item.status
+                                    )}
+                                </span>
+                            </td>
+                        </tr>
+                    `
+                )
+                .join("");
+
+        document.getElementById(
+            "attendanceTable"
+        ).innerHTML =
+            rows ||
+            `
+                <tr>
+                    <td
+                        colspan="6"
+                        style="
+                            text-align:center;
+                            padding:25px;
+                            color:#789091;
+                        "
+                    >
+                        No attendance records found.
+                    </td>
+                </tr>
+            `;
+    }
+
+    /*
+     * ============================================================
+     * PAYROLL
+     * ============================================================
+     */
+
+    function renderPayroll() {
+        const payroll = state.payroll;
+
+        if (!payroll) {
+            return;
+        }
+
+        document.getElementById(
+            "salaryMonth"
+        ).textContent =
+            `${payroll.month} Net Salary`;
+
+        document.getElementById(
+            "salaryNet"
+        ).textContent =
+            payroll.netSalary;
+
+        document.getElementById(
+            "salaryProcessedDate"
+        ).textContent =
+            `Salary processed on ${payroll.processedDate}`;
+
+        document.getElementById(
+            "salaryBasic"
+        ).textContent =
+            payroll.basicSalary;
+
+        document.getElementById(
+            "salaryAllowances"
+        ).textContent =
+            payroll.allowances;
+
+        document.getElementById(
+            "salaryDeductions"
+        ).textContent =
+            payroll.deductions;
+
+        document.getElementById(
+            "payrollSummary"
+        ).innerHTML = `
+            <div class="detail-item">
+                <span>Gross Salary</span>
+                <strong>
+                    ${escapeHtml(
+                        payroll.grossSalary
+                    )}
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Total Deductions</span>
+                <strong>
+                    ${escapeHtml(
+                        payroll.deductions
+                    )}
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Tax Deduction</span>
+                <strong>
+                    ${escapeHtml(
+                        payroll.taxDeduction
+                    )}
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Provident Fund</span>
+                <strong>
+                    ${escapeHtml(
+                        payroll.providentFund
+                    )}
+                </strong>
+            </div>
+        `;
+
+        document.getElementById(
+            "payslipList"
+        ).innerHTML =
+            payroll.payslips
+                .map(
+                    (payslip) => `
+                        <div class="payslip-row">
+
+                            <div class="payslip-left">
+
+                                <div class="pdf-icon">
+                                    PDF
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        ${escapeHtml(
+                                            payslip.month
+                                        )}
+                                        Payslip
+                                    </strong>
+
+                                    <span>
+                                        Net salary:
+                                        ${escapeHtml(
+                                            payslip.netSalary
+                                        )}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <button
+                                class="download-btn"
+                                data-payslip-month="${escapeHtml(
+                                    payslip.month
+                                )}"
+                            >
+                                View
+                            </button>
+
+                        </div>
+                    `
+                )
+                .join("");
+    }
+
+    /*
+     * ============================================================
+     * NOTIFICATIONS
+     * ============================================================
+     */
+
+    function renderNotifications() {
+        const unread =
+            state.notifications.some(
+                (notification) =>
+                    notification.unread
+            );
+
+        document.getElementById(
+            "notificationDot"
+        ).style.display =
+            unread ? "block" : "none";
+
+        document.getElementById(
+            "notificationList"
+        ).innerHTML =
+            state.notifications
+                .map(
+                    (notification) => `
+                        <div class="notification-item">
+
+                            <div class="notification-icon">
+                                ${escapeHtml(
+                                    notification.icon
+                                )}
+                            </div>
+
+                            <div>
+
+                                <h4>
+                                    ${escapeHtml(
+                                        notification.title
+                                    )}
+                                </h4>
+
+                                <p>
+                                    ${escapeHtml(
+                                        notification.message
+                                    )}
+                                </p>
+
+                                <time>
+                                    ${escapeHtml(
+                                        notification.time
+                                    )}
+                                </time>
+
+                            </div>
+
+                        </div>
+                    `
+                )
+                .join("");
+    }
+
+    function markNotificationsRead() {
+        state.notifications =
+            state.notifications.map(
+                (notification) => ({
+                    ...notification,
+                    unread: false
+                })
+            );
+
+        renderNotifications();
+
+        showToast(
+            "All notifications marked as read.",
+            "success"
+        );
+    }
+
+    /*
+     * ============================================================
+     * LEAVE FORM
+     * ============================================================
+     */
+
+    function calculateDays(
+        startDate,
+        endDate
+    ) {
+        const start =
+            new Date(
+                `${startDate}T00:00:00`
+            );
+
+        const end =
+            new Date(
+                `${endDate}T00:00:00`
+            );
+
+        if (
+            Number.isNaN(start.getTime()) ||
+            Number.isNaN(end.getTime())
+        ) {
+            return 0;
+        }
+
+        if (end < start) {
+            return 0;
+        }
+
+        return (
+            Math.floor(
+                (end - start) /
+                (1000 * 60 * 60 * 24)
+            ) + 1
+        );
+    }
+
+    async function handleLeaveSubmit(event) {
+        event.preventDefault();
+
+        const type =
+            document.getElementById(
+                "leaveType"
+            ).value;
+
+        const duration =
+            document.getElementById(
+                "leaveDuration"
+            ).value;
+
+        const startDate =
+            document.getElementById(
+                "startDate"
+            ).value;
+
+        const endDate =
+            document.getElementById(
+                "endDate"
+            ).value;
+
+        const reason =
+            document.getElementById(
+                "leaveReason"
+            ).value.trim();
+
+        if (
+            !type ||
+            !startDate ||
+            !endDate ||
+            !reason
+        ) {
+            showToast(
+                "Please complete all required fields.",
+                "error"
+            );
+
+            return;
+        }
+
+        const days =
+            calculateDays(
+                startDate,
+                endDate
+            );
+
+        if (days <= 0) {
+            showToast(
+                "End date must be after or equal to start date.",
+                "error"
+            );
+
+            return;
+        }
+
+        const request = {
+            employeeId:
+                state.employee?.id || null,
+
+            employeeEmail:
+                state.employee?.email || null,
+
+            employeeName:
+                state.employee?.name || null,
+
+            type,
+            duration,
+            startDate,
+            endDate,
+
+            days:
+                duration === "Half Day"
+                    ? 0.5
+                    : days,
+
+            reason
+        };
+
+        try {
+            const result =
+                await EMPLOYEE_API
+                    .submitLeaveRequest(
+                        request
+                    );
+
+            if (
+                !result ||
+                result.success === false
+            ) {
+                throw new Error(
+                    result?.message ||
+                    "Unable to submit leave request."
+                );
+            }
+
+            document
+                .getElementById("leaveForm")
+                .reset();
+
+            /*
+             * Refresh data from your backend.
+             * This is important after a successful
+             * API request.
+             */
+            await refreshData();
+
+            showToast(
+                result.message ||
+                "Leave request submitted successfully.",
+                "success"
+            );
+        } catch (error) {
+            console.error(error);
+
+            showToast(
+                error.message ||
+                "Unable to submit leave request.",
+                "error"
+            );
+        }
+    }
+
+    /*
+     * ============================================================
+     * PAYSLIP VIEW
+     * ============================================================
+     */
+
+    function printPayslip(month) {
+        const employee =
+            state.employee || {};
+
+        const payroll =
+            state.payroll || {};
+
+        const payslipWindow =
+            window.open(
+                "",
+                "_blank",
+                "width=800,height=700"
+            );
+
+        if (!payslipWindow) {
+            showToast(
+                "Please allow pop-ups to view the payslip.",
+                "error"
+            );
+
+            return;
+        }
+
+        payslipWindow.document.write(`
+            <!DOCTYPE html>
+
+            <html lang="en">
+
+            <head>
+
+                <meta charset="UTF-8">
+
+                <title>
+                    ${escapeHtml(month)} Payslip
+                </title>
+
+                <style>
+
+                    body {
+                        font-family:
+                            Arial,
+                            sans-serif;
+
+                        padding: 40px;
+                        color: #172033;
+                    }
+
+                    .header {
+                        display: flex;
+                        justify-content: space-between;
+                        border-bottom:
+                            2px solid #0f766e;
+                        padding-bottom: 20px;
+                    }
+
+                    h1 {
+                        color: #0f766e;
+                    }
+
+                    .employee {
+                        margin: 30px 0;
+                        line-height: 1.8;
+                    }
+
+                    table {
+                        width: 100%;
+                        border-collapse:
+                            collapse;
+                        margin-top: 20px;
+                    }
+
+                    th,
+                    td {
+                        padding: 12px;
+                        border:
+                            1px solid #ddd;
+                        text-align: left;
+                    }
+
+                    th {
+                        background: #ecfdf5;
+                    }
+
+                    .net {
+                        margin-top: 30px;
+                        padding: 20px;
+                        background: #ecfdf5;
+                        border-left:
+                            4px solid #0f766e;
+                        font-size: 22px;
+                        font-weight: bold;
+                    }
+
+                    .footer {
+                        margin-top: 50px;
+                        color: #777;
+                        font-size: 12px;
+                    }
+
+                </style>
+
+            </head>
+
+            <body>
+
+                <div class="header">
+
+                    <div>
+                        <h1>
+                            PayFlow HR
+                        </h1>
+
+                        <p>
+                            Employee Payroll Statement
+                        </p>
+                    </div>
+
+                    <div>
+                        <strong>
+                            ${escapeHtml(month)}
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="employee">
+
+                    <strong>
+                        Employee:
+                    </strong>
+
+                    ${escapeHtml(
+                        employee.name ||
+                        "Employee"
+                    )}
+
+                    <br>
+
+                    <strong>
+                        Email:
+                    </strong>
+
+                    ${escapeHtml(
+                        employee.email ||
+                        "—"
+                    )}
+
+                    <br>
+
+                    <strong>
+                        Employee ID:
+                    </strong>
+
+                    ${escapeHtml(
+                        employee.id ||
+                        "—"
+                    )}
+
+                </div>
+
+                <table>
+
+                    <tr>
+                        <th>
+                            Earnings
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Basic Salary
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                payroll.basicSalary ||
+                                "—"
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Allowances
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                payroll.allowances ||
+                                "—"
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            Gross Salary
+                        </th>
+
+                        <th>
+                            ${escapeHtml(
+                                payroll.grossSalary ||
+                                "—"
+                            )}
+                        </th>
+                    </tr>
+
+                </table>
+
+                <table>
+
+                    <tr>
+                        <th>
+                            Deductions
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Income Tax
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                payroll.taxDeduction ||
+                                "—"
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Provident Fund
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                payroll.providentFund ||
+                                "—"
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            Total Deductions
+                        </th>
+
+                        <th>
+                            ${escapeHtml(
+                                payroll.deductions ||
+                                "—"
+                            )}
+                        </th>
+                    </tr>
+
+                </table>
+
+                <div class="net">
+                    Net Salary:
+                    ${escapeHtml(
+                        payroll.netSalary ||
+                        "—"
+                    )}
+                </div>
+
+                <div class="footer">
+                    Generated by PayFlow HR Employee Portal.
+                </div>
+
+                <script>
+                    window.onload = function () {
+                        window.print();
+                    };
+                <\/script>
+
+            </body>
+
+            </html>
+        `);
+
+        payslipWindow.document.close();
+    }
+
+    /*
+     * ============================================================
+     * DATA REFRESH
+     * ============================================================
+     */
+
+    async function refreshData() {
+        const [
+            employee,
+            attendance,
+            leaveBalance,
+            leaveRequests,
+            payroll,
+            notifications
+        ] = await Promise.all([
+            EMPLOYEE_API.getEmployee(),
+            EMPLOYEE_API.getAttendance(),
+            EMPLOYEE_API.getLeaveBalance(),
+            EMPLOYEE_API.getLeaveRequests(),
+            EMPLOYEE_API.getPayroll(),
+            EMPLOYEE_API.getNotifications()
+        ]);
+
+        state.employee =
+            employee || {};
+
+        state.attendance =
+            Array.isArray(attendance)
+                ? attendance
+                : [];
+
+        state.leaveBalance =
+            Array.isArray(leaveBalance)
+                ? leaveBalance
+                : [];
+
+        state.leaveRequests =
+            Array.isArray(leaveRequests)
+                ? leaveRequests
+                : [];
+
+        state.payroll =
+            payroll || null;
+
+        state.notifications =
+            Array.isArray(notifications)
+                ? notifications
+                : [];
+
+        renderEmployee();
+        renderDashboardStats();
+        renderAttendanceChart();
+        renderLeaveBalance();
+        renderLeaveRequests();
+        renderAttendance();
+        renderPayroll();
+        renderNotifications();
+    }
+
+    /*
+     * ============================================================
+     * DATE
+     * ============================================================
+     */
+
+    function updateCurrentDate() {
+        const today = new Date();
+
+        document.getElementById(
+            "currentDate"
+        ).textContent =
+            today.toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+    }
+
+    /*
+     * ============================================================
+     * EVENTS
+     * ============================================================
+     */
+
+    function setupEvents() {
+        document
+            .querySelectorAll(".nav-item")
+            .forEach((item) => {
+                item.addEventListener(
+                    "click",
+                    () => {
+                        showSection(
+                            item.dataset.section
+                        );
+                    }
+                );
+            });
+
+        document
+            .querySelectorAll(
+                "[data-go-section]"
+            )
+            .forEach((button) => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        showSection(
+                            button.dataset.goSection
+                        );
+                    }
+                );
+            });
+
+        document
+            .getElementById(
+                "mobileMenuButton"
+            )
+            .addEventListener(
+                "click",
+                toggleSidebar
+            );
+
+        document
+            .getElementById(
+                "notificationButton"
+            )
+            .addEventListener(
+                "click",
+                () => {
+                    showSection(
+                        "notifications"
+                    );
+                }
+            );
+
+        document
+            .getElementById(
+                "logoutButton"
+            )
+            .addEventListener(
+                "click",
+                async () => {
+                    try {
+                        await EMPLOYEE_API.logout();
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            );
+
+        document
+            .getElementById(
+                "leaveForm"
+            )
+            .addEventListener(
+                "submit",
+                handleLeaveSubmit
+            );
+
+        document
+            .getElementById(
+                "markNotificationsRead"
+            )
+            .addEventListener(
+                "click",
+                markNotificationsRead
+            );
+
+        document
+            .getElementById(
+                "editProfileButton"
+            )
+            .addEventListener(
+                "click",
+                () => {
+                    showToast(
+                        "Connect this button to your profile update API.",
+                        "success"
+                    );
+                }
+            );
+
+        document
+            .getElementById(
+                "payslipList"
+            )
+            .addEventListener(
+                "click",
+                (event) => {
+                    const button =
+                        event.target.closest(
+                            "[data-payslip-month]"
+                        );
+
+                    if (!button) {
+                        return;
+                    }
+
+                    printPayslip(
+                        button.dataset
+                            .payslipMonth
+                    );
+                }
+            );
+    }
+
+    /*
+     * ============================================================
+     * START APPLICATION
+     * ============================================================
+     */
+
+    async function initializeEmployeeInterface() {
+        setupEvents();
+        updateCurrentDate();
+
+        try {
+            await refreshData();
+        } catch (error) {
+            console.error(error);
+
+            showToast(
+                "Unable to load employee data. Connect EMPLOYEE_API to your backend.",
+                "error"
+            );
+        }
+    }
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeEmployeeInterface
+    );
+</script>
+
+</body>
+</html>
