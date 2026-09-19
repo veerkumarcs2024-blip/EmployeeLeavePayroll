@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
                         break;
 
                     case "EMPLOYEE":
-                        response.sendRedirect("employee.html");
+                        response.sendRedirect("employee/employee.html");
                         break;
 
                     case "INTERN":

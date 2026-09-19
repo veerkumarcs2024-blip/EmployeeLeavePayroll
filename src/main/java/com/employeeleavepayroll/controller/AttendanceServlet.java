@@ -15,8 +15,8 @@ import jakarta.servlet.http.HttpSession;
 
 import com.employeeleavepayroll.util.DBConnection;
 
-@WebServlet("/EmployeeDataServlet")
-public class EmployeeDataServlet extends HttpServlet {
+@WebServlet("/AttendanceServlet")
+public class AttendanceServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,12 +40,10 @@ public class EmployeeDataServlet extends HttpServlet {
         int userId = (Integer) session.getAttribute("userId");
 
         String sql =
-                "SELECT u.id, u.full_name, u.email, u.role, u.status, "
-              + "e.employee_id, e.department, e.designation, e.manager, "
-              + "e.joining_date, e.employment_type, e.phone, e.work_location "
-              + "FROM users u "
-              + "JOIN employees e ON u.id = e.user_id "
-              + "WHERE u.id = ?";
+                "SELECT attendance_date, check_in, check_out, status "
+              + "FROM attendance "
+              + "WHERE user_id = ? "
+              + "ORDER BY attendance_date DESC";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement =
@@ -57,31 +55,43 @@ public class EmployeeDataServlet extends HttpServlet {
 
                 PrintWriter out = response.getWriter();
 
-                if (resultSet.next()) {
+                out.println("[");
+
+                boolean first = true;
+
+                while (resultSet.next()) {
+
+                    if (!first) {
+                        out.println(",");
+                    }
+
+                    String date =
+                            resultSet.getDate("attendance_date").toString();
+
+                    String checkIn =
+                            resultSet.getTime("check_in") != null
+                            ? resultSet.getTime("check_in").toString()
+                            : "";
+
+                    String checkOut =
+                            resultSet.getTime("check_out") != null
+                            ? resultSet.getTime("check_out").toString()
+                            : "";
+
+                    String status =
+                            resultSet.getString("status");
 
                     out.println("{");
-                    out.println("\"id\":" + resultSet.getInt("id") + ",");
-                    out.println("\"fullName\":\"" + resultSet.getString("full_name") + "\",");
-                    out.println("\"email\":\"" + resultSet.getString("email") + "\",");
-                    out.println("\"role\":\"" + resultSet.getString("role") + "\",");
-                    out.println("\"status\":\"" + resultSet.getString("status") + "\",");
-                    out.println("\"employeeId\":\"" + resultSet.getString("employee_id") + "\",");
-                    out.println("\"department\":\"" + resultSet.getString("department") + "\",");
-                    out.println("\"designation\":\"" + resultSet.getString("designation") + "\",");
-                    out.println("\"manager\":\"" + resultSet.getString("manager") + "\",");
-                    out.println("\"joiningDate\":\"" + resultSet.getDate("joining_date") + "\",");
-                    out.println("\"employmentType\":\"" + resultSet.getString("employment_type") + "\",");
-                    out.println("\"phone\":\"" + resultSet.getString("phone") + "\",");
-                    out.println("\"workLocation\":\"" + resultSet.getString("work_location") + "\"");
+                    out.println("\"date\":\"" + date + "\",");
+                    out.println("\"checkIn\":\"" + checkIn + "\",");
+                    out.println("\"checkOut\":\"" + checkOut + "\",");
+                    out.println("\"status\":\"" + status + "\"");
                     out.println("}");
 
-                } else {
-
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    out.write(
-                            "{\"error\":\"Employee data not found\"}"
-                    );
+                    first = false;
                 }
+
+                out.println("]");
             }
 
         } catch (Exception e) {

@@ -1318,7 +1318,7 @@
 
             <button class="nav-item" data-section="payroll">
                 <span class="nav-icon">₹</span>
-                Payroll & Payslips
+                Payroll
             </button>
 
             <button class="nav-item" data-section="notifications">
@@ -2246,233 +2246,233 @@
      *
      * ============================================================
      */
+     const EMPLOYEE_API = {
+    		 
+     async getEmployee() {
+    	    const response = await fetch("../EmployeeDataServlet");
 
-    const EMPLOYEE_API = {
-        /*
-         * Replace this object with your authenticated
-         * employee information.
-         */
-        async getEmployee() {
-            let currentUser = {};
+    	    if (!response.ok) {
+    	        throw new Error("Unable to load employee data.");
+    	    }
 
-            try {
-                currentUser = JSON.parse(
-                    localStorage.getItem("currentPayFlowUser") || "{}"
-                );
-            } catch {
-                currentUser = {};
-            }
+    	    return await response.json();
+    	},
 
-            return {
-                id: currentUser.employeeId || "EMP-2026-0148",
-                name: currentUser.name || "Employee",
-                email: currentUser.email || "employee@company.com",
-                department: "Information Technology",
-                designation: "Software Engineer",
-                manager: "Rahul Sharma",
-                joiningDate: "15 January 2024",
-                employmentType: "Full Time",
-                phone: "+91 98765 43210",
-                workLocation: "New Delhi, India",
-                role: currentUser.role || "Employee"
-            };
-        },
+    	async getAttendance() {
 
-        /*
-         * Return attendance data from your backend here.
-         */
-        async getAttendance() {
-            return [
-                {
-                    date: "22 Aug 2026",
-                    day: "Saturday",
-                    checkIn: "09:12 AM",
-                    checkOut: "06:03 PM",
-                    hours: "8h 51m",
-                    status: "Present"
-                },
-                {
-                    date: "21 Aug 2026",
-                    day: "Friday",
-                    checkIn: "09:04 AM",
-                    checkOut: "06:15 PM",
-                    hours: "9h 11m",
-                    status: "Present"
-                },
-                {
-                    date: "20 Aug 2026",
-                    day: "Thursday",
-                    checkIn: "09:18 AM",
-                    checkOut: "06:00 PM",
-                    hours: "8h 42m",
-                    status: "Present"
-                },
-                {
-                    date: "19 Aug 2026",
-                    day: "Wednesday",
-                    checkIn: "—",
-                    checkOut: "—",
-                    hours: "—",
-                    status: "Absent"
-                },
-                {
-                    date: "18 Aug 2026",
-                    day: "Tuesday",
-                    checkIn: "09:06 AM",
-                    checkOut: "06:10 PM",
-                    hours: "9h 04m",
-                    status: "Present"
-                }
-            ];
-        },
+    	    const response = await fetch("../AttendanceServlet");
+
+    	    if (!response.ok) {
+    	        throw new Error("Unable to load attendance data.");
+    	    }
+
+    	    const data = await response.json();
+
+    	    return data.map(item => {
+
+    	        let hours = "—";
+
+    	        if (item.checkIn && item.checkOut) {
+
+    	            const checkIn = new Date("1970-01-01T" + item.checkIn);
+    	            const checkOut = new Date("1970-01-01T" + item.checkOut);
+
+    	            const diffMinutes =
+    	                Math.round((checkOut - checkIn) / 60000);
+
+    	            const h = Math.floor(diffMinutes / 60);
+    	            const m = diffMinutes % 60;
+
+    	            hours = `${h}h ${m.toString().padStart(2, "0")}m`;
+    	        }
+
+    	        const dateObj = new Date(item.date + "T00:00:00");
+
+    	        const formattedDate =
+    	            dateObj.toLocaleDateString("en-IN", {
+    	                day: "2-digit",
+    	                month: "short",
+    	                year: "numeric"
+    	            });
+
+    	        const day =
+    	            dateObj.toLocaleDateString("en-IN", {
+    	                weekday: "long"
+    	            });
+
+    	        const formatTime = (time) => {
+
+    	            if (!time) {
+    	                return "—";
+    	            }
+
+    	            const [hour, minute] = time.split(":");
+
+    	            const date = new Date();
+    	            date.setHours(parseInt(hour), parseInt(minute));
+
+    	            return date.toLocaleTimeString("en-IN", {
+    	                hour: "2-digit",
+    	                minute: "2-digit",
+    	                hour12: true
+    	            });
+    	        };
+
+    	        return {
+    	            date: formattedDate,
+    	            day: day,
+    	            checkIn: formatTime(item.checkIn),
+    	            checkOut: formatTime(item.checkOut),
+    	            hours: hours,
+    	            status: item.status
+    	        };
+    	    });
+    	},
 
         /*
          * Return the employee's leave balances here.
          */
-        async getLeaveBalance() {
-            return [
-                {
-                    type: "Casual Leave",
-                    available: 6,
-                    used: 12,
-                    total: 18,
-                    color: "teal"
-                },
-                {
-                    type: "Sick Leave",
-                    available: 8,
-                    used: 2,
-                    total: 10,
-                    color: "blue"
-                },
-                {
-                    type: "Earned Leave",
-                    available: 11,
-                    used: 4,
-                    total: 15,
-                    color: "orange"
-                },
-                {
-                    type: "Unpaid Leave",
-                    available: "∞",
-                    used: 0,
-                    total: null,
-                    color: "purple"
-                }
-            ];
-        },
+         async getLeaveBalance() {
+
+        	    const response = await fetch("../LeaveBalanceServlet");
+
+        	    if (!response.ok) {
+        	        throw new Error("Unable to load leave balance.");
+        	    }
+
+        	    const data = await response.json();
+
+        	    return data.map(item => {
+
+        	        let color = "teal";
+
+        	        if (item.type === "Sick Leave") {
+        	            color = "blue";
+        	        } else if (item.type === "Earned Leave") {
+        	            color = "orange";
+        	        } else if (item.type === "Unpaid Leave") {
+        	            color = "purple";
+        	        }
+
+        	        return {
+        	            type: item.type,
+        	            available: item.available,
+        	            used: item.used,
+        	            total: item.total,
+        	            color: color
+        	        };
+        	    });
+        	},
 
         /*
          * Return leave requests for this employee.
          */
-        async getLeaveRequests() {
-            return [
-                {
-                    id: 1,
-                    type: "Casual Leave",
-                    startDate: "25 Aug 2026",
-                    endDate: "26 Aug 2026",
-                    days: 2,
-                    reason: "Personal work",
-                    status: "Approved"
-                },
-                {
-                    id: 2,
-                    type: "Sick Leave",
-                    startDate: "12 Aug 2026",
-                    endDate: "12 Aug 2026",
-                    days: 1,
-                    reason: "Medical appointment",
-                    status: "Approved"
-                }
-            ];
-        },
+         async getLeaveRequests() {
+
+        	    const response = await fetch("../LeaveServlet");
+
+        	    if (!response.ok) {
+        	        throw new Error("Unable to load leave requests.");
+        	    }
+
+        	    return await response.json();
+        	},
 
         /*
          * Connect this function to your POST leave API.
          */
-        async submitLeaveRequest(request) {
-            console.log(
-                "CONNECT THIS TO YOUR BACKEND:",
-                request
-            );
+         async submitLeaveRequest(request) {
 
-            return {
-                success: true,
-                message: "Leave request submitted successfully."
-            };
-        },
+        	    const response = await fetch("../LeaveServlet", {
+        	        method: "POST",
+        	        headers: {
+        	            "Content-Type": "application/x-www-form-urlencoded"
+        	        },
+        	        body: new URLSearchParams({
+        	            leaveType: request.type,
+        	            duration: request.duration,
+        	            startDate: request.startDate,
+        	            endDate: request.endDate,
+        	            days: request.days,
+        	            reason: request.reason || ""
+        	        })
+        	    });
+
+        	    const data = await response.json();
+
+        	    if (!response.ok) {
+        	        throw new Error(data.error || "Leave request failed.");
+        	    }
+
+        	    return {
+        	        success: true,
+        	        message: "Leave request submitted successfully."
+        	    };
+        	},
 
         /*
          * Return payroll data here.
          */
-        async getPayroll() {
-            return {
-                month: "August 2026",
-                netSalary: "₹62,450",
-                basicSalary: "₹45,000",
-                allowances: "₹25,000",
-                deductions: "₹7,550",
-                grossSalary: "₹70,000",
-                taxDeduction: "₹4,500",
-                providentFund: "₹3,050",
-                processedDate: "31 August 2026",
-                payslips: [
-                    {
-                        month: "August 2026",
-                        netSalary: "₹62,450"
-                    },
-                    {
-                        month: "July 2026",
-                        netSalary: "₹62,450"
-                    },
-                    {
-                        month: "June 2026",
-                        netSalary: "₹61,850"
-                    }
-                ]
-            };
-        },
+         async getPayroll() {
+
+        	    const response = await fetch("../PayrollServlet");
+
+        	    if (!response.ok) {
+        	        throw new Error("Unable to load payroll data.");
+        	    }
+
+        	    const data = await response.json();
+
+        	    const formatCurrency = (value) => {
+        	        return "₹" + Number(value).toLocaleString("en-IN");
+        	    };
+
+        	    const formatDate = (date) => {
+
+        	        if (!date || date === "—") {
+        	            return "—";
+        	        }
+
+        	        const dateObj = new Date(date + "T00:00:00");
+
+        	        return dateObj.toLocaleDateString("en-IN", {
+        	            day: "2-digit",
+        	            month: "long",
+        	            year: "numeric"
+        	        });
+        	    };
+
+        	    return {
+        	        month: data.month,
+        	        netSalary: formatCurrency(data.netSalary),
+        	        basicSalary: formatCurrency(data.basicSalary),
+        	        allowances: formatCurrency(data.allowances),
+        	        deductions: formatCurrency(data.deductions),
+        	        grossSalary: formatCurrency(data.grossSalary),
+        	        taxDeduction: formatCurrency(data.taxDeduction),
+        	        providentFund: formatCurrency(data.providentFund),
+        	        processedDate: formatDate(data.processedDate),
+
+        	        payslips: data.payslips.map(item => ({
+        	            month: item.month,
+        	            netSalary: formatCurrency(item.netSalary)
+        	        }))
+        	    };
+        	},
 
         /*
          * Return notifications here.
          */
-        async getNotifications() {
-            return [
-                {
-                    icon: "✓",
-                    title: "Leave Request Approved",
-                    message:
-                        "Your casual leave request for 25–26 August 2026 has been approved by Rahul Sharma.",
-                    time: "Today · 10:15 AM",
-                    unread: true
-                },
-                {
-                    icon: "₹",
-                    title: "Payslip Available",
-                    message:
-                        "Your August 2026 payslip is now available in the Payroll section.",
-                    time: "Yesterday · 04:20 PM",
-                    unread: true
-                },
-                {
-                    icon: "📅",
-                    title: "Leave Balance Updated",
-                    message:
-                        "Your monthly leave balance has been updated according to company policy.",
-                    time: "20 Aug 2026 · 09:00 AM",
-                    unread: true
-                },
-                {
-                    icon: "⏱️",
-                    title: "Attendance Reminder",
-                    message:
-                        "Please make sure your attendance records are accurate before the monthly payroll cutoff.",
-                    time: "18 Aug 2026 · 11:30 AM",
-                    unread: false
-                }
-            ];
-        },
+         async getNotifications() {
+
+        	    const response = await fetch("../NotificationServlet");
+
+        	    if (!response.ok) {
+        	        throw new Error("Unable to load notifications.");
+        	    }
+
+        	    return await response.json();
+        	},
 
         /*
          * Connect this to your authentication/logout system.

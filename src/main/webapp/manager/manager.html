@@ -1,0 +1,3929 @@
+<!-- manager.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manager | Employee Management System</title>
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --text: #172033;
+            --muted: #6b7280;
+            --border: #e7eaf0;
+            --background: #f6f7fb;
+            --white: #ffffff;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --sidebar: #111827;
+            --sidebar-text: #aeb7c8;
+            --shadow: 0 8px 30px rgba(25, 35, 55, 0.06);
+            --radius: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid rgba(79, 70, 229, 0.2);
+            outline-offset: 2px;
+        }
+
+        /* =========================
+           APP
+        ========================= */
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: var(--sidebar);
+            color: white;
+            position: fixed;
+            inset: 0 auto 0 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transition: transform 0.25s ease;
+        }
+
+        .brand {
+            height: 78px;
+            padding: 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--primary);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .brand h2 {
+            font-size: 16px;
+        }
+
+        .brand span {
+            display: block;
+            color: #7f899d;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .user-mini {
+            margin: 20px 16px 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+
+        .user-mini strong,
+        .user-mini span {
+            display: block;
+        }
+
+        .user-mini strong {
+            font-size: 12px;
+        }
+
+        .user-mini span {
+            margin-top: 3px;
+            font-size: 10px;
+            color: var(--sidebar-text);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .avatar.small {
+            width: 36px;
+            height: 36px;
+            flex-basis: 36px;
+        }
+
+        .navigation {
+            flex: 1;
+            padding: 10px 12px;
+            overflow-y: auto;
+        }
+
+        .nav-title {
+            color: #697387;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            padding: 16px 12px 8px;
+        }
+
+        .nav-item {
+            width: 100%;
+            min-height: 43px;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            color: var(--sidebar-text);
+            background: transparent;
+            border-radius: 9px;
+            text-align: left;
+            font-size: 12px;
+            transition: 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.06);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 18px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 5px;
+            display: grid;
+            place-items: center;
+            background: #ef4444;
+            border-radius: 10px;
+            color: white;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .logout-btn {
+            margin: 14px 16px 20px;
+            padding: 18px 0 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            color: #fca5a5;
+            background: transparent;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 12px;
+            text-align: left;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main-content {
+            width: calc(100% - 260px);
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 78px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: transparent;
+            font-size: 22px;
+        }
+
+        .page-heading h1 {
+            font-size: 20px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            margin-top: 4px;
+            font-size: 11px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            position: relative;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 10px;
+            color: #4b5563;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 7px;
+            right: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ef4444;
+        }
+
+        .profile-menu {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+        }
+
+        .profile-menu-text strong,
+        .profile-menu-text span {
+            display: block;
+        }
+
+        .profile-menu-text strong {
+            font-size: 11px;
+        }
+
+        .profile-menu-text span {
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 28px 32px 50px;
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome-card {
+            min-height: 180px;
+            padding: 28px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg,#4f46e5,#6366f1);
+            color: white;
+            box-shadow: 0 15px 40px rgba(79,70,229,0.18);
+        }
+
+        .eyebrow {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.3px;
+            opacity: 0.8;
+        }
+
+        .welcome-card h2 {
+            margin: 9px 0 7px;
+            font-size: 25px;
+        }
+
+        .welcome-card p:last-child {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        .welcome-illustration {
+            width: 160px;
+            height: 160px;
+            position: relative;
+            display: grid;
+            place-items: center;
+        }
+
+        .welcome-illustration span {
+            position: relative;
+            z-index: 2;
+            font-size: 60px;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .circle-one {
+            width: 150px;
+            height: 150px;
+        }
+
+        .circle-two {
+            width: 105px;
+            height: 105px;
+        }
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            flex: 0 0 45px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .blue {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .green {
+            background: #ecfdf3;
+            color: #16a34a;
+        }
+
+        .orange {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        .red {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .stat-card span,
+        .stat-card small {
+            display: block;
+            color: var(--muted);
+        }
+
+        .stat-card span {
+            font-size: 10px;
+        }
+
+        .stat-card strong {
+            display: block;
+            margin: 3px 0;
+            font-size: 22px;
+        }
+
+        .stat-card small {
+            font-size: 9px;
+        }
+
+        .positive {
+            color: var(--success) !important;
+        }
+
+        /* =========================
+           PANELS
+        ========================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .bottom-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 19px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h3 {
+            font-size: 14px;
+        }
+
+        .panel-header p {
+            color: var(--muted);
+            margin-top: 4px;
+            font-size: 10px;
+        }
+
+        .text-btn {
+            background: transparent;
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           TABLES
+        ========================= */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #fafbfc;
+            color: #7b8495;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-align: left;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f0f1f4;
+            color: #4b5563;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .employee-cell {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .employee-cell strong,
+        .employee-cell span {
+            display: block;
+        }
+
+        .employee-cell strong {
+            color: var(--text);
+            font-size: 10px;
+        }
+
+        .employee-cell span {
+            color: var(--muted);
+            font-size: 8px;
+            margin-top: 2px;
+        }
+
+        .employee-avatar {
+            width: 30px;
+            height: 30px;
+            flex-basis: 30px;
+            font-size: 9px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 8px;
+            border-radius: 20px;
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .active-status {
+            background: #ecfdf3;
+            color: #15803d;
+        }
+
+        .pending-status {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .leave-status {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .absent-status {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .late-status {
+            background: #fefce8;
+            color: #a16207;
+        }
+
+        .approval-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .approval-actions button {
+            width: 27px;
+            height: 27px;
+            border-radius: 7px;
+            font-weight: 800;
+        }
+
+        .approve-btn {
+            color: #15803d;
+            background: #ecfdf3;
+        }
+
+        .reject-btn {
+            color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .more-btn {
+            color: #6b7280;
+            background: transparent;
+        }
+
+        /* =========================
+           ATTENDANCE
+        ========================= */
+
+        .attendance-summary {
+            min-height: 230px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            padding: 20px;
+        }
+
+        .donut {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background:
+                conic-gradient(
+                    #4f46e5 0 83%,
+                    #93c5fd 83% 95%,
+                    #fca5a5 95% 100%
+                );
+            position: relative;
+        }
+
+        .donut::before {
+            content: "";
+            position: absolute;
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .donut div {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .donut strong,
+        .donut span {
+            display: block;
+        }
+
+        .donut strong {
+            font-size: 21px;
+        }
+
+        .donut span {
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 3px;
+        }
+
+        .attendance-legend > div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 14px 0;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .attendance-legend strong {
+            margin-left: auto;
+            color: var(--text);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.present {
+            background: #4f46e5;
+        }
+
+        .legend-dot.leave {
+            background: #93c5fd;
+        }
+
+        .legend-dot.absent {
+            background: #fca5a5;
+        }
+
+        /* =========================
+           EVENTS
+        ========================= */
+
+        .event-list {
+            padding: 0 20px 15px;
+        }
+
+        .event {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .event:last-child {
+            border-bottom: 0;
+        }
+
+        .event-date {
+            width: 40px;
+            height: 44px;
+            flex: 0 0 40px;
+            display: grid;
+            place-items: center;
+            align-content: center;
+            background: #eef2ff;
+            border-radius: 9px;
+        }
+
+        .event-date strong {
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .event-date span {
+            color: var(--primary);
+            font-size: 7px;
+            font-weight: 800;
+        }
+
+        .event > div:last-child strong,
+        .event > div:last-child span {
+            display: block;
+        }
+
+        .event > div:last-child strong {
+            font-size: 10px;
+        }
+
+        .event > div:last-child span {
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 3px;
+        }
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .quick-actions {
+            padding: 0 20px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quick-actions button {
+            min-height: 75px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 7px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            color: var(--text);
+            text-align: left;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .quick-actions button:hover {
+            background: #f8faff;
+            border-color: #c7d2fe;
+        }
+
+        .quick-actions span {
+            color: var(--primary);
+            font-size: 17px;
+        }
+
+        /* =========================
+           PROFILE
+        ========================= */
+
+        .profile-header-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-cover {
+            height: 130px;
+            background: linear-gradient(135deg,#3730a3,#818cf8);
+        }
+
+        .profile-main {
+            min-height: 110px;
+            padding: 0 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            margin-top: -45px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 90px;
+            border: 5px solid white;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .profile-title {
+            flex: 1;
+        }
+
+        .profile-title h2 {
+            font-size: 19px;
+        }
+
+        .profile-title p {
+            color: var(--muted);
+            font-size: 11px;
+            margin: 5px 0 8px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .details-grid {
+            padding: 0 20px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .detail {
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail.full {
+            grid-column: 1 / -1;
+        }
+
+        .detail span,
+        .detail strong {
+            display: block;
+        }
+
+        .detail span {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .detail strong {
+            margin-top: 4px;
+            font-size: 10px;
+        }
+
+        .details-list {
+            padding: 0 20px 15px;
+        }
+
+        .details-list > div {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .details-list span {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .details-list strong {
+            font-size: 10px;
+            text-align: right;
+        }
+
+        .leave-balance {
+            padding: 0 20px 20px;
+        }
+
+        .leave-balance > div {
+            margin: 15px 0;
+        }
+
+        .leave-balance span {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .leave-balance strong {
+            float: right;
+            font-size: 11px;
+        }
+
+        .leave-balance small {
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .progress {
+            height: 6px;
+            margin-top: 7px;
+            background: #eef0f5;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress i {
+            display: block;
+            height: 100%;
+            background: var(--primary);
+            border-radius: inherit;
+        }
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section-actions {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .section-actions h2 {
+            font-size: 20px;
+        }
+
+        .section-actions p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-input,
+        .date-input,
+        .select-input,
+        .form-group input {
+            height: 40px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: white;
+            color: var(--text);
+            font-size: 10px;
+        }
+
+        .search-input {
+            width: 210px;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            min-height: 40px;
+            padding: 0 15px;
+            border-radius: 9px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .primary-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .secondary-btn {
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        /* =========================
+           TEAM
+        ========================= */
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .mini-stat {
+            padding: 17px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .mini-stat span {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .mini-stat strong {
+            display: block;
+            margin-top: 5px;
+            font-size: 20px;
+        }
+
+        /* =========================
+           TABS
+        ========================= */
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 15px;
+            padding: 5px;
+            width: fit-content;
+            background: #eceef3;
+            border-radius: 9px;
+        }
+
+        .tab {
+            padding: 8px 13px;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 7px rgba(0,0,0,0.06);
+        }
+
+        .tab span {
+            margin-left: 4px;
+            color: #dc2626;
+        }
+
+        /* =========================
+           ATTENDANCE PAGE
+        ========================= */
+
+        .attendance-cards {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .attendance-card {
+            padding: 18px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .attendance-card span,
+        .attendance-card small {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .attendance-card strong {
+            display: block;
+            margin: 6px 0 2px;
+            font-size: 22px;
+        }
+
+        /* =========================
+           PAYROLL
+        ========================= */
+
+        .payroll-stats {
+            grid-template-columns: repeat(3,1fr);
+        }
+
+        .security-note {
+            margin-top: 15px;
+            padding: 14px 17px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            color: #1e40af;
+            font-size: 9px;
+        }
+
+        .security-note strong {
+            white-space: nowrap;
+        }
+
+        .security-note span {
+            color: #475569;
+        }
+
+        /* =========================
+           REPORTS
+        ========================= */
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 18px;
+        }
+
+        .report-card {
+            padding: 23px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .report-icon {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            background: #eef2ff;
+            color: var(--primary);
+            border-radius: 11px;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .report-card h3 {
+            margin-top: 18px;
+            font-size: 13px;
+        }
+
+        .report-card p {
+            min-height: 42px;
+            margin: 7px 0 18px;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           NOTIFICATIONS
+        ========================= */
+
+        .notification-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .notification {
+            padding: 17px;
+            display: flex;
+            gap: 13px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .notification.unread {
+            border-left: 3px solid var(--primary);
+        }
+
+        .notification-icon {
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        .notification strong {
+            font-size: 11px;
+        }
+
+        .notification p {
+            margin: 4px 0;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .notification span {
+            color: #9ca3af;
+            font-size: 8px;
+        }
+
+        /* =========================
+           SETTINGS
+        ========================= */
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        form {
+            padding: 0 20px 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #4b5563;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .form-group input {
+            width: 100%;
+        }
+
+        .setting-row {
+            min-height: 70px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .setting-row strong,
+        .setting-row span {
+            display: block;
+        }
+
+        .setting-row strong {
+            font-size: 10px;
+        }
+
+        .setting-row span {
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 3px;
+        }
+
+        .switch {
+            position: relative;
+            width: 38px;
+            height: 21px;
+            flex: 0 0 38px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .switch span {
+            position: absolute;
+            inset: 0;
+            background: #d1d5db;
+            border-radius: 20px;
+            transition: 0.2s;
+        }
+
+        .switch span::before {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        .switch input:checked + span {
+            background: var(--primary);
+        }
+
+        .switch input:checked + span::before {
+            transform: translateX(17px);
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            padding: 13px 18px;
+            background: #111827;
+            color: white;
+            border-radius: 9px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            font-size: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.25s ease;
+            z-index: 5000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1200px) {
+            .stats-grid,
+            .team-stats {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .report-grid {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .topbar {
+                padding: 0 18px;
+                gap: 15px;
+            }
+
+            .page-heading {
+                flex: 1;
+            }
+
+            .profile-menu-text,
+            .profile-menu > span:last-child {
+                display: none;
+            }
+
+            .content {
+                padding: 20px 18px 40px;
+            }
+
+            .profile-grid,
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-illustration {
+                display: none;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .topbar {
+                height: 70px;
+            }
+
+            .page-heading h1 {
+                font-size: 16px;
+            }
+
+            .page-heading p {
+                display: none;
+            }
+
+            .stats-grid,
+            .team-stats,
+            .attendance-cards,
+            .report-grid,
+            .payroll-stats,
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-actions {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .action-group {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .welcome-card {
+                padding: 22px;
+            }
+
+            .welcome-card h2 {
+                font-size: 20px;
+            }
+
+            .profile-main {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .profile-main .primary-btn {
+                width: 100%;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail.full {
+                grid-column: auto;
+            }
+
+            .tabs {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .security-note {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">EM</div>
+
+            <div>
+                <h2>EmployeeMS</h2>
+                <span>Management System</span>
+            </div>
+        </div>
+
+        <div class="user-mini">
+            <div class="avatar">AS</div>
+
+            <div>
+                <strong id="sidebarName">Vikram Kumar</strong>
+                <span>System Manager</span>
+            </div>
+        </div>
+
+        <nav class="navigation">
+
+            <p class="nav-title">MAIN MENU</p>
+
+            <button class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" data-page="profile">
+                <span class="nav-icon">◎</span>
+                My Profile
+            </button>
+
+            <button class="nav-item" data-page="team">
+                <span class="nav-icon">♟</span>
+                Teams & Projects
+            </button>
+
+            <button class="nav-item" data-page="leave">
+                <span class="nav-icon">▣</span>
+                Leave Management
+                <span class="nav-badge">3</span>
+            </button>
+
+            <button class="nav-item" data-page="attendance">
+                <span class="nav-icon">◷</span>
+                Attendance
+            </button>
+
+            <button class="nav-item" data-page="payroll">
+                <span class="nav-icon">₹</span>
+                Payroll
+            </button>
+
+
+            <button class="nav-item" data-page="employees">
+                <span class="nav-icon">♟</span>
+                Employee Management
+            </button>
+            <button class="nav-item" data-page="reports">
+                <span class="nav-icon">▤</span>
+                Reports
+            </button>
+
+            <p class="nav-title">SYSTEM</p>
+
+            <button class="nav-item" data-page="notifications">
+                <span class="nav-icon">♢</span>
+                Notifications
+                <span class="nav-badge">5</span>
+            </button>
+
+            <button class="nav-item" data-page="settings">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </button>
+
+        </nav>
+
+        <button class="logout-btn" id="logoutBtn">
+            <span>↪</span>
+            Logout
+        </button>
+
+    </aside>
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <button class="mobile-menu" id="mobileMenu">
+                ☰
+            </button>
+
+            <div class="page-heading">
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSubtitle">
+                    Overview of your team and daily activities
+                </p>
+            </div>
+
+            <div class="topbar-actions">
+
+                <button class="icon-btn" id="notificationButton">
+                    ♢
+                    <span class="notification-dot"></span>
+                </button>
+
+                <div class="profile-menu" id="profileMenu">
+
+                    <div class="avatar small">
+                        AS
+                    </div>
+
+                    <div class="profile-menu-text">
+                        <strong>Vikram Kumar</strong>
+                        <span>System Manager</span>
+                    </div>
+
+                    <span>⌄</span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="content">
+
+            <!-- =========================
+                 DASHBOARD
+            ========================== -->
+
+            <section class="page active" id="dashboard">
+                <div class="welcome-card">
+
+                    <div>
+                        <p class="eyebrow">
+                            SATURDAY, AUGUST 22, 2026
+                        </p>
+
+                        <h2>
+                            Good evening, Vikram 👋
+                        </h2>
+
+                        <p>
+                            Here's what's happening with your team today.
+                        </p>
+                    </div>
+
+                    <div class="welcome-illustration">
+                        <div class="circle circle-one"></div>
+                        <div class="circle circle-two"></div>
+                        <span>👥</span>
+                    </div>
+
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-icon blue">♟</div>
+
+                        <div>
+                            <span>Total Team</span>
+                            <strong>24</strong>
+                            <small>Team members</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">✓</div>
+
+                        <div>
+                            <span>Present Today</span>
+                            <strong>20</strong>
+                            <small class="positive">
+                                83.3% attendance
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">▣</div>
+
+                        <div>
+                            <span>On Leave</span>
+                            <strong>3</strong>
+                            <small>Today</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon red">!</div>
+
+                        <div>
+                            <span>Absent</span>
+                            <strong>1</strong>
+                            <small>Needs attention</small>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="dashboard-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Pending Leave Requests</h3>
+                                <p>Requests requiring your approval</p>
+                            </div>
+
+                            <button class="text-btn" data-page-link="leave">
+                                View All →
+                            </button>
+
+                        </div>
+
+                        <div class="table-container">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                        <th>EMPLOYEE</th>
+                                        <th>LEAVE TYPE</th>
+                                        <th>DATES</th>
+                                        <th>DAYS</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <div class="employee-cell">
+                                                <div class="avatar employee-avatar">
+                                                    RV
+                                                </div>
+
+                                                <div>
+                                                    <strong>Rahul Verma</strong>
+                                                    <span>EMP-1024</span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>Casual Leave</td>
+
+                                        <td>25 - 27 Aug</td>
+
+                                        <td>3</td>
+
+                                        <td>
+                                            <div class="approval-actions">
+
+                                                <button class="approve-btn">
+                                                    ✓
+                                                </button>
+
+                                                <button class="reject-btn">
+                                                    ×
+                                                </button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="employee-cell">
+
+                                                <div class="avatar employee-avatar">
+                                                    PM
+                                                </div>
+
+                                                <div>
+                                                    <strong>Priya Mehta</strong>
+                                                    <span>EMP-1042</span>
+                                                </div>
+
+                                            </div>
+                                        </td>
+
+                                        <td>Sick Leave</td>
+
+                                        <td>24 Aug</td>
+
+                                        <td>1</td>
+
+                                        <td>
+                                            <div class="approval-actions">
+
+                                                <button class="approve-btn">
+                                                    ✓
+                                                </button>
+
+                                                <button class="reject-btn">
+                                                    ×
+                                                </button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Team Attendance</h3>
+                                <p>Today's overview</p>
+                            </div>
+
+                        </div>
+
+                        <div class="attendance-summary">
+
+                            <div class="donut">
+
+                                <div>
+                                    <strong>83%</strong>
+                                    <span>Present</span>
+                                </div>
+
+                            </div>
+
+                            <div class="attendance-legend">
+
+                                <div>
+                                    <span class="legend-dot present"></span>
+                                    Present
+                                    <strong>20</strong>
+                                </div>
+
+                                <div>
+                                    <span class="legend-dot leave"></span>
+                                    On Leave
+                                    <strong>3</strong>
+                                </div>
+
+                                <div>
+                                    <span class="legend-dot absent"></span>
+                                    Absent
+                                    <strong>1</strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="dashboard-grid bottom-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Upcoming Events</h3>
+                                <p>Important team dates</p>
+                            </div>
+
+                        </div>
+
+                        <div class="event-list">
+
+                            <div class="event">
+
+                                <div class="event-date">
+                                    <strong>24</strong>
+                                    <span>AUG</span>
+                                </div>
+
+                                <div>
+                                    <strong>Priya's Birthday</strong>
+                                    <span>Monday</span>
+                                </div>
+
+                            </div>
+
+                            <div class="event">
+
+                                <div class="event-date">
+                                    <strong>27</strong>
+                                    <span>AUG</span>
+                                </div>
+
+                                <div>
+                                    <strong>Team Meeting</strong>
+                                    <span>10:30 AM</span>
+                                </div>
+
+                            </div>
+
+                            <div class="event">
+
+                                <div class="event-date">
+                                    <strong>30</strong>
+                                    <span>AUG</span>
+                                </div>
+
+                                <div>
+                                    <strong>Rahul's Work Anniversary</strong>
+                                    <span>3 years completed</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Quick Actions</h3>
+                                <p>Common manager tasks</p>
+                            </div>
+
+                        </div>
+
+                        <div class="quick-actions">
+
+                            <button data-page-link="leave">
+                                <span>▣</span>
+                                Review Leave
+                            </button>
+
+                            <button data-page-link="team">
+                                <span>♟</span>
+                                View Team
+                            </button>
+
+                            <button data-page-link="attendance">
+                                <span>◷</span>
+                                Attendance
+                            </button>
+
+                            <button data-page-link="reports">
+                                <span>▤</span>
+                                Generate Report
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 PROFILE
+            ========================== -->
+
+            <section class="page" id="profile">
+
+                <div class="profile-header-card">
+
+                    <div class="profile-cover"></div>
+
+                    <div class="profile-main">
+
+                        <div class="profile-avatar">
+                            AS
+                        </div>
+
+                        <div class="profile-title">
+
+                            <h2>Vikram Kumar</h2>
+
+                            <p>
+                                Operations & People Manager • System Manager
+                            </p>
+
+                            <span class="status active-status">
+                                ● Active
+                            </span>
+
+                        </div>
+
+                        <button class="primary-btn" id="editProfileBtn">
+                            ✎ Edit Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="profile-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Personal Information</h3>
+                                <p>Your basic personal details</p>
+                            </div>
+
+                        </div>
+
+                        <div class="details-grid">
+
+                            <div class="detail">
+                                <span>Full Name</span>
+                                <strong>Vikram Kumar</strong>
+                            </div>
+
+                            <div class="detail">
+                                <span>Employee ID</span>
+                                <strong>MGR-2024-001</strong>
+                            </div>
+
+                            <div class="detail">
+                                <span>Date of Birth</span>
+                                <strong>14 March 1994</strong>
+                            </div>
+
+                            <div class="detail">
+                                <span>Gender</span>
+                                <strong>Male</strong>
+                            </div>
+
+                            <div class="detail">
+                                <span>Phone</span>
+                                <strong>+91 98765 43210</strong>
+                            </div>
+
+                            <div class="detail">
+                                <span>Email</span>
+                                <strong>aarav.sharma@company.com</strong>
+                            </div>
+
+                            <div class="detail full">
+                                <span>Address</span>
+                                <strong>New Delhi, Delhi, India</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Employment Information</h3>
+                                <p>Company and job details</p>
+                            </div>
+
+                        </div>
+
+                        <div class="details-list">
+
+                            <div>
+                                <span>Designation</span>
+                                <strong>Operations & People Manager</strong>
+                            </div>
+
+                            <div>
+                                <span>Department</span>
+                                <strong>Information Technology</strong>
+                            </div>
+
+                            <div>
+                                <span>Role</span>
+                                <strong>System Manager</strong>
+                            </div>
+
+                            <div>
+                                <span>Reporting Manager</span>
+                                <strong>Neha Kapoor (HR Manager)</strong>
+                            </div>
+
+                            <div>
+                                <span>Date of Joining</span>
+                                <strong>12 June 2021</strong>
+                            </div>
+
+                            <div>
+                                <span>Work Location</span>
+                                <strong>New Delhi Office</strong>
+                            </div>
+
+                            <div>
+                                <span>Employment Type</span>
+                                <strong>Full Time</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Emergency Contact</h3>
+                                <p>Emergency contact information</p>
+                            </div>
+
+                        </div>
+
+                        <div class="details-list">
+
+                            <div>
+                                <span>Name</span>
+                                <strong>Ananya Sharma</strong>
+                            </div>
+
+                            <div>
+                                <span>Relationship</span>
+                                <strong>Spouse</strong>
+                            </div>
+
+                            <div>
+                                <span>Phone</span>
+                                <strong>+91 98765 11223</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Leave Balance</h3>
+                                <p>Current leave availability</p>
+                            </div>
+
+                        </div>
+
+                        <div class="leave-balance">
+
+                            <div>
+                                <span>Casual Leave</span>
+                                <strong>8 <small>/ 12</small></strong>
+
+                                <div class="progress">
+                                    <i style="width:67%"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span>Sick Leave</span>
+                                <strong>6 <small>/ 10</small></strong>
+
+                                <div class="progress">
+                                    <i style="width:60%"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span>Earned Leave</span>
+                                <strong>14 <small>/ 20</small></strong>
+
+                                <div class="progress">
+                                    <i style="width:70%"></i>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 TEAM
+            ========================== -->
+
+            <section class="page" id="team">
+
+                <div class="section-actions">
+
+                    <div>
+                        <h2>Teams & Projects</h2>
+                        <p>Manage and monitor your team members.</p>
+                    </div>
+
+                    <div class="action-group">
+
+                        <input
+                            type="search"
+                            id="teamSearch"
+                            class="search-input"
+                            placeholder="Search employee..."
+                        >
+
+                        <button class="primary-btn">
+                            + Add Member
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="team-stats">
+
+                    <div class="mini-stat">
+                        <span>Total Members</span>
+                        <strong>24</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>Present</span>
+                        <strong>20</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>On Leave</span>
+                        <strong>3</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>Absent</span>
+                        <strong>1</strong>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>EMPLOYEE</th>
+                                    <th>DESIGNATION</th>
+                                    <th>DEPARTMENT</th>
+                                    <th>ATTENDANCE</th>
+                                    <th>LEAVE BALANCE</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="teamTable">
+
+                                <tr data-name="Rahul Verma">
+
+                                    <td>
+                                        <div class="employee-cell">
+
+                                            <div class="avatar employee-avatar">
+                                                RV
+                                            </div>
+
+                                            <div>
+                                                <strong>Rahul Verma</strong>
+                                                <span>EMP-1024</span>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                    <td>Software Developer</td>
+                                    <td>IT</td>
+                                    <td>96%</td>
+                                    <td>12 Days</td>
+
+                                    <td>
+                                        <span class="status active-status">
+                                            Active
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <button class="more-btn">
+                                            •••
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                                <tr data-name="Priya Mehta">
+
+                                    <td>
+                                        <div class="employee-cell">
+
+                                            <div class="avatar employee-avatar">
+                                                PM
+                                            </div>
+
+                                            <div>
+                                                <strong>Priya Mehta</strong>
+                                                <span>EMP-1042</span>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                    <td>UI/UX Designer</td>
+                                    <td>Design</td>
+                                    <td>91%</td>
+                                    <td>8 Days</td>
+
+                                    <td>
+                                        <span class="status active-status">
+                                            Active
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <button class="more-btn">
+                                            •••
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                                <tr data-name="Vikram Singh">
+
+                                    <td>
+                                        <div class="employee-cell">
+
+                                            <div class="avatar employee-avatar">
+                                                VS
+                                            </div>
+
+                                            <div>
+                                                <strong>Vikram Singh</strong>
+                                                <span>EMP-1098</span>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                    <td>Backend Developer</td>
+                                    <td>IT</td>
+                                    <td>89%</td>
+                                    <td>10 Days</td>
+
+                                    <td>
+                                        <span class="status leave-status">
+                                            On Leave
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <button class="more-btn">
+                                            •••
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                                <tr data-name="Sneha Patel">
+
+                                    <td>
+                                        <div class="employee-cell">
+
+                                            <div class="avatar employee-avatar">
+                                                SP
+                                            </div>
+
+                                            <div>
+                                                <strong>Sneha Patel</strong>
+                                                <span>EMP-1112</span>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                    <td>QA Engineer</td>
+                                    <td>IT</td>
+                                    <td>94%</td>
+                                    <td>15 Days</td>
+
+                                    <td>
+                                        <span class="status active-status">
+                                            Active
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <button class="more-btn">
+                                            •••
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 LEAVE
+            ========================== -->
+
+            <section class="page" id="leave">
+
+                <div class="section-actions">
+
+                    <div>
+                        <h2>Leave Management</h2>
+                        <p>Review and manage team leave requests.</p>
+                    </div>
+
+                    <button class="primary-btn">
+                        Download Report
+                    </button>
+
+                </div>
+
+                <div class="tabs">
+
+                    <button class="tab active" data-tab="pending">
+                        Pending <span>3</span>
+                    </button>
+
+                    <button class="tab" data-tab="approved">
+                        Approved
+                    </button>
+
+                    <button class="tab" data-tab="rejected">
+                        Rejected
+                    </button>
+
+                    <button class="tab" data-tab="history">
+                        History
+                    </button>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>EMPLOYEE</th>
+                                    <th>LEAVE TYPE</th>
+                                    <th>FROM</th>
+                                    <th>TO</th>
+                                    <th>DAYS</th>
+                                    <th>REASON</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="leaveTable">
+                            	 <tr>
+       								 <td colspan="8" style="text-align:center; padding:25px;">
+            								Loading leave requests...
+      							 	 </td>
+   								 </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 ATTENDANCE
+            ========================== -->
+
+            <section class="page" id="attendance">
+
+                <div class="section-actions">
+
+                    <div>
+                        <h2>Team Attendance</h2>
+                        <p>Monitor daily attendance and working hours.</p>
+                    </div>
+
+                    <input
+                        type="date"
+                        class="date-input"
+                        value="2026-08-22"
+                    >
+
+                </div>
+
+                <div class="attendance-cards">
+
+                    <div class="attendance-card">
+                        <span>Present</span>
+                        <strong>20</strong>
+                        <small>83.3% of team</small>
+                    </div>
+
+                    <div class="attendance-card">
+                        <span>Absent</span>
+                        <strong>1</strong>
+                        <small>4.2% of team</small>
+                    </div>
+
+                    <div class="attendance-card">
+                        <span>On Leave</span>
+                        <strong>3</strong>
+                        <small>12.5% of team</small>
+                    </div>
+
+                    <div class="attendance-card">
+                        <span>Late</span>
+                        <strong>2</strong>
+                        <small>8.3% of team</small>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>Today's Attendance</h3>
+                            <p>Saturday, August 22, 2026</p>
+                        </div>
+
+                        <button class="secondary-btn">
+                            Export CSV
+                        </button>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>EMPLOYEE</th>
+                                    <th>CHECK IN</th>
+                                    <th>CHECK OUT</th>
+                                    <th>WORK HOURS</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td>
+                                        <div class="employee-cell">
+                                            <div class="avatar employee-avatar">
+                                                RV
+                                            </div>
+
+                                            <strong>Rahul Verma</strong>
+                                        </div>
+                                    </td>
+
+                                    <td>09:02 AM</td>
+                                    <td>06:11 PM</td>
+                                    <td>9h 09m</td>
+
+                                    <td>
+                                        <span class="status active-status">
+                                            Present
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td>
+                                        <div class="employee-cell">
+                                            <div class="avatar employee-avatar">
+                                                PM
+                                            </div>
+
+                                            <strong>Priya Mehta</strong>
+                                        </div>
+                                    </td>
+
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+
+                                    <td>
+                                        <span class="status leave-status">
+                                            On Leave
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td>
+                                        <div class="employee-cell">
+                                            <div class="avatar employee-avatar">
+                                                VS
+                                            </div>
+
+                                            <strong>Vikram Singh</strong>
+                                        </div>
+                                    </td>
+
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+
+                                    <td>
+                                        <span class="status absent-status">
+                                            Absent
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td>
+                                        <div class="employee-cell">
+                                            <div class="avatar employee-avatar">
+                                                SP
+                                            </div>
+
+                                            <strong>Sneha Patel</strong>
+                                        </div>
+                                    </td>
+
+                                    <td>09:27 AM</td>
+                                    <td>—</td>
+                                    <td>7h 35m</td>
+
+                                    <td>
+                                        <span class="status late-status">
+                                            Late
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 PAYROLL
+            ========================== -->
+
+            <section class="page" id="payroll">
+
+                <div class="section-actions">
+
+                    <div>
+                        <h2>Payroll Overview</h2>
+                        <p>
+                            View authorized payroll information for your team.
+                        </p>
+                    </div>
+
+                    <select class="select-input">
+                        <option>August 2026</option>
+                        <option>July 2026</option>
+                        <option>June 2026</option>
+                    </select>
+
+                </div>
+
+                <div class="stats-grid payroll-stats">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon blue">
+                            ₹
+                        </div>
+
+                        <div>
+                            <span>Total Payroll</span>
+                            <strong>₹18.4L</strong>
+                            <small>August 2026</small>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                        <div>
+                            <span>Processed</span>
+                            <strong>24</strong>
+                            <small class="positive">
+                                100% processed
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon orange">
+                            ₹
+                        </div>
+
+                        <div>
+                            <span>Average Salary</span>
+                            <strong>₹76.7K</strong>
+                            <small>Per employee</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>Team Payroll</h3>
+                            <p>August 2026 payroll summary</p>
+                        </div>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>EMPLOYEE</th>
+                                    <th>BASIC SALARY</th>
+                                    <th>EARNINGS</th>
+                                    <th>DEDUCTIONS</th>
+                                    <th>NET PAY</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td><strong>Rahul Verma</strong></td>
+                                    <td>₹65,000</td>
+                                    <td>₹8,500</td>
+                                    <td>₹7,100</td>
+                                    <td><strong>₹66,400</strong></td>
+
+                                    <td>
+                                        <span class="status active-status">
+                                            Processed
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>Priya Mehta</strong></td>
+                                    <td>₹58,000</td>
+                                    <td>₹6,500</td>
+                                    <td>₹6,300</td>
+                                    <td><strong>₹58,200</strong></td>
+
+                                    <td>
+                                        <span class="status active-status">
+                                            Processed
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>Vikram Singh</strong></td>
+                                    <td>₹72,000</td>
+                                    <td>₹9,000</td>
+                                    <td>₹8,200</td>
+                                    <td><strong>₹72,800</strong></td>
+
+                                    <td>
+                                        <span class="status active-status">
+                                            Processed
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="security-note">
+
+                    <strong>🔒 Payroll privacy</strong>
+
+                    <span>
+                        Salary and financial information should be displayed
+                        according to System Manager permissions.
+                    </span>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 REPORTS
+            ========================== -->
+
+            <section class="page" id="reports">
+
+                <div class="section-actions">
+
+                    <div>
+                        <h2>Reports</h2>
+                        <p>Generate reports for your team.</p>
+                    </div>
+
+                </div>
+
+                <div class="report-grid">
+
+                    <div class="report-card">
+                        <div class="report-icon">◷</div>
+                        <h3>Attendance Report</h3>
+                        <p>
+                            Monthly attendance, late arrivals and absences.
+                        </p>
+                        <button class="secondary-btn">
+                            Generate Report
+                        </button>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">▣</div>
+                        <h3>Leave Report</h3>
+                        <p>
+                            Team leave requests, balances and history.
+                        </p>
+                        <button class="secondary-btn">
+                            Generate Report
+                        </button>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">₹</div>
+                        <h3>Payroll Report</h3>
+                        <p>
+                            Authorized team payroll information.
+                        </p>
+                        <button class="secondary-btn">
+                            Generate Report
+                        </button>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">♟</div>
+                        <h3>Team Report</h3>
+                        <p>
+                            Employee information and team summary.
+                        </p>
+                        <button class="secondary-btn">
+                            Generate Report
+                        </button>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 NOTIFICATIONS
+            ========================== -->
+
+            <section class="page" id="notifications">
+
+                <div class="section-actions">
+
+                    <div>
+                        <h2>Notifications</h2>
+                        <p>
+                            Stay updated with team activities.
+                        </p>
+                    </div>
+
+                    <button class="text-btn" id="markAllRead">
+                        Mark all as read
+                    </button>
+
+                </div>
+
+                <div class="notification-list">
+
+                    <div class="notification unread">
+
+                        <div class="notification-icon orange">
+                            ▣
+                        </div>
+
+                        <div>
+                            <strong>New leave request</strong>
+
+                            <p>
+                                Rahul Verma submitted a Casual Leave request.
+                            </p>
+
+                            <span>10 minutes ago</span>
+                        </div>
+
+                    </div>
+
+                    <div class="notification unread">
+
+                        <div class="notification-icon blue">
+                            ◷
+                        </div>
+
+                        <div>
+                            <strong>Late attendance</strong>
+
+                            <p>
+                                Sneha Patel checked in at 09:27 AM.
+                            </p>
+
+                            <span>32 minutes ago</span>
+                        </div>
+
+                    </div>
+
+                    <div class="notification">
+
+                        <div class="notification-icon green">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>Payroll processed</strong>
+
+                            <p>
+                                August 2026 team payroll has been processed.
+                            </p>
+
+                            <span>Yesterday</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 SETTINGS
+            ========================== -->
+
+            <section class="page" id="settings">
+
+                <div class="section-actions">
+
+                    <div>
+                        <h2>Settings</h2>
+                        <p>
+                            Manage your account preferences.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="settings-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Account Settings</h3>
+                                <p>
+                                    Update your account information
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <form id="settingsForm">
+
+                            <div class="form-group">
+
+                                <label>Email Address</label>
+
+                                <input
+                                    type="email"
+                                    value="aarav.sharma@company.com"
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Phone Number</label>
+
+                                <input
+                                    type="tel"
+                                    value="+91 98765 43210"
+                                >
+
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="primary-btn"
+                            >
+                                Save Changes
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Notifications</h3>
+                                <p>
+                                    Choose what notifications you receive
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div class="setting-row">
+
+                            <div>
+                                <strong>Leave requests</strong>
+
+                                <span>
+                                    Notify me when team members request leave.
+                                </span>
+                            </div>
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                >
+
+                                <span></span>
+
+                            </label>
+
+                        </div>
+
+                        <div class="setting-row">
+
+                            <div>
+                                <strong>Attendance alerts</strong>
+
+                                <span>
+                                    Notify me about late or missing attendance.
+                                </span>
+                            </div>
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                >
+
+                                <span></span>
+
+                            </label>
+
+                        </div>
+
+                        <div class="setting-row">
+
+                            <div>
+                                <strong>Payroll notifications</strong>
+
+                                <span>
+                                    Notify me when payroll is processed.
+                                </span>
+                            </div>
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                >
+
+                                <span></span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    /*
+     * System Manager Interface
+     * Single-file implementation.
+     */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const navItems = document.querySelectorAll(".nav-item");
+        const pages = document.querySelectorAll(".page");
+
+        const pageTitle = document.getElementById("pageTitle");
+        const pageSubtitle = document.getElementById("pageSubtitle");
+
+        const sidebar = document.getElementById("sidebar");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        const toast = document.getElementById("toast");
+
+        const pageInformation = {
+            dashboard: {
+                title: "Dashboard",
+                subtitle: "Overview of your team and daily activities"
+            },
+
+            profile: {
+                title: "My Profile",
+                subtitle: "Complete employee and employment information"
+            },
+
+            team: {
+                title: "Teams & Projects",
+                subtitle: "Manage and monitor your team members"
+            },
+
+            leave: {
+                title: "Leave Management",
+                subtitle: "Review and manage team leave requests"
+            },
+
+            attendance: {
+                title: "Attendance",
+                subtitle: "Monitor daily attendance and working hours"
+            },
+
+            payroll: {
+                title: "Payroll",
+                subtitle: "View authorized team payroll information"
+            },
+
+            reports: {
+                title: "Reports",
+                subtitle: "Generate reports for your team"
+            },
+
+            notifications: {
+                title: "Notifications",
+                subtitle: "Stay updated with team activities"
+            },
+
+            settings: {
+                title: "Settings",
+                subtitle: "Manage your account preferences"
+            }
+        };
+        
+        async function loadLeaveRequests() {
+
+            const leaveTable =
+                document.getElementById("leaveTable");
+
+            if (!leaveTable) return;
+
+            leaveTable.innerHTML = `
+                <tr>
+                    <td colspan="8"
+                        style="text-align:center; padding:25px;">
+                        Loading leave requests...
+                    </td>
+                </tr>
+            `;
+
+            try {
+
+                const response =
+                    await fetch("../LeaveApprovalServlet");
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Unable to load leave requests."
+                    );
+                }
+
+                const requests =
+                    await response.json();
+
+                if (requests.length === 0) {
+
+                    leaveTable.innerHTML = `
+                        <tr>
+                            <td colspan="8"
+                                style="text-align:center; padding:25px;">
+                                No leave requests found.
+                            </td>
+                        </tr>
+                    `;
+
+                    return;
+                }
+
+                leaveTable.innerHTML =
+                    requests.map(function (request) {
+
+                        const status =
+                            (request.status || "")
+                                .toLowerCase();
+
+                        return `
+                            <tr data-status="${status}">
+
+                                <td>
+                                    <div class="employee-cell">
+
+                                        <div class="avatar employee-avatar">
+                                            ${(request.employeeName || "E")
+                                                .substring(0, 2)
+                                                .toUpperCase()}
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                ${request.employeeName || "—"}
+                                            </strong>
+
+                                            <span>
+                                                ${request.employeeId || "—"}
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    ${request.type || "—"}
+                                </td>
+
+                                <td>
+                                    ${request.startDate || "—"}
+                                </td>
+
+                                <td>
+                                    ${request.endDate || "—"}
+                                </td>
+
+                                <td>
+                                    ${request.days || "—"}
+                                </td>
+
+                                <td>
+                                    ${request.reason || "—"}
+                                </td>
+
+                                <td>
+                                    <span class="status ${
+                                        status === "approved"
+                                            ? "active-status"
+                                            : status === "rejected"
+                                            ? "absent-status"
+                                            : "pending-status"
+                                    }">
+                                        ${request.status || "Pending"}
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    ${
+                                        status === "pending"
+                                            ? `
+                                                <button
+                                                    onclick="updateLeaveStatus(${request.id}, 'Approved')"
+                                                    class="btn btn-success">
+                                                    Approve
+                                                </button>
+
+                                                <button
+                                                    onclick="updateLeaveStatus(${request.id}, 'Rejected')"
+                                                    class="btn btn-danger">
+                                                    Reject
+                                                </button>
+                                            `
+                                            : `
+                                                <span
+                                                    class="status ${
+                                                        status === "approved"
+                                                            ? "active-status"
+                                                            : "absent-status"
+                                                    }">
+                                                    Done
+                                                </span>
+                                            `
+                                    }
+
+                                </td>
+
+                            </tr>
+                        `;
+
+                    }).join("");
+
+            } catch (error) {
+
+                console.error(error);
+
+                leaveTable.innerHTML = `
+                    <tr>
+                        <td colspan="8"
+                            style="text-align:center; padding:25px;">
+                            Unable to load leave requests.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        window.updateLeaveStatus = async function(leaveId, status) {
+            try {
+                const response = await fetch("../LeaveApprovalServlet", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `leaveId=${leaveId}&status=${status}`
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Unable to update leave status.");
+                }
+
+                loadLeaveRequests();
+
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
+        };
+
+        function showToast(message) {
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            clearTimeout(window.toastTimer);
+
+            window.toastTimer = setTimeout(function () {
+                toast.classList.remove("show");
+            }, 2800);
+        }
+
+
+        function showPage(pageId) {
+
+            const targetPage =
+                document.getElementById(pageId);
+
+            if (!targetPage) {
+                return;
+            }
+
+            pages.forEach(function (page) {
+                page.classList.remove("active");
+            });
+
+            navItems.forEach(function (item) {
+                item.classList.remove("active");
+            });
+
+            targetPage.classList.add("active");
+
+            const activeNav =
+                document.querySelector(
+                    '.nav-item[data-page="' + pageId + '"]'
+                );
+
+            if (activeNav) {
+                activeNav.classList.add("active");
+            }
+
+            const information =
+                pageInformation[pageId];
+
+            if (information) {
+
+                pageTitle.textContent =
+                    information.title;
+
+                pageSubtitle.textContent =
+                    information.subtitle;
+            }
+
+            sidebar.classList.remove("open");
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+
+        navItems.forEach(function (item) {
+
+            item.addEventListener("click", function () {
+
+                showPage(item.dataset.page);
+
+            });
+            
+            loadLeaveRequests();
+
+        });
+
+
+        document
+            .querySelectorAll("[data-page-link]")
+            .forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    showPage(button.dataset.pageLink);
+
+                });
+
+            });
+
+
+        mobileMenu.addEventListener("click", function () {
+
+            sidebar.classList.toggle("open");
+
+        });
+
+
+        document.addEventListener("click", function (event) {
+
+            if (
+                window.innerWidth <= 900 &&
+                sidebar.classList.contains("open") &&
+                !sidebar.contains(event.target) &&
+                !mobileMenu.contains(event.target)
+            ) {
+
+                sidebar.classList.remove("open");
+
+            }
+
+        });
+
+
+        document
+            .getElementById("notificationButton")
+            .addEventListener("click", function () {
+
+                showPage("notifications");
+
+            });
+
+
+        document
+            .getElementById("profileMenu")
+            .addEventListener("click", function () {
+
+                showPage("profile");
+
+            });
+
+
+        document
+            .getElementById("editProfileBtn")
+            .addEventListener("click", function () {
+
+                showToast(
+                    "Profile editing can be connected to your database."
+                );
+
+            });
+
+
+        /*
+         * Leave approval.
+         */
+
+        document
+            .querySelectorAll(".approve-btn")
+            .forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    const row =
+                        button.closest("tr");
+
+                    if (!row) {
+                        return;
+                    }
+
+                    const employee =
+                        row.querySelector(
+                            ".employee-cell strong"
+                        )?.textContent ||
+                        "Employee";
+
+                    const status =
+                        row.querySelector(".status");
+
+                    if (status) {
+
+                        status.className =
+                            "status active-status";
+
+                        status.textContent =
+                            "Approved";
+                    }
+
+                    const actions =
+                        row.querySelector(
+                            ".approval-actions"
+                        );
+
+                    if (actions) {
+
+                        actions.innerHTML =
+                            '<span class="status active-status">Done</span>';
+
+                    }
+
+                    showToast(
+                        employee +
+                        "'s leave request was approved."
+                    );
+
+                });
+
+            });
+
+
+        /*
+         * Leave rejection.
+         */
+
+        document
+            .querySelectorAll(".reject-btn")
+            .forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    const row =
+                        button.closest("tr");
+
+                    if (!row) {
+                        return;
+                    }
+
+                    const employee =
+                        row.querySelector(
+                            ".employee-cell strong"
+                        )?.textContent ||
+                        "Employee";
+
+                    const status =
+                        row.querySelector(".status");
+
+                    if (status) {
+
+                        status.className =
+                            "status absent-status";
+
+                        status.textContent =
+                            "Rejected";
+
+                    }
+
+                    const actions =
+                        row.querySelector(
+                            ".approval-actions"
+                        );
+
+                    if (actions) {
+
+                        actions.innerHTML =
+                            '<span class="status absent-status">Done</span>';
+
+                    }
+
+                    showToast(
+                        employee +
+                        "'s leave request was rejected."
+                    );
+
+                });
+
+            });
+
+
+        /*
+         * Team search.
+         */
+
+        const teamSearch =
+            document.getElementById("teamSearch");
+
+        teamSearch.addEventListener(
+            "input",
+            function (event) {
+
+                const searchTerm =
+                    event.target.value
+                        .trim()
+                        .toLowerCase();
+
+                const rows =
+                    document.querySelectorAll(
+                        "#teamTable tr"
+                    );
+
+                rows.forEach(function (row) {
+
+                    const name =
+                        row.dataset.name
+                            ?.toLowerCase() ||
+                        "";
+
+                    row.style.display =
+                        name.includes(searchTerm)
+                            ? ""
+                            : "none";
+
+                });
+
+            }
+        );
+
+
+        /*
+         * Leave tabs.
+         */
+
+         /* Leave tabs */
+
+         const tabs = document.querySelectorAll(".tab");
+
+         tabs.forEach(function (tab) {
+
+             tab.addEventListener("click", function () {
+
+                 tabs.forEach(function (item) {
+                     item.classList.remove("active");
+                 });
+
+                 tab.classList.add("active");
+
+                 const selectedTab = tab.dataset.tab;
+
+                 const rows =
+                     document.querySelectorAll("#leaveTable tr");
+
+                 rows.forEach(function (row) {
+
+                     const status =
+                         row.dataset.status || "";
+
+                     if (selectedTab === "pending") {
+                         row.style.display =
+                             status === "pending" ? "" : "none";
+                     }
+
+                     else if (selectedTab === "approved") {
+                         row.style.display =
+                             status === "approved" ? "" : "none";
+                     }
+
+                     else if (selectedTab === "rejected") {
+                         row.style.display =
+                             status === "rejected" ? "" : "none";
+                     }
+
+                     else if (selectedTab === "history") {
+                         row.style.display = "";
+                     }
+
+                 });
+
+             });
+
+         });
+
+
+        /*
+         * Mark notifications as read.
+         */
+
+        document
+            .getElementById("markAllRead")
+            .addEventListener(
+                "click",
+                function () {
+
+                    document
+                        .querySelectorAll(
+                            ".notification.unread"
+                        )
+                        .forEach(function (item) {
+
+                            item.classList.remove(
+                                "unread"
+                            );
+
+                        });
+
+                    showToast(
+                        "All notifications marked as read."
+                    );
+
+                }
+            );
+
+
+        /*
+         * Settings form.
+         */
+
+        document
+            .getElementById("settingsForm")
+            .addEventListener(
+                "submit",
+                function (event) {
+
+                    event.preventDefault();
+
+                    showToast(
+                        "Account settings saved successfully."
+                    );
+
+                }
+            );
+
+
+        /*
+         * Report buttons.
+         */
+
+        document
+            .querySelectorAll(
+                ".report-card .secondary-btn"
+            )
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const reportName =
+                            button
+                                .closest(".report-card")
+                                ?.querySelector("h3")
+                                ?.textContent ||
+                            "Report";
+
+                        showToast(
+                            reportName +
+                            " generation started."
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /*
+         * Employee action buttons.
+         */
+
+        document
+            .querySelectorAll(".more-btn")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        showToast(
+                            "Employee actions menu opened."
+                        );
+
+                    }
+                );
+
+            });
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener("click", function () {
+                window.location.href = "../login.jsp";
+            });
+
+
+        showPage("dashboard");
+
+    });
+</script>
+
+
+</body>
+</html>

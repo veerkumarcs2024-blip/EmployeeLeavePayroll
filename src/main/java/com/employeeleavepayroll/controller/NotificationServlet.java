@@ -15,8 +15,8 @@ import jakarta.servlet.http.HttpSession;
 
 import com.employeeleavepayroll.util.DBConnection;
 
-@WebServlet("/EmployeeDataServlet")
-public class EmployeeDataServlet extends HttpServlet {
+@WebServlet("/NotificationServlet")
+public class NotificationServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,12 +40,10 @@ public class EmployeeDataServlet extends HttpServlet {
         int userId = (Integer) session.getAttribute("userId");
 
         String sql =
-                "SELECT u.id, u.full_name, u.email, u.role, u.status, "
-              + "e.employee_id, e.department, e.designation, e.manager, "
-              + "e.joining_date, e.employment_type, e.phone, e.work_location "
-              + "FROM users u "
-              + "JOIN employees e ON u.id = e.user_id "
-              + "WHERE u.id = ?";
+                "SELECT id, icon, title, message, notification_time, unread "
+              + "FROM notifications "
+              + "WHERE user_id = ? "
+              + "ORDER BY notification_time DESC";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement =
@@ -57,31 +55,35 @@ public class EmployeeDataServlet extends HttpServlet {
 
                 PrintWriter out = response.getWriter();
 
-                if (resultSet.next()) {
+                out.println("[");
+
+                boolean first = true;
+
+                while (resultSet.next()) {
+
+                    if (!first) {
+                        out.println(",");
+                    }
+
+                    String icon = resultSet.getString("icon");
+                    String title = resultSet.getString("title");
+                    String message = resultSet.getString("message");
+                    boolean unread = resultSet.getBoolean("unread");
 
                     out.println("{");
-                    out.println("\"id\":" + resultSet.getInt("id") + ",");
-                    out.println("\"fullName\":\"" + resultSet.getString("full_name") + "\",");
-                    out.println("\"email\":\"" + resultSet.getString("email") + "\",");
-                    out.println("\"role\":\"" + resultSet.getString("role") + "\",");
-                    out.println("\"status\":\"" + resultSet.getString("status") + "\",");
-                    out.println("\"employeeId\":\"" + resultSet.getString("employee_id") + "\",");
-                    out.println("\"department\":\"" + resultSet.getString("department") + "\",");
-                    out.println("\"designation\":\"" + resultSet.getString("designation") + "\",");
-                    out.println("\"manager\":\"" + resultSet.getString("manager") + "\",");
-                    out.println("\"joiningDate\":\"" + resultSet.getDate("joining_date") + "\",");
-                    out.println("\"employmentType\":\"" + resultSet.getString("employment_type") + "\",");
-                    out.println("\"phone\":\"" + resultSet.getString("phone") + "\",");
-                    out.println("\"workLocation\":\"" + resultSet.getString("work_location") + "\"");
+                    out.println("\"icon\":\"" + icon + "\",");
+                    out.println("\"title\":\"" + title + "\",");
+                    out.println("\"message\":\"" + message + "\",");
+                    out.println("\"time\":\""
+                            + resultSet.getTimestamp("notification_time")
+                            + "\",");
+                    out.println("\"unread\":" + unread);
                     out.println("}");
 
-                } else {
-
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    out.write(
-                            "{\"error\":\"Employee data not found\"}"
-                    );
+                    first = false;
                 }
+
+                out.println("]");
             }
 
         } catch (Exception e) {
