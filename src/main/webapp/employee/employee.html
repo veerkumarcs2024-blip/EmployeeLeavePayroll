@@ -2414,7 +2414,6 @@
          * Return payroll data here.
          */
          async getPayroll() {
-
         	    const response = await fetch("../PayrollServlet");
 
         	    if (!response.ok) {
@@ -2423,39 +2422,29 @@
 
         	    const data = await response.json();
 
-        	    const formatCurrency = (value) => {
-        	        return "₹" + Number(value).toLocaleString("en-IN");
-        	    };
-
-        	    const formatDate = (date) => {
-
-        	        if (!date || date === "—") {
-        	            return "—";
-        	        }
-
-        	        const dateObj = new Date(date + "T00:00:00");
-
-        	        return dateObj.toLocaleDateString("en-IN", {
-        	            day: "2-digit",
-        	            month: "long",
-        	            year: "numeric"
-        	        });
-        	    };
+        	    const formatMoney = (value) =>
+        	        "₹" + Number(value || 0).toLocaleString("en-IN");
 
         	    return {
         	        month: data.month,
-        	        netSalary: formatCurrency(data.netSalary),
-        	        basicSalary: formatCurrency(data.basicSalary),
-        	        allowances: formatCurrency(data.allowances),
-        	        deductions: formatCurrency(data.deductions),
-        	        grossSalary: formatCurrency(data.grossSalary),
-        	        taxDeduction: formatCurrency(data.taxDeduction),
-        	        providentFund: formatCurrency(data.providentFund),
-        	        processedDate: formatDate(data.processedDate),
-
-        	        payslips: data.payslips.map(item => ({
+        	        netSalary: formatMoney(data.netSalary),
+        	        basicSalary: formatMoney(data.basicSalary),
+        	        allowances: formatMoney(data.allowances),
+        	        deductions: formatMoney(data.deductions),
+        	        grossSalary: formatMoney(data.grossSalary),
+        	        taxDeduction: formatMoney(data.taxDeduction),
+        	        providentFund: formatMoney(data.providentFund),
+        	        processedDate: data.processedDate,
+        	        payslips: (data.payslips || []).map(item => ({
         	            month: item.month,
-        	            netSalary: formatCurrency(item.netSalary)
+        	            basicSalary: formatMoney(item.basicSalary),
+        	            allowances: formatMoney(item.allowances),
+        	            grossSalary: formatMoney(item.grossSalary),
+        	            taxDeduction: formatMoney(item.taxDeduction),
+        	            providentFund: formatMoney(item.providentFund),
+        	            deductions: formatMoney(item.deductions),
+        	            netSalary: formatMoney(item.netSalary),
+        	            processedDate: item.processedDate
         	        }))
         	    };
         	},
@@ -3750,11 +3739,16 @@
      */
 
     function printPayslip(month) {
-        const employee =
-            state.employee || {};
+    	const employee =
+    	    state.employee || {};
 
-        const payroll =
-            state.payroll || {};
+    	const payrollData =
+    	    state.payroll || {};
+
+    	const payroll =
+    	    (payrollData.payslips || []).find(
+    	        item => item.month === month
+    	    ) || payrollData;
 
         const payslipWindow =
             window.open(
@@ -3903,11 +3897,11 @@
                     </strong>
 
                     ${escapeHtml(
-                        employee.id ||
+                        employee.employeeId ||
                         "—"
                     )}
 
-                </div>
+                    </div>
 
                 <table>
 

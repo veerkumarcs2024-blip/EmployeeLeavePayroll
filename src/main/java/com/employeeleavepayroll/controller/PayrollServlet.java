@@ -98,21 +98,51 @@ public class PayrollServlet extends HttpServlet {
                             + "\",");
 
                     out.println("\"payslips\":[");
-
                     boolean first = true;
 
                     do {
-
                         if (!first) {
                             out.println(",");
                         }
 
                         out.println("{");
+
                         out.println("\"month\":\""
                                 + resultSet.getString("payroll_month")
                                 + "\",");
+
+                        out.println("\"basicSalary\":"
+                                + resultSet.getBigDecimal("basic_salary")
+                                + ",");
+
+                        out.println("\"allowances\":"
+                                + resultSet.getBigDecimal("allowances")
+                                + ",");
+
+                        out.println("\"grossSalary\":"
+                                + resultSet.getBigDecimal("gross_salary")
+                                + ",");
+
+                        out.println("\"taxDeduction\":"
+                                + resultSet.getBigDecimal("tax_deduction")
+                                + ",");
+
+                        out.println("\"providentFund\":"
+                                + resultSet.getBigDecimal("provident_fund")
+                                + ",");
+
+                        out.println("\"deductions\":"
+                                + resultSet.getBigDecimal("deductions")
+                                + ",");
+
                         out.println("\"netSalary\":"
-                                + resultSet.getBigDecimal("net_salary"));
+                                + resultSet.getBigDecimal("net_salary")
+                                + ",");
+
+                        out.println("\"processedDate\":\""
+                                + resultSet.getDate("processed_date")
+                                + "\"");
+
                         out.println("}");
 
                         first = false;
