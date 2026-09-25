@@ -2322,153 +2322,9 @@
                                 </tr>
                             </thead>
 
-                            <tbody id="teamTable">
-
-                                <tr data-name="Rahul Verma">
-
-                                    <td>
-                                        <div class="employee-cell">
-
-                                            <div class="avatar employee-avatar">
-                                                RV
-                                            </div>
-
-                                            <div>
-                                                <strong>Rahul Verma</strong>
-                                                <span>EMP-1024</span>
-                                            </div>
-
-                                        </div>
-                                    </td>
-
-                                    <td>Software Developer</td>
-                                    <td>IT</td>
-                                    <td>96%</td>
-                                    <td>12 Days</td>
-
-                                    <td>
-                                        <span class="status active-status">
-                                            Active
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <button class="more-btn">
-                                            •••
-                                        </button>
-                                    </td>
-
-                                </tr>
-
-                                <tr data-name="Priya Mehta">
-
-                                    <td>
-                                        <div class="employee-cell">
-
-                                            <div class="avatar employee-avatar">
-                                                PM
-                                            </div>
-
-                                            <div>
-                                                <strong>Priya Mehta</strong>
-                                                <span>EMP-1042</span>
-                                            </div>
-
-                                        </div>
-                                    </td>
-
-                                    <td>UI/UX Designer</td>
-                                    <td>Design</td>
-                                    <td>91%</td>
-                                    <td>8 Days</td>
-
-                                    <td>
-                                        <span class="status active-status">
-                                            Active
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <button class="more-btn">
-                                            •••
-                                        </button>
-                                    </td>
-
-                                </tr>
-
-                                <tr data-name="Vikram Singh">
-
-                                    <td>
-                                        <div class="employee-cell">
-
-                                            <div class="avatar employee-avatar">
-                                                VS
-                                            </div>
-
-                                            <div>
-                                                <strong>Vikram Singh</strong>
-                                                <span>EMP-1098</span>
-                                            </div>
-
-                                        </div>
-                                    </td>
-
-                                    <td>Backend Developer</td>
-                                    <td>IT</td>
-                                    <td>89%</td>
-                                    <td>10 Days</td>
-
-                                    <td>
-                                        <span class="status leave-status">
-                                            On Leave
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <button class="more-btn">
-                                            •••
-                                        </button>
-                                    </td>
-
-                                </tr>
-
-                                <tr data-name="Sneha Patel">
-
-                                    <td>
-                                        <div class="employee-cell">
-
-                                            <div class="avatar employee-avatar">
-                                                SP
-                                            </div>
-
-                                            <div>
-                                                <strong>Sneha Patel</strong>
-                                                <span>EMP-1112</span>
-                                            </div>
-
-                                        </div>
-                                    </td>
-
-                                    <td>QA Engineer</td>
-                                    <td>IT</td>
-                                    <td>94%</td>
-                                    <td>15 Days</td>
-
-                                    <td>
-                                        <span class="status active-status">
-                                            Active
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <button class="more-btn">
-                                            •••
-                                        </button>
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
+                           <tbody id="teamTable">
+   								 <!-- Team members will be loaded from database -->
+							</tbody>
 
                         </table>
 
@@ -3218,6 +3074,7 @@
      */
 
     document.addEventListener("DOMContentLoaded", function () {
+    	loadTeam();
 
         const navItems = document.querySelectorAll(".nav-item");
         const pages = document.querySelectorAll(".page");
@@ -3719,6 +3576,80 @@
         /*
          * Team search.
          */
+         
+         async function loadTeam() {
+        	    try {
+        	        const response = await fetch("../ManagerTeamServlet");
+
+        	        if (!response.ok) {
+        	            throw new Error("Unable to load team data.");
+        	        }
+
+        	        const team = await response.json();
+
+        	        const teamTable = document.getElementById("teamTable");
+
+        	        teamTable.innerHTML = "";
+
+        	        team.forEach(employee => {
+        	            const initials = employee.fullName
+        	                .split(" ")
+        	                .map(name => name.charAt(0))
+        	                .join("")
+        	                .substring(0, 2)
+        	                .toUpperCase();
+
+        	            const row = document.createElement("tr");
+
+        	            row.dataset.name = employee.fullName;
+
+        	            row.innerHTML = `
+        	                <td>
+        	                    <div class="employee-cell">
+        	                        <div class="avatar employee-avatar">
+        	                            ${initials}
+        	                        </div>
+        	                        <div>
+        	                            <strong>${employee.fullName}</strong>
+        	                            <span>${employee.employeeId}</span>
+        	                        </div>
+        	                    </div>
+        	                </td>
+
+        	                <td>${employee.designation}</td>
+
+        	                <td>${employee.department}</td>
+
+        	                <td>—</td>
+
+        	                <td>—</td>
+
+        	                <td>
+        	                    <span class="status active-status">
+        	                        Active
+        	                    </span>
+        	                </td>
+
+        	                <td>
+        	                    <button class="more-btn">•••</button>
+        	                </td>
+        	            `;
+
+        	            teamTable.appendChild(row);
+        	        });
+
+        	    } catch (error) {
+        	        console.error(error);
+
+        	        document.getElementById("teamTable").innerHTML = `
+        	            <tr>
+        	                <td colspan="7">
+        	                    Unable to load team data.
+        	                </td>
+        	            </tr>
+        	        `;
+        	    }
+        	}
 
         const teamSearch =
             document.getElementById("teamSearch");
