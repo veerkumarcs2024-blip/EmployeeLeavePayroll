@@ -2289,17 +2289,17 @@
 
                     <div class="mini-stat">
                         <span>Present</span>
-                        <strong>20</strong>
+                        <strong id="attendancePresent">0</strong>
                     </div>
 
                     <div class="mini-stat">
                         <span>On Leave</span>
-                        <strong>3</strong>
+                        <strong id="attendanceOnLeave">0</strong>
                     </div>
 
                     <div class="mini-stat">
                         <span>Absent</span>
-                        <strong>1</strong>
+                        <strong id="attendanceAbsent">0</strong>
                     </div>
 
                 </div>
@@ -2333,6 +2333,51 @@
                 </div>
 
             </section>
+            
+            <section class="page" id="attendance">
+
+			    <div class="section-actions">
+			
+			        <div>
+			            <h2>Team Attendance</h2>
+			            <p>Monitor daily attendance and working hours.</p>
+			        </div>
+			
+			        <input
+			            type="date"
+			            id="attendanceDate"
+			            class="date-input"
+			        >
+			
+			    </div>
+			
+			    <div class="panel">
+			
+			        <div class="table-container">
+			
+			            <table>
+			
+			                <thead>
+			                    <tr>
+			                        <th>EMPLOYEE</th>
+			                        <th>CHECK IN</th>
+			                        <th>CHECK OUT</th>
+			                        <th>WORK HOURS</th>
+			                        <th>STATUS</th>
+			                    </tr>
+			                </thead>
+			
+			                <tbody id="managerAttendanceTable">
+			                    <!-- Attendance data will be loaded from database -->
+			                </tbody>
+			
+			            </table>
+			
+			        </div>
+			
+			    </div>
+			
+			</section>
 
             <!-- =========================
                  LEAVE
@@ -2412,187 +2457,9 @@
                  ATTENDANCE
             ========================== -->
 
-            <section class="page" id="attendance">
-
-                <div class="section-actions">
-
-                    <div>
-                        <h2>Team Attendance</h2>
-                        <p>Monitor daily attendance and working hours.</p>
-                    </div>
-
-                    <input
-                        type="date"
-                        class="date-input"
-                        value="2026-08-22"
-                    >
-
-                </div>
-
-                <div class="attendance-cards">
-
-                    <div class="attendance-card">
-                        <span>Present</span>
-                        <strong>20</strong>
-                        <small>83.3% of team</small>
-                    </div>
-
-                    <div class="attendance-card">
-                        <span>Absent</span>
-                        <strong>1</strong>
-                        <small>4.2% of team</small>
-                    </div>
-
-                    <div class="attendance-card">
-                        <span>On Leave</span>
-                        <strong>3</strong>
-                        <small>12.5% of team</small>
-                    </div>
-
-                    <div class="attendance-card">
-                        <span>Late</span>
-                        <strong>2</strong>
-                        <small>8.3% of team</small>
-                    </div>
-
-                </div>
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-                            <h3>Today's Attendance</h3>
-                            <p>Saturday, August 22, 2026</p>
-                        </div>
-
-                        <button class="secondary-btn">
-                            Export CSV
-                        </button>
-
-                    </div>
-
-                    <div class="table-container">
-
-                        <table>
-
-                            <thead>
-                                <tr>
-                                    <th>EMPLOYEE</th>
-                                    <th>CHECK IN</th>
-                                    <th>CHECK OUT</th>
-                                    <th>WORK HOURS</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                <tr>
-
-                                    <td>
-                                        <div class="employee-cell">
-                                            <div class="avatar employee-avatar">
-                                                RV
-                                            </div>
-
-                                            <strong>Rahul Verma</strong>
-                                        </div>
-                                    </td>
-
-                                    <td>09:02 AM</td>
-                                    <td>06:11 PM</td>
-                                    <td>9h 09m</td>
-
-                                    <td>
-                                        <span class="status active-status">
-                                            Present
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <div class="employee-cell">
-                                            <div class="avatar employee-avatar">
-                                                PM
-                                            </div>
-
-                                            <strong>Priya Mehta</strong>
-                                        </div>
-                                    </td>
-
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-
-                                    <td>
-                                        <span class="status leave-status">
-                                            On Leave
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <div class="employee-cell">
-                                            <div class="avatar employee-avatar">
-                                                VS
-                                            </div>
-
-                                            <strong>Vikram Singh</strong>
-                                        </div>
-                                    </td>
-
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-
-                                    <td>
-                                        <span class="status absent-status">
-                                            Absent
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <div class="employee-cell">
-                                            <div class="avatar employee-avatar">
-                                                SP
-                                            </div>
-
-                                            <strong>Sneha Patel</strong>
-                                        </div>
-                                    </td>
-
-                                    <td>09:27 AM</td>
-                                    <td>—</td>
-                                    <td>7h 35m</td>
-
-                                    <td>
-                                        <span class="status late-status">
-                                            Late
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
+            <tbody id="managerAttendanceTable">
+    			<!-- Attendance data will be loaded from database -->
+			</tbody>
 
             <!-- =========================
                  PAYROLL
@@ -3075,6 +2942,12 @@
 
     document.addEventListener("DOMContentLoaded", function () {
     	loadTeam();
+    	
+    	loadManagerAttendance();
+    	
+    	document
+        .getElementById("attendanceDate")
+        .addEventListener("change", loadManagerAttendance);
 
         const navItems = document.querySelectorAll(".nav-item");
         const pages = document.querySelectorAll(".page");
@@ -3295,21 +3168,14 @@
 
         window.updateLeaveStatus = async function(leaveId, status) {
             try {
-                const response = await fetch("../LeaveApprovalServlet", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: `leaveId=${leaveId}&status=${status}`
-                });
+            	const selectedDate =
+            	    document.getElementById("attendanceDate").value;
 
-                const result = await response.json();
+            	const url = selectedDate
+            	    ? `../ManagerAttendanceServlet?date=${selectedDate}`
+            	    : "../ManagerAttendanceServlet";
 
-                if (!response.ok || !result.success) {
-                    throw new Error(result.message || "Unable to update leave status.");
-                }
-
-                loadLeaveRequests();
+            	const response = await fetch(url);
 
             } catch (error) {
                 console.error(error);
@@ -3618,16 +3484,20 @@
 
         	                <td>${employee.designation}</td>
 
-        	                <td>${employee.department}</td>
+        	                <td>${employee.availableLeave} Days</td>
 
         	                <td>—</td>
 
         	                <td>—</td>
 
         	                <td>
-        	                    <span class="status active-status">
-        	                        Active
-        	                    </span>
+        	            	<span class="status ${
+        	                employee.latestAttendanceStatus === "Present"
+        	                    ? "active-status"
+        	                    : "leave-status"
+        	            }">
+        	                ${employee.latestAttendanceStatus || "No Record"}
+        	            </span>
         	                </td>
 
         	                <td>
@@ -3684,6 +3554,112 @@
 
             }
         );
+        
+        async function loadManagerAttendance() {
+            try {
+                const response = await fetch("../ManagerAttendanceServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load attendance data.");
+                }
+
+                const data = await response.json();
+                const attendance = data.records || [];
+                
+                const summary = data.summary || {};
+
+                document.getElementById("attendancePresent").textContent =
+                    summary.present || 0;
+
+                document.getElementById("attendanceAbsent").textContent =
+                    summary.absent || 0;
+
+                document.getElementById("attendanceOnLeave").textContent =
+                    summary.onLeave || 0;
+
+                const table =
+                    document.getElementById("managerAttendanceTable");
+
+                table.innerHTML = "";
+
+                attendance.forEach(record => {
+
+                    const initials = record.fullName
+                        .split(" ")
+                        .map(name => name.charAt(0))
+                        .join("")
+                        .substring(0, 2)
+                        .toUpperCase();
+
+                    const checkIn = record.checkIn || "—";
+                    const checkOut = record.checkOut || "—";
+
+                    let workHours = "—";
+
+                    if (record.checkIn && record.checkOut) {
+                        const start = new Date(
+                            `1970-01-01T${record.checkIn}`
+                        );
+
+                        const end = new Date(
+                            `1970-01-01T${record.checkOut}`
+                        );
+
+                        const minutes =
+                            Math.floor((end - start) / 60000);
+
+                        workHours =
+                            `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+                    }
+
+                    const statusClass =
+                        record.status === "Present"
+                            ? "active-status"
+                            : "absent-status";
+
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>
+                            <div class="employee-cell">
+                                <div class="avatar employee-avatar">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <strong>${record.fullName}</strong>
+                                    <span>${record.employeeId}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>${checkIn}</td>
+                        <td>${checkOut}</td>
+                        <td>${workHours}</td>
+
+                        <td>
+                            <span class="status ${statusClass}">
+                                ${record.status || "No Record"}
+                            </span>
+                        </td>
+                    `;
+
+                    table.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error(error);
+
+                document.getElementById(
+                    "managerAttendanceTable"
+                ).innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            Unable to load attendance data.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
 
 
         /*
