@@ -1890,7 +1890,7 @@
                             <div class="donut">
 
                                 <div>
-                                    <strong>83%</strong>
+                                    <strong id="dashboardAttendancePercent">83%</strong>
                                     <span>Present</span>
                                 </div>
 
@@ -1901,19 +1901,19 @@
                                 <div>
                                     <span class="legend-dot present"></span>
                                     Present
-                                    <strong>20</strong>
+                                    <strong id="dashboardPresentCount">20</strong>
                                 </div>
 
                                 <div>
                                     <span class="legend-dot leave"></span>
                                     On Leave
-                                    <strong>3</strong>
+                                    <strong id="dashboardOnLeaveCount">3</strong>
                                 </div>
 
                                 <div>
                                     <span class="legend-dot absent"></span>
                                     Absent
-                                    <strong>1</strong>
+                                    <strong id="dashboardAbsentCount">1</strong>
                                 </div>
 
                             </div>
@@ -3673,7 +3673,38 @@
 
                 document.getElementById("attendancePercentage").textContent =
                     `${attendancePercentage}% attendance`;
+                    
+                document.getElementById("dashboardAttendancePercent").textContent =
+                   	`${attendancePercentage}%`
+                   	
+                 const presentPercent =
+				    totalForAttendance > 0
+				        ? (data.present / totalForAttendance) * 100
+				        : 0;
+				
+				const leavePercent =
+				    totalForAttendance > 0
+				        ? (data.onLeave / totalForAttendance) * 100
+				        : 0;
+				
+				const donut =
+				    document.querySelector(".donut");
+				
+				donut.style.background =
+				    `conic-gradient(
+				        #4f46e5 0 ${presentPercent}%,
+				        #93c5fd ${presentPercent}% ${presentPercent + leavePercent}%,
+				        #fca5a5 ${presentPercent + leavePercent}% 100%
+				    )`;
+                 document.getElementById("dashboardPresentCount").textContent =
+    					data.present || 0;
 
+				document.getElementById("dashboardOnLeaveCount").textContent =
+   						 data.onLeave || 0;
+
+				document.getElementById("dashboardAbsentCount").textContent =
+   						 data.absent || 0;
+                 
                 document.getElementById("onLeaveToday").textContent =
                     data.onLeave || 0;
 
