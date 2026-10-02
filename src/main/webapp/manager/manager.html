@@ -1722,7 +1722,7 @@
 
                         <div>
                             <span>Total Team</span>
-                            <strong>24</strong>
+                            <strong id="totalTeam"></strong>
                             <small>Team members</small>
                         </div>
                     </div>
@@ -1732,8 +1732,8 @@
 
                         <div>
                             <span>Present Today</span>
-                            <strong>20</strong>
-                            <small class="positive">
+                            <strong id="presentToday"></strong>
+                            <small class="positive" id="attendancePercentage">
                                 83.3% attendance
                             </small>
                         </div>
@@ -1744,7 +1744,7 @@
 
                         <div>
                             <span>On Leave</span>
-                            <strong>3</strong>
+                            <strong id="onLeaveToday"></strong>
                             <small>Today</small>
                         </div>
                     </div>
@@ -1754,7 +1754,7 @@
 
                         <div>
                             <span>Absent</span>
-                            <strong>1</strong>
+                            <strong id="absentToday"></strong>
                             <small>Needs attention</small>
                         </div>
                     </div>
@@ -1792,7 +1792,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="pendingLeaveTable">
 
                                     <tr>
                                         <td>
@@ -2944,6 +2944,8 @@
     	loadTeam();
     	
     	loadManagerAttendance();
+    	loadManagerDashboard();
+    	loadPendingLeaveRequests();
     	
     	document
         .getElementById("attendanceDate")
@@ -3006,6 +3008,93 @@
                 subtitle: "Manage your account preferences"
             }
         };
+        
+        async function loadPendingLeaveRequests() {
+
+            try {
+
+                const response =
+                    await fetch("../LeaveApprovalServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load pending leave requests.");
+                }
+
+                const data = await response.json();
+
+                const pendingRequests =
+                    data.filter(request => request.status === "Pending");
+
+                const table =
+                    document.getElementById("pendingLeaveTable");
+
+                table.innerHTML = "";
+
+                pendingRequests.forEach(request => {
+
+                    const initials = request.employeeName
+                        .split(" ")
+                        .map(name => name.charAt(0))
+                        .join("")
+                        .substring(0, 2)
+                        .toUpperCase();
+
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>
+                            <div class="employee-cell">
+                                <div class="avatar employee-avatar">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <strong>${request.employeeName}</strong>
+                                    <span>${request.employeeId}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>${request.type}</td>
+
+                        <td>
+                            ${request.startDate} - ${request.endDate}
+                        </td>
+
+                        <td>${request.days}</td>
+
+                        <td>
+                            <div class="approval-actions">
+                                <button
+                                    class="approve-btn"
+                                    onclick="updateLeaveStatus(${request.id}, 'Approved')">
+                                    ✓
+                                </button>
+
+                                <button
+                                    class="reject-btn"
+                                    onclick="updateLeaveStatus(${request.id}, 'Rejected')">
+                                    ×
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+                    table.appendChild(row);
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("pendingLeaveTable").innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            Unable to load pending leave requests.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
         
         async function loadLeaveRequests() {
 
@@ -3554,6 +3643,47 @@
 
             }
         );
+        
+        async function loadManagerDashboard() {
+            try {
+                const response =
+                    await fetch("../ManagerDashboardServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load dashboard data.");
+                }
+
+                const data = await response.json();
+
+                document.getElementById("totalTeam").textContent =
+                    data.totalTeam || 0;
+
+                document.getElementById("presentToday").textContent =
+                    data.present || 0;
+                
+                const totalForAttendance =
+                    (data.present || 0) +
+                    (data.absent || 0) +
+                    (data.onLeave || 0);
+
+                const attendancePercentage =
+                    totalForAttendance > 0
+                        ? ((data.present / totalForAttendance) * 100).toFixed(1)
+                        : 0;
+
+                document.getElementById("attendancePercentage").textContent =
+                    `${attendancePercentage}% attendance`;
+
+                document.getElementById("onLeaveToday").textContent =
+                    data.onLeave || 0;
+
+                document.getElementById("absentToday").textContent =
+                    data.absent || 0;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
         
         async function loadManagerAttendance() {
             try {
