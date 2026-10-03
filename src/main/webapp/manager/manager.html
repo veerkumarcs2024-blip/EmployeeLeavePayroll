@@ -1594,7 +1594,7 @@
             <button class="nav-item" data-page="leave">
                 <span class="nav-icon">▣</span>
                 Leave Management
-                <span class="nav-badge">3</span>
+                <span class="nav-badge" id="leaveBadge">0</span>
             </button>
 
             <button class="nav-item" data-page="attendance">
@@ -1622,7 +1622,7 @@
             <button class="nav-item" data-page="notifications">
                 <span class="nav-icon">♢</span>
                 Notifications
-                <span class="nav-badge">5</span>
+                <span class="nav-badge" id="notificationBadge">0</span>
             </button>
 
             <button class="nav-item" data-page="settings">
@@ -1890,7 +1890,7 @@
                             <div class="donut">
 
                                 <div>
-                                    <strong id="dashboardAttendancePercent">83%</strong>
+                                    <strong id="dashboardAttendancePercent">0%</strong>
                                     <span>Present</span>
                                 </div>
 
@@ -1901,19 +1901,19 @@
                                 <div>
                                     <span class="legend-dot present"></span>
                                     Present
-                                    <strong id="dashboardPresentCount">20</strong>
+                                    <strong id="dashboardPresentCount">0</strong>
                                 </div>
 
                                 <div>
                                     <span class="legend-dot leave"></span>
                                     On Leave
-                                    <strong id="dashboardOnLeaveCount">3</strong>
+                                    <strong id="dashboardOnLeaveCount">0</strong>
                                 </div>
 
                                 <div>
                                     <span class="legend-dot absent"></span>
                                     Absent
-                                    <strong id="dashboardAbsentCount">1</strong>
+                                    <strong id="dashboardAbsentCount">0</strong>
                                 </div>
 
                             </div>
@@ -1937,7 +1937,7 @@
 
                         </div>
 
-                        <div class="event-list">
+                        <div class="event-list" id="managerEventsList">
 
                             <div class="event">
 
@@ -2401,7 +2401,7 @@
                 <div class="tabs">
 
                     <button class="tab active" data-tab="pending">
-                        Pending <span>3</span>
+                        Pending <span></span>
                     </button>
 
                     <button class="tab" data-tab="approved">
@@ -2711,7 +2711,7 @@
 
                 </div>
 
-                <div class="notification-list">
+                <div class="notification-list" id="managerNotificationList">
 
                     <div class="notification unread">
 
@@ -2945,6 +2945,8 @@
     	
     	loadManagerAttendance();
     	loadManagerDashboard();
+    	loadManagerEvents();
+    	loadManagerNotifications();
     	loadPendingLeaveRequests();
     	
     	document
@@ -3009,6 +3011,144 @@
             }
         };
         
+        async function loadManagerEvents() {
+
+            try {
+
+                const response =
+                    await fetch("../ManagerEventsServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load events.");
+                }
+
+                const events = await response.json();
+
+                const eventsList =
+                    document.getElementById("managerEventsList");
+
+                eventsList.innerHTML = "";
+
+                events.forEach(event => {
+
+                    const date = new Date(event.eventDate + "T00:00:00");
+
+                    const day =
+                        date.getDate().toString().padStart(2, "0");
+
+                    const month =
+                        date.toLocaleString("en-US", {
+                            month: "short"
+                        }).toUpperCase();
+
+                    const eventItem =
+                        document.createElement("div");
+
+                    eventItem.className = "event";
+
+                    eventItem.innerHTML = `
+                        <div class="event-date">
+                            <strong>${day}</strong>
+                            <span>${month}</span>
+                        </div>
+
+                        <div>
+                            <strong>${event.title}</strong>
+                            <span>
+                                ${event.eventTime || event.description || ""}
+                            </span>
+                        </div>
+                    `;
+
+                    eventsList.appendChild(eventItem);
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("managerEventsList").innerHTML = `
+                    <div class="event">
+                        <div>
+                            <strong>Unable to load events</strong>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        async function loadManagerNotifications() {
+
+            try {
+
+                const response =
+                    await fetch("../NotificationServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load notifications.");
+                }
+
+                const notifications = await response.json();
+                
+                const unreadCount =
+                    notifications.filter(
+                        notification => notification.unread
+                    ).length;
+
+                const badge =
+                    document.getElementById("notificationBadge");
+
+                badge.textContent = unreadCount;
+
+                badge.style.display =
+                    unreadCount > 0 ? "inline-flex" : "none";
+
+                const list =
+                    document.getElementById("managerNotificationList");
+
+                list.innerHTML = "";
+
+                notifications.forEach(notification => {
+
+                    const item =
+                        document.createElement("div");
+
+                    item.className =
+                        notification.unread
+                            ? "notification unread"
+                            : "notification";
+
+                    item.innerHTML = `
+                        <div class="notification-icon blue">
+                            ${notification.icon || "🔔"}
+                        </div>
+
+                        <div>
+                            <strong>${notification.title}</strong>
+
+                            <p>${notification.message}</p>
+
+                            <span>${notification.time}</span>
+                        </div>
+                    `;
+
+                    list.appendChild(item);
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("managerNotificationList").innerHTML = `
+                    <div class="notification">
+                        <div>
+                            <strong>Unable to load notifications</strong>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
         async function loadPendingLeaveRequests() {
 
             try {
@@ -3024,6 +3164,17 @@
 
                 const pendingRequests =
                     data.filter(request => request.status === "Pending");
+                
+                const leaveBadge =
+                    document.getElementById("leaveBadge");
+
+                leaveBadge.textContent =
+                    pendingRequests.length;
+
+                leaveBadge.style.display =pendi
+                    pendingRequests.length > 0
+                        ? "inline-flex"
+                        : "none";
 
                 const table =
                     document.getElementById("pendingLeaveTable");
@@ -3880,33 +4031,49 @@
         /*
          * Mark notifications as read.
          */
+         
+         document
+         .getElementById("markAllRead")
+         .addEventListener("click", async function () {
 
-        document
-            .getElementById("markAllRead")
-            .addEventListener(
-                "click",
-                function () {
+             try {
 
-                    document
-                        .querySelectorAll(
-                            ".notification.unread"
-                        )
-                        .forEach(function (item) {
+                 const response =
+                     await fetch("../NotificationServlet", {
+                         method: "POST"
+                     });
 
-                            item.classList.remove(
-                                "unread"
-                            );
+                 const data = await response.json();
 
-                        });
+                 if (!response.ok || !data.success) {
+                     throw new Error(
+                         data.message ||
+                         "Unable to mark notifications as read."
+                     );
+                 }
 
-                    showToast(
-                        "All notifications marked as read."
-                    );
+                 document
+                     .querySelectorAll(".notification.unread")
+                     .forEach(function (item) {
+                         item.classList.remove("unread");
+                     });
 
-                }
-            );
+                 showToast(
+                     "All notifications marked as read."
+                 );
 
+             } catch (error) {
 
+                 console.error(error);
+
+                 showToast(
+                     error.message ||
+                     "Unable to mark notifications as read.",
+                     "error"
+                 );
+             }
+         });
+         
         /*
          * Settings form.
          */

@@ -21,6 +21,58 @@ public class NotificationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("application/json;charset=UTF-8");
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("userId") == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write(
+                "{\"success\":false,\"message\":\"User not logged in\"}"
+            );
+            return;
+        }
+
+        int userId = (Integer) session.getAttribute("userId");
+
+        String sql =
+            "UPDATE notifications " +
+            "SET unread = 0 " +
+            "WHERE user_id = ?";
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement =
+                 connection.prepareStatement(sql)) {
+
+            statement.setInt(1, userId);
+
+            int updatedRows = statement.executeUpdate();
+
+            response.getWriter().write(
+                "{\"success\":true,\"updated\":" +
+                updatedRows + "}"
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            response.setStatus(
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            );
+
+            response.getWriter().write(
+                "{\"success\":false,\"message\":\"Database error\"}"
+            );
+        }
+    }
+    
+    
+    @Override
     protected void doGet(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
