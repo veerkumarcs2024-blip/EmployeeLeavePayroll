@@ -2038,16 +2038,16 @@
 
                     <div class="profile-main">
 
-                        <div class="profile-avatar">
+                        <div class="profile-avatar" id="managerProfileAvatar">
                             AS
                         </div>
 
                         <div class="profile-title">
 
-                            <h2>Vikram Kumar</h2>
+                            <h2 id="managerProfileName">Vikram Kumar</h2>
 
                             <p>
-                                Operations & People Manager • System Manager
+                                Operations and People Manager • System Manager
                             </p>
 
                             <span class="status active-status">
@@ -2086,32 +2086,32 @@
 
                             <div class="detail">
                                 <span>Employee ID</span>
-                                <strong>MGR-2024-001</strong>
+                                <strong id="managerEmployeeId">MGR-2024-001</strong>
                             </div>
 
                             <div class="detail">
                                 <span>Date of Birth</span>
-                                <strong>14 March 1994</strong>
+                                <strong id="managerDob">14 March 1994</strong>
                             </div>
 
                             <div class="detail">
                                 <span>Gender</span>
-                                <strong>Male</strong>
+                                <strong id="managerGender">Male</strong>
                             </div>
 
                             <div class="detail">
                                 <span>Phone</span>
-                                <strong>+91 98765 43210</strong>
+                                <strong id="managerPhone">+91 98765 43210</strong>
                             </div>
 
                             <div class="detail">
                                 <span>Email</span>
-                                <strong>aarav.sharma@company.com</strong>
+                                <strong id="managerEmail">aarav.sharma@company.com</strong>
                             </div>
 
                             <div class="detail full">
                                 <span>Address</span>
-                                <strong>New Delhi, Delhi, India</strong>
+                                <strong id="managerAddress">New Delhi, Delhi, India</strong>
                             </div>
 
                         </div>
@@ -2133,37 +2133,37 @@
 
                             <div>
                                 <span>Designation</span>
-                                <strong>Operations & People Manager</strong>
+                                <strong id="managerDesignation"></strong>
                             </div>
 
                             <div>
                                 <span>Department</span>
-                                <strong>Information Technology</strong>
+                                <strong id="managerDepartment">Information Technology</strong>
                             </div>
 
                             <div>
                                 <span>Role</span>
-                                <strong>System Manager</strong>
+                                <strong id="managerRole">System Manager</strong>
                             </div>
 
                             <div>
                                 <span>Reporting Manager</span>
-                                <strong>Neha Kapoor (HR Manager)</strong>
+                                <strong id="managerReportingManager">Neha Kapoor (HR Manager)</strong>
                             </div>
 
                             <div>
                                 <span>Date of Joining</span>
-                                <strong>12 June 2021</strong>
+                                <strong id="managerJoiningDate">12 June 2021</strong>
                             </div>
 
                             <div>
                                 <span>Work Location</span>
-                                <strong>New Delhi Office</strong>
+                                <strong id="managerWorkLocation">New Delhi Office</strong>
                             </div>
 
                             <div>
                                 <span>Employment Type</span>
-                                <strong>Full Time</strong>
+                                <strong id="managerEmploymentType">Full Time</strong>
                             </div>
 
                         </div>
@@ -2185,17 +2185,17 @@
 
                             <div>
                                 <span>Name</span>
-                                <strong>Ananya Sharma</strong>
+                                <strong id="managerEmergencyName">Ananya Sharma</strong>
                             </div>
 
                             <div>
                                 <span>Relationship</span>
-                                <strong>Spouse</strong>
+                                <strong id="managerEmergencyRelationship">Spouse</strong>
                             </div>
 
                             <div>
                                 <span>Phone</span>
-                                <strong>+91 98765 11223</strong>
+                                <strong id="managerEmergencyPhone">+91 98765 11223</strong>
                             </div>
 
                         </div>
@@ -2948,6 +2948,7 @@
     	loadManagerEvents();
     	loadManagerNotifications();
     	loadPendingLeaveRequests();
+    	loadManagerProfile();
     	
     	document
         .getElementById("attendanceDate")
@@ -3146,6 +3147,80 @@
                         </div>
                     </div>
                 `;
+            }
+        }
+        
+        async function loadManagerProfile() {
+            try {
+                const response = await fetch("../ManagerProfileServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load manager profile.");
+                }
+
+                const profile = await response.json();
+
+                document.getElementById("managerProfileName").textContent =
+                    profile.fullName;
+
+                document.getElementById("managerProfileAvatar").textContent =
+                    profile.fullName
+                        .split(" ")
+                        .map(name => name.charAt(0))
+                        .join("")
+                        .substring(0, 2)
+                        .toUpperCase();
+
+                document.getElementById("managerEmployeeId").textContent =
+                    profile.employeeId;
+
+                document.getElementById("managerDob").textContent =
+                    profile.dateOfBirth;
+
+                document.getElementById("managerGender").textContent =
+                    profile.gender;
+
+                document.getElementById("managerPhone").textContent =
+                    profile.phone;
+
+                document.getElementById("managerEmail").textContent =
+                    profile.email;
+
+                document.getElementById("managerAddress").textContent =
+                    profile.address;
+
+                document.getElementById("managerDesignation").textContent =
+                    profile.designation;
+
+                document.getElementById("managerDepartment").textContent =
+                    profile.department;
+
+                document.getElementById("managerRole").textContent =
+                    "System Manager";
+
+                document.getElementById("managerReportingManager").textContent =
+                    profile.manager + " (HR Manager)";
+
+                document.getElementById("managerJoiningDate").textContent =
+                    profile.joiningDate;
+
+                document.getElementById("managerWorkLocation").textContent =
+                    profile.workLocation;
+
+                document.getElementById("managerEmploymentType").textContent =
+                    profile.employmentType;
+
+                document.getElementById("managerEmergencyName").textContent =
+                    profile.emergencyName;
+
+                document.getElementById("managerEmergencyRelationship").textContent =
+                    profile.emergencyRelationship;
+
+                document.getElementById("managerEmergencyPhone").textContent =
+                    profile.emergencyPhone;
+
+            } catch (error) {
+                console.error(error);
             }
         }
         
