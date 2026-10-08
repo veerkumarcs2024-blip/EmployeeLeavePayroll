@@ -1053,7 +1053,7 @@ td{
     }
 }
 </style>
-    <script src="auth.js"></script>
+   
 </head>
 
 <body>
@@ -1067,15 +1067,15 @@ td{
     <div class="brand">
         <div class="brand-logo">EM</div>
         <div>
-            <h2>EmployeeMS</h2>
+            <h2>Employee Leave & Payroll System</h2>
             <span>Admin Management</span>
         </div>
     </div>
 
     <div class="user-mini">
-        <div class="avatar">VK</div>
+        <div class="avatar">CH</div>
         <div>
-            <strong>Veer Kumar</strong>
+            <strong>Chandan</strong>
             <span>System Administrator</span>
         </div>
     </div>
@@ -1191,11 +1191,11 @@ td{
         <div class="profile-menu" id="profileMenu">
 
             <div class="avatar">
-                VK
+                CH
             </div>
 
             <div class="profile-text">
-                <strong>Veer Kumar</strong>
+                <strong>Chandan</strong>
                 <span>Administrator</span>
             </div>
 
@@ -1218,10 +1218,10 @@ td{
         <div>
             <p class="eyebrow">ADMIN CONTROL CENTER</p>
 
-            <h2>Welcome back, Veer 👋</h2>
+            <h2>Welcome back, Chandan 👋</h2>
 
             <p>
-                Manage employees, teams, projects and the complete organization.
+                Manage employees, leave, attendance, payroll and projects from one place.
             </p>
         </div>
 
@@ -1341,24 +1341,24 @@ td{
                     <tbody>
 
                         <tr>
-                            <td><strong>EmployeeMS 2.0</strong></td>
-                            <td>Aarav Sharma</td>
+                            <td><strong>Employee Leave & Payroll System</strong></td>
+                            <td>Vikram Kumar</td>
                             <td>12</td>
                             <td>78%</td>
                             <td><span class="status active">Active</span></td>
                         </tr>
 
                         <tr>
-                            <td><strong>Mobile Application</strong></td>
-                            <td>Priya Mehta</td>
+                            <td><strong>Employee Portal</strong></td>
+                            <td>Rahul Sharma</td>
                             <td>8</td>
                             <td>54%</td>
                             <td><span class="status active">Active</span></td>
                         </tr>
 
                         <tr>
-                            <td><strong>AI Analytics</strong></td>
-                            <td>Rahul Verma</td>
+                            <td><strong>Payroll & Attendance Module</strong></td>
+                            <td>Veer Kumar</td>
                             <td>6</td>
                             <td>32%</td>
                             <td><span class="status pending">Planning</span></td>
@@ -1387,7 +1387,7 @@ td{
                     <div class="notification-icon orange">🚀</div>
                     <div>
                         <strong>New project created</strong>
-                        <p>AI Analytics project was created.</p>
+                        <p>Payroll & Attendance Module project was created.</p>
                         <span>15 minutes ago</span>
                     </div>
                 </div>
@@ -1398,7 +1398,7 @@ td{
                     <div class="notification-icon blue">👥</div>
                     <div>
                         <strong>Team leader assigned</strong>
-                        <p>Priya Mehta assigned to Mobile Application.</p>
+                        <p>Rahul Sharma assigned to Employee Portal.</p>
                         <span>1 hour ago</span>
                     </div>
                 </div>
@@ -1443,14 +1443,63 @@ td{
                     <tr>
                         <th>EMPLOYEE</th>
                         <th>EMP ID</th>
-                        <th>EMAIL</th>
-                        <th>ROLE</th>
+                        <th>DEPARTMENT</th>
+                        <th>DESIGNATION</th>
                         <th>STATUS</th>
                         <th>ACTION</th>
                     </tr>
                 </thead>
 
-                <tbody id="employeeTableBody">
+                <tbody>
+
+                    <tr>
+                        <td><strong>Veer Kumar</strong></td>
+                        <td>EMP-1024</td>
+                        <td>IT</td>
+                        <td>Software Engineer</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="small-btn secondary-btn view-btn">Edit</button>
+                            <button class="small-btn danger-btn delete-btn">Delete</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Rahul Sharma</strong></td>
+                        <td>EMP-1042</td>
+                        <td>IT</td>
+                        <td>Senior Developer</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="small-btn secondary-btn view-btn">Edit</button>
+                            <button class="small-btn danger-btn delete-btn">Delete</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Veer Kumar</strong></td>
+                        <td>EMP-1078</td>
+                        <td>Finance</td>
+                        <td>Account Manager</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="small-btn secondary-btn view-btn">Edit</button>
+                            <button class="small-btn danger-btn delete-btn">Delete</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Employee User</strong></td>
+                        <td>EMP-1102</td>
+                        <td>HR</td>
+                        <td>HR Executive</td>
+                        <td><span class="status pending">On Leave</span></td>
+                        <td>
+                            <button class="small-btn secondary-btn view-btn">Edit</button>
+                            <button class="small-btn danger-btn delete-btn">Delete</button>
+                        </td>
+                    </tr>
+
                 </tbody>
 
             </table>
@@ -1482,7 +1531,7 @@ td{
 
         <div class="management-card">
             <div class="management-icon">★</div>
-            <h3>Aarav Sharma</h3>
+            <h3>Vikram Kumar</h3>
             <p>Senior Software Engineer<br>IT Department<br>Managing 24 employees</p>
             <span class="status active">Active</span>
             <br><br>
@@ -1491,7 +1540,7 @@ td{
 
         <div class="management-card">
             <div class="management-icon">★</div>
-            <h3>Priya Mehta</h3>
+            <h3>Rahul Sharma</h3>
             <p>Project Manager<br>IT Department<br>Managing 18 employees</p>
             <span class="status active">Active</span>
             <br><br>
@@ -1500,7 +1549,7 @@ td{
 
         <div class="management-card">
             <div class="management-icon">★</div>
-            <h3>Rahul Verma</h3>
+            <h3>Veer Kumar</h3>
             <p>Engineering Lead<br>R&D Department<br>Managing 15 employees</p>
             <span class="status active">Active</span>
             <br><br>
@@ -1551,8 +1600,8 @@ td{
                         <td><strong>Aditya Kumar</strong></td>
                         <td>INT-2026-01</td>
                         <td>AKTU</td>
-                        <td>Aarav Sharma</td>
-                        <td>EmployeeMS</td>
+                        <td>Vikram Kumar</td>
+                        <td>Employee Leave & Payroll System</td>
                         <td><span class="status active">Active</span></td>
                     </tr>
 
@@ -1560,7 +1609,7 @@ td{
                         <td><strong>Neha Singh</strong></td>
                         <td>INT-2026-02</td>
                         <td>DU</td>
-                        <td>Priya Mehta</td>
+                        <td>Rahul Sharma</td>
                         <td>Mobile App</td>
                         <td><span class="status active">Active</span></td>
                     </tr>
@@ -1569,8 +1618,8 @@ td{
                         <td><strong>Rohan Gupta</strong></td>
                         <td>INT-2026-03</td>
                         <td>AKTU</td>
-                        <td>Rahul Verma</td>
-                        <td>AI Analytics</td>
+                        <td>Veer Kumar</td>
+                        <td>Payroll & Attendance Module</td>
                         <td><span class="status pending">Pending</span></td>
                     </tr>
 
@@ -1650,16 +1699,16 @@ td{
         <div class="project-card">
 
             <div class="project-top">
-                <h3>EmployeeMS 2.0</h3>
+                <h3>Employee Leave & Payroll System</h3>
                 <span class="status active">Active</span>
             </div>
 
-            <p>Complete employee management system upgrade.</p>
+            <p>Employee leave, attendance and payroll management system.</p>
 
             <div class="project-info">
                 <div>
                     <span>Team Leader</span>
-                    <strong>Aarav Sharma</strong>
+                    <strong>Vikram Kumar</strong>
                 </div>
                 <div>
                     <span>Members</span>
@@ -1684,16 +1733,16 @@ td{
         <div class="project-card">
 
             <div class="project-top">
-                <h3>Mobile Application</h3>
+                <h3>Employee Portal</h3>
                 <span class="status active">Active</span>
             </div>
 
-            <p>Mobile employee portal and attendance application.</p>
+            <p>Employee leave and attendance portal.</p>
 
             <div class="project-info">
                 <div>
                     <span>Team Leader</span>
-                    <strong>Priya Mehta</strong>
+                    <strong>Rahul Sharma</strong>
                 </div>
                 <div>
                     <span>Members</span>
@@ -1718,16 +1767,16 @@ td{
         <div class="project-card">
 
             <div class="project-top">
-                <h3>AI Analytics</h3>
+                <h3>Payroll & Attendance Module</h3>
                 <span class="status pending">Planning</span>
             </div>
 
-            <p>AI-based employee performance analytics system.</p>
+            <p>Payroll and attendance management module.</p>
 
             <div class="project-info">
                 <div>
                     <span>Team Leader</span>
-                    <strong>Rahul Verma</strong>
+                    <strong>Veer Kumar</strong>
                 </div>
                 <div>
                     <span>Members</span>
@@ -1781,9 +1830,9 @@ td{
 
             <select class="select-input" id="teamFilter">
                 <option>All Projects</option>
-                <option>EmployeeMS 2.0</option>
-                <option>Mobile Application</option>
-                <option>AI Analytics</option>
+                <option>Employee Leave & Payroll System</option>
+                <option>Employee Portal</option>
+                <option>Payroll & Attendance Module</option>
             </select>
 
         </div>
@@ -1806,8 +1855,8 @@ td{
                 <tbody>
 
                     <tr>
-                        <td><strong>EmployeeMS 2.0</strong></td>
-                        <td>Aarav Sharma</td>
+                        <td><strong>Employee Leave & Payroll System</strong></td>
+                        <td>Vikram Kumar</td>
                         <td>10</td>
                         <td>2</td>
                         <td>12</td>
@@ -1819,8 +1868,8 @@ td{
                     </tr>
 
                     <tr>
-                        <td><strong>Mobile Application</strong></td>
-                        <td>Priya Mehta</td>
+                        <td><strong>Employee Portal</strong></td>
+                        <td>Rahul Sharma</td>
                         <td>7</td>
                         <td>1</td>
                         <td>8</td>
@@ -1832,8 +1881,8 @@ td{
                     </tr>
 
                     <tr>
-                        <td><strong>AI Analytics</strong></td>
-                        <td>Rahul Verma</td>
+                        <td><strong>Payroll & Attendance Module</strong></td>
+                        <td>Veer Kumar</td>
                         <td>5</td>
                         <td>1</td>
                         <td>6</td>
@@ -1927,7 +1976,7 @@ td{
                 <tbody>
 
                     <tr>
-                        <td><strong>Rahul Verma</strong></td>
+                        <td><strong>Veer Kumar</strong></td>
                         <td>Casual Leave</td>
                         <td>5-7 Sep</td>
                         <td>3</td>
@@ -1939,7 +1988,7 @@ td{
                     </tr>
 
                     <tr>
-                        <td><strong>Priya Mehta</strong></td>
+                        <td><strong>Rahul Sharma</strong></td>
                         <td>Sick Leave</td>
                         <td>8 Sep</td>
                         <td>1</td>
@@ -2036,7 +2085,7 @@ td{
                 <tbody>
 
                     <tr>
-                        <td><strong>Rahul Verma</strong></td>
+                        <td><strong>Veer Kumar</strong></td>
                         <td>IT</td>
                         <td>09:02 AM</td>
                         <td>06:04 PM</td>
@@ -2045,7 +2094,7 @@ td{
                     </tr>
 
                     <tr>
-                        <td><strong>Priya Mehta</strong></td>
+                        <td><strong>Rahul Sharma</strong></td>
                         <td>IT</td>
                         <td>09:27 AM</td>
                         <td>06:10 PM</td>
@@ -2054,7 +2103,7 @@ td{
                     </tr>
 
                     <tr>
-                        <td><strong>Vikram Singh</strong></td>
+                        <td><strong>Veer Kumar</strong></td>
                         <td>Finance</td>
                         <td>—</td>
                         <td>—</td>
@@ -2165,7 +2214,7 @@ td{
             </div>
             <div class="setting-row">
                 <div>
-                    <strong>EmployeeMS</strong>
+                    <strong>Employee Leave & Payroll System</strong>
                     <span>New Delhi, India · Monday to Friday · Asia/Kolkata</span>
                 </div>
                 <span class="status active">Configured</span>
@@ -2196,7 +2245,7 @@ td{
                 <tbody>
 
                     <tr>
-                        <td><strong>Rahul Verma</strong></td>
+                        <td><strong>Veer Kumar</strong></td>
                         <td>₹65,000</td>
                         <td>₹8,500</td>
                         <td>₹7,100</td>
@@ -2205,7 +2254,7 @@ td{
                     </tr>
 
                     <tr>
-                        <td><strong>Priya Mehta</strong></td>
+                        <td><strong>Rahul Sharma</strong></td>
                         <td>₹58,000</td>
                         <td>₹6,500</td>
                         <td>₹6,300</td>
@@ -2307,7 +2356,7 @@ td{
 
             <div>
                 <strong>New Leave Request</strong>
-                <p>Rahul Verma submitted a Casual Leave request.</p>
+                <p>Veer Kumar submitted a Casual Leave request.</p>
                 <span>10 minutes ago</span>
             </div>
 
@@ -2319,7 +2368,7 @@ td{
 
             <div>
                 <strong>New Project Created</strong>
-                <p>AI Analytics project has been created.</p>
+                <p>Payroll & Attendance Module project has been created.</p>
                 <span>35 minutes ago</span>
             </div>
 
@@ -2352,12 +2401,12 @@ td{
         <div class="profile-main">
 
             <div class="profile-avatar">
-                VK
+                CH
             </div>
 
             <div class="profile-title">
 
-                <h2>Veer Kumar</h2>
+                <h2>Chandan</h2>
 
                 <p>
                     System Administrator • Employee Management System
@@ -2390,7 +2439,7 @@ td{
 
                 <div class="detail">
                     <span>Full Name</span>
-                    <strong>Veer Kumar</strong>
+                    <strong>Chandan</strong>
                 </div>
 
                 <div class="detail">
@@ -2795,36 +2844,6 @@ document.addEventListener("DOMContentLoaded", function(){
         showPage("profile");
 
     });
-    
-    /* ================= LOAD EMPLOYEES FROM DATABASE ================= */
-
-    function loadEmployees() {
-
-        const employeeTableBody =
-            document.getElementById("employeeTableBody");
-
-        if (!employeeTableBody) {
-            return;
-        }
-
-        employeeTableBody.innerHTML =
-            "<tr><td colspan='6'>Loading employees...</td></tr>";
-
-        fetch("EmployeeDataServlet")
-            .then(response => response.text())
-            .then(data => {
-
-                employeeTableBody.innerHTML = data;
-
-            })
-            .catch(error => {
-
-                console.error("Employee loading error:", error);
-
-                employeeTableBody.innerHTML =
-                    "<tr><td colspan='6'>Unable to load employees.</td></tr>";
-            });
-    }
 
 
     /* ================= EMPLOYEE SEARCH ================= */
