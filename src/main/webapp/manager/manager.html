@@ -1594,7 +1594,6 @@
             <button class="nav-item" data-page="leave">
                 <span class="nav-icon">▣</span>
                 Leave Management
-                <span class="nav-badge" id="leaveBadge">0</span>
             </button>
 
             <button class="nav-item" data-page="attendance">
@@ -1760,170 +1759,6 @@
                     </div>
 
                 </div>
-
-                <div class="dashboard-grid">
-
-                    <div class="panel">
-
-                        <div class="panel-header">
-
-                            <div>
-                                <h3>Pending Leave Requests</h3>
-                                <p>Requests requiring your approval</p>
-                            </div>
-
-                            <button class="text-btn" data-page-link="leave">
-                                View All →
-                            </button>
-
-                        </div>
-
-                        <div class="table-container">
-
-                            <table>
-
-                                <thead>
-                                    <tr>
-                                        <th>EMPLOYEE</th>
-                                        <th>LEAVE TYPE</th>
-                                        <th>DATES</th>
-                                        <th>DAYS</th>
-                                        <th>ACTION</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="pendingLeaveTable">
-
-                                    <tr>
-                                        <td>
-                                            <div class="employee-cell">
-                                                <div class="avatar employee-avatar">
-                                                    RV
-                                                </div>
-
-                                                <div>
-                                                    <strong>Rahul Verma</strong>
-                                                    <span>EMP-1024</span>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td>Casual Leave</td>
-
-                                        <td>25 - 27 Aug</td>
-
-                                        <td>3</td>
-
-                                        <td>
-                                            <div class="approval-actions">
-
-                                                <button class="approve-btn">
-                                                    ✓
-                                                </button>
-
-                                                <button class="reject-btn">
-                                                    ×
-                                                </button>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div class="employee-cell">
-
-                                                <div class="avatar employee-avatar">
-                                                    PM
-                                                </div>
-
-                                                <div>
-                                                    <strong>Priya Mehta</strong>
-                                                    <span>EMP-1042</span>
-                                                </div>
-
-                                            </div>
-                                        </td>
-
-                                        <td>Sick Leave</td>
-
-                                        <td>24 Aug</td>
-
-                                        <td>1</td>
-
-                                        <td>
-                                            <div class="approval-actions">
-
-                                                <button class="approve-btn">
-                                                    ✓
-                                                </button>
-
-                                                <button class="reject-btn">
-                                                    ×
-                                                </button>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                    <div class="panel">
-
-                        <div class="panel-header">
-
-                            <div>
-                                <h3>Team Attendance</h3>
-                                <p>Today's overview</p>
-                            </div>
-
-                        </div>
-
-                        <div class="attendance-summary">
-
-                            <div class="donut">
-
-                                <div>
-                                    <strong id="dashboardAttendancePercent">0%</strong>
-                                    <span>Present</span>
-                                </div>
-
-                            </div>
-
-                            <div class="attendance-legend">
-
-                                <div>
-                                    <span class="legend-dot present"></span>
-                                    Present
-                                    <strong id="dashboardPresentCount">0</strong>
-                                </div>
-
-                                <div>
-                                    <span class="legend-dot leave"></span>
-                                    On Leave
-                                    <strong id="dashboardOnLeaveCount">0</strong>
-                                </div>
-
-                                <div>
-                                    <span class="legend-dot absent"></span>
-                                    Absent
-                                    <strong id="dashboardAbsentCount">0</strong>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
                 <div class="dashboard-grid bottom-grid">
 
                     <div class="panel">
@@ -2046,11 +1881,11 @@
 
                             <h2 id="managerProfileName">Vikram Kumar</h2>
 
-                            <p>
+                            <p id="managerProfileDesignation">
                                 Operations and People Manager • System Manager
                             </p>
 
-                            <span class="status active-status">
+                            <span class="status active-status" id="managerProfileStatus">
                                 ● Active
                             </span>
 
@@ -2081,7 +1916,7 @@
 
                             <div class="detail">
                                 <span>Full Name</span>
-                                <strong>Vikram Kumar</strong>
+                                <strong id="managerFullName">Vikram Kumar</strong>
                             </div>
 
                             <div class="detail">
@@ -2133,7 +1968,7 @@
 
                             <div>
                                 <span>Designation</span>
-                                <strong id="managerDesignation"></strong>
+                                <strong id="managerDesignation">Operations & People Manager</strong>
                             </div>
 
                             <div>
@@ -2284,7 +2119,7 @@
 
                     <div class="mini-stat">
                         <span>Total Members</span>
-                        <strong>24</strong>
+                        <strong id="teamTotalMembers">0</strong>
                     </div>
 
                     <div class="mini-stat">
@@ -2331,6 +2166,35 @@
                     </div>
 
                 </div>
+                
+                <div class="panel" style="margin-top: 24px;">
+
+				    <div class="panel-header">
+				        <div>
+				            <h3>Projects</h3>
+				            <p>View and monitor active projects.</p>
+				        </div>
+				    </div>
+				
+				    <div class="table-container">
+				        <table>
+				            <thead>
+				                <tr>
+				                    <th>PROJECT</th>
+				                    <th>DESCRIPTION</th>
+				                    <th>STATUS</th>
+				                    <th>START DATE</th>
+				                    <th>END DATE</th>
+				                </tr>
+				            </thead>
+				
+				            <tbody id="projectTable">
+				                <!-- Project data will be loaded from database -->
+				            </tbody>
+				        </table>
+				    </div>
+				
+				</div>
 
             </section>
             
@@ -2949,6 +2813,7 @@
     	loadManagerNotifications();
     	loadPendingLeaveRequests();
     	loadManagerProfile();
+    	loadManagerProjects();
     	
     	document
         .getElementById("attendanceDate")
@@ -3012,69 +2877,159 @@
             }
         };
         
-        async function loadManagerEvents() {
+        async function loadManagerAttendance() {
 
             try {
 
                 const response =
-                    await fetch("../ManagerEventsServlet");
+                    await fetch("../ManagerAttendanceServlet");
 
                 if (!response.ok) {
-                    throw new Error("Unable to load events.");
+                    throw new Error("Unable to load attendance data.");
                 }
 
-                const events = await response.json();
+                const data = await response.json();
 
-                const eventsList =
-                    document.getElementById("managerEventsList");
+                const attendance = data.records || [];
+                const summary = data.summary || {};
 
-                eventsList.innerHTML = "";
+                const presentElement =
+                    document.getElementById("attendancePresent");
 
-                events.forEach(event => {
+                const absentElement =
+                    document.getElementById("attendanceAbsent");
 
-                    const date = new Date(event.eventDate + "T00:00:00");
+                const leaveElement =
+                    document.getElementById("attendanceOnLeave");
 
-                    const day =
-                        date.getDate().toString().padStart(2, "0");
+                const table =
+                    document.getElementById("managerAttendanceTable");
 
-                    const month =
-                        date.toLocaleString("en-US", {
-                            month: "short"
-                        }).toUpperCase();
+                if (presentElement) {
+                    presentElement.textContent =
+                        summary.present || 0;
+                }
 
-                    const eventItem =
-                        document.createElement("div");
+                if (absentElement) {
+                    absentElement.textContent =
+                        summary.absent || 0;
+                }
 
-                    eventItem.className = "event";
+                if (leaveElement) {
+                    leaveElement.textContent =
+                        summary.onLeave || 0;
+                }
 
-                    eventItem.innerHTML = `
-                        <div class="event-date">
-                            <strong>${day}</strong>
-                            <span>${month}</span>
-                        </div>
+                if (!table) {
+                    console.error(
+                        "managerAttendanceTable not found."
+                    );
+                    return;
+                }
 
-                        <div>
-                            <strong>${event.title}</strong>
-                            <span>
-                                ${event.eventTime || event.description || ""}
+                table.innerHTML = "";
+
+                attendance.forEach(record => {
+
+                    const initials =
+                        (record.fullName || "Employee")
+                            .split(" ")
+                            .map(name => name.charAt(0))
+                            .join("")
+                            .substring(0, 2)
+                            .toUpperCase();
+
+                    const checkIn =
+                        record.checkIn || "—";
+
+                    const checkOut =
+                        record.checkOut || "—";
+
+                    let workHours = "—";
+
+                    if (record.checkIn && record.checkOut) {
+
+                        const start = new Date(
+                            `1970-01-01T${record.checkIn}`
+                        );
+
+                        const end = new Date(
+                            `1970-01-01T${record.checkOut}`
+                        );
+
+                        const minutes =
+                            Math.floor(
+                                (end - start) / 60000
+                            );
+
+                        workHours =
+                            `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+                    }
+
+                    const statusClass =
+                        record.status === "Present"
+                            ? "active-status"
+                            : "absent-status";
+
+                    const row =
+                        document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>
+                            <div class="employee-cell">
+                                <div class="avatar employee-avatar">
+                                    ${initials}
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        ${record.fullName || "Unknown"}
+                                    </strong>
+
+                                    <span>
+                                        ${record.employeeId || "—"}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>${checkIn}</td>
+                        <td>${checkOut}</td>
+                        <td>${workHours}</td>
+
+                        <td>
+                            <span class="status ${statusClass}">
+                                ${record.status || "No Record"}
                             </span>
-                        </div>
+                        </td>
                     `;
 
-                    eventsList.appendChild(eventItem);
+                    table.appendChild(row);
                 });
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Attendance loading error:",
+                    error
+                );
 
-                document.getElementById("managerEventsList").innerHTML = `
-                    <div class="event">
-                        <div>
-                            <strong>Unable to load events</strong>
-                        </div>
-                    </div>
-                `;
+                const table =
+                    document.getElementById(
+                        "managerAttendanceTable"
+                    );
+
+                if (table) {
+
+                    table.innerHTML = `
+                        <tr>
+                            <td colspan="5"
+                                style="text-align:center; padding:25px;">
+                                Unable to load attendance data.
+                            </td>
+                        </tr>
+                    `;
+                }
             }
         }
         
@@ -3246,15 +3201,19 @@
                 leaveBadge.textContent =
                     pendingRequests.length;
 
-                leaveBadge.style.display =pendi
+                leaveBadge.style.display =
                     pendingRequests.length > 0
                         ? "inline-flex"
                         : "none";
 
-                const table =
-                    document.getElementById("pendingLeaveTable");
+                    const table =
+                        document.getElementById("pendingLeaveTable");
 
-                table.innerHTML = "";
+                    if (!table) {
+                        return;
+                    }
+
+                    table.innerHTML = "";
 
                 pendingRequests.forEach(request => {
 
@@ -3319,6 +3278,56 @@
                         </td>
                     </tr>
                 `;
+            }
+        }
+        
+        async function loadManagerProjects() {
+            try {
+                const response = await fetch("../ManagerProjectServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load projects.");
+                }
+
+                const projects = await response.json();
+
+                const projectTable = document.getElementById("projectTable");
+
+                if (!projectTable) {
+                    console.error("projectTable not found.");
+                    return;
+                }
+
+                projectTable.innerHTML = "";
+
+                projects.forEach(project => {
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>${project.projectName || "—"}</td>
+                        <td>${project.description || "—"}</td>
+                        <td>${project.status || "—"}</td>
+                        <td>${project.startDate || "—"}</td>
+                        <td>${project.endDate || "Ongoing"}</td>
+                    `;
+
+                    projectTable.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error("Project loading error:", error);
+
+                const projectTable = document.getElementById("projectTable");
+
+                if (projectTable) {
+                    projectTable.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding:25px;">
+                                Unable to load projects.
+                            </td>
+                        </tr>
+                    `;
+                }
             }
         }
         
@@ -3562,16 +3571,12 @@
 
 
         navItems.forEach(function (item) {
-
             item.addEventListener("click", function () {
-
                 showPage(item.dataset.page);
-
             });
-            
-            loadLeaveRequests();
-
         });
+
+        loadLeaveRequests();
 
 
         document
@@ -3770,19 +3775,63 @@
 
         	        const teamTable = document.getElementById("teamTable");
 
+        	        if (!teamTable) {
+        	            console.error("teamTable not found.");
+        	            return;
+        	        }
+
         	        teamTable.innerHTML = "";
+        	        
+        	        const teamTotalMembers =
+        	            document.getElementById("teamTotalMembers");
+
+        	        if (teamTotalMembers) {
+        	            teamTotalMembers.textContent = team.length;
+        	        }
+        	        let presentCount = 0;
+        	        let onLeaveCount = 0;
+        	        let absentCount = 0;
 
         	        team.forEach(employee => {
-        	            const initials = employee.fullName
+        	            const status =
+        	                (employee.latestAttendanceStatus || "").toLowerCase();
+
+        	            if (status === "present") {
+        	                presentCount++;
+        	            } else if (
+        	                status === "on leave" ||
+        	                status === "leave"
+        	            ) {
+        	                onLeaveCount++;
+        	            } else if (status === "absent") {
+        	                absentCount++;
+        	            }
+        	        });
+        	        
+        	        document.getElementById("presentToday").textContent = presentCount;
+        	        document.getElementById("onLeaveToday").textContent = onLeaveCount;
+        	        document.getElementById("absentToday").textContent = absentCount;
+
+        	        team.forEach(employee => {
+
+        	            const initials = (employee.fullName || "Employee")
         	                .split(" ")
         	                .map(name => name.charAt(0))
         	                .join("")
         	                .substring(0, 2)
         	                .toUpperCase();
 
+        	            const attendanceStatus =
+        	                employee.latestAttendanceStatus || "No Record";
+
+        	            const attendanceClass =
+        	                attendanceStatus === "Present"
+        	                    ? "active-status"
+        	                    : "leave-status";
+
         	            const row = document.createElement("tr");
 
-        	            row.dataset.name = employee.fullName;
+        	            row.dataset.name = employee.fullName || "";
 
         	            row.innerHTML = `
         	                <td>
@@ -3791,28 +3840,28 @@
         	                            ${initials}
         	                        </div>
         	                        <div>
-        	                            <strong>${employee.fullName}</strong>
-        	                            <span>${employee.employeeId}</span>
+        	                            <strong>${employee.fullName || "Unknown"}</strong>
+        	                            <span>${employee.employeeId || "—"}</span>
         	                        </div>
         	                    </div>
         	                </td>
 
-        	                <td>${employee.designation}</td>
+        	                <td>${employee.designation || "—"}</td>
 
-        	                <td>${employee.availableLeave} Days</td>
-
-        	                <td>—</td>
-
-        	                <td>—</td>
+        	                <td>${employee.department || "—"}</td>
 
         	                <td>
-        	            	<span class="status ${
-        	                employee.latestAttendanceStatus === "Present"
-        	                    ? "active-status"
-        	                    : "leave-status"
-        	            }">
-        	                ${employee.latestAttendanceStatus || "No Record"}
-        	            </span>
+        	                    <span class="status ${attendanceClass}">
+        	                        ${attendanceStatus}
+        	                    </span>
+        	                </td>
+
+        	                <td>${employee.availableLeave || 0} Days</td>
+
+        	                <td>
+        	                    <span class="status active-status">
+        	                        Active
+        	                    </span>
         	                </td>
 
         	                <td>
@@ -3824,51 +3873,51 @@
         	        });
 
         	    } catch (error) {
-        	        console.error(error);
 
-        	        document.getElementById("teamTable").innerHTML = `
-        	            <tr>
-        	                <td colspan="7">
-        	                    Unable to load team data.
-        	                </td>
-        	            </tr>
-        	        `;
+        	        console.error("Team loading error:", error);
+
+        	        const teamTable =
+        	            document.getElementById("teamTable");
+
+        	        if (teamTable) {
+        	            teamTable.innerHTML = `
+        	                <tr>
+        	                    <td colspan="7"
+        	                        style="text-align:center; padding:25px;">
+        	                        Unable to load team data.
+        	                    </td>
+        	                </tr>
+        	            `;
+        	        }
         	    }
         	}
 
-        const teamSearch =
-            document.getElementById("teamSearch");
+         const teamSearch = document.getElementById("teamSearch");
 
-        teamSearch.addEventListener(
-            "input",
-            function (event) {
+         if (teamSearch) {
 
-                const searchTerm =
-                    event.target.value
-                        .trim()
-                        .toLowerCase();
+             teamSearch.addEventListener("input", function () {
 
-                const rows =
-                    document.querySelectorAll(
-                        "#teamTable tr"
-                    );
+                 const searchTerm =
+                     teamSearch.value.trim().toLowerCase();
 
-                rows.forEach(function (row) {
+                 const rows =
+                     document.querySelectorAll("#teamTable tr");
 
-                    const name =
-                        row.dataset.name
-                            ?.toLowerCase() ||
-                        "";
+                 rows.forEach(function (row) {
 
-                    row.style.display =
-                        name.includes(searchTerm)
-                            ? ""
-                            : "none";
+                     const rowText =
+                         row.textContent.toLowerCase();
 
-                });
+                     if (rowText.includes(searchTerm)) {
+                         row.style.display = "";
+                     } else {
+                         row.style.display = "none";
+                     }
 
-            }
-        );
+                 });
+             });
+         }
         
         async function loadManagerDashboard() {
             try {
@@ -3901,7 +3950,7 @@
                     `${attendancePercentage}% attendance`;
                     
                 document.getElementById("dashboardAttendancePercent").textContent =
-                   	`${attendancePercentage}%`
+                   	`${attendancePercentage}%`;
                    	
                  const presentPercent =
 				    totalForAttendance > 0
@@ -3916,12 +3965,15 @@
 				const donut =
 				    document.querySelector(".donut");
 				
+				if (donut) {
 				donut.style.background =
 				    `conic-gradient(
 				        #4f46e5 0 ${presentPercent}%,
 				        #93c5fd ${presentPercent}% ${presentPercent + leavePercent}%,
 				        #fca5a5 ${presentPercent + leavePercent}% 100%
 				    )`;
+				}
+				
                  document.getElementById("dashboardPresentCount").textContent =
     					data.present || 0;
 
@@ -4047,6 +4099,115 @@
                 `;
             }
         }
+        
+        async function loadManagerEvents() {
+
+            try {
+
+                const response =
+                    await fetch("../ManagerEventsServlet");
+
+                if (!response.ok) {
+                    throw new Error("Unable to load events.");
+                }
+
+                const events = await response.json();
+
+                const eventList =
+                    document.getElementById("managerEventsList");
+
+                if (!eventList) {
+                    console.error("managerEventsList not found.");
+                    return;
+                }
+
+                eventList.innerHTML = "";
+
+                events.forEach(event => {
+
+                    let day = "—";
+                    let month = "";
+                    let eventTime = "";
+
+                    if (event.eventDate) {
+
+                        const date =
+                            new Date(event.eventDate + "T00:00:00");
+
+                        day =
+                            String(date.getDate()).padStart(2, "0");
+
+                        month =
+                            date.toLocaleString("en-US", {
+                                month: "short"
+                            }).toUpperCase();
+                    }
+
+                    if (event.eventTime) {
+                        eventTime = event.eventTime;
+                    }
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className = "event";
+
+                    row.innerHTML = `
+                        <div class="event-date">
+                            <strong>${day}</strong>
+                            <span>${month}</span>
+                        </div>
+
+                        <div>
+                            <strong>
+                                ${event.title || "Event"}
+                            </strong>
+
+                            <span>
+                                ${event.description || eventTime || ""}
+                            </span>
+                        </div>
+                    `;
+
+                    eventList.appendChild(row);
+                });
+
+                if (events.length === 0) {
+
+                    eventList.innerHTML = `
+                        <div class="event">
+                            <div>
+                                <strong>No upcoming events</strong>
+                                <span>No events available.</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Events loading error:",
+                    error
+                );
+
+                const eventList =
+                    document.getElementById("managerEventsList");
+
+                if (eventList) {
+
+                    eventList.innerHTML = `
+                        <div class="event">
+                            <div>
+                                <strong>Unable to load events</strong>
+                                <span>Please try again.</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+        
 
 
         /*

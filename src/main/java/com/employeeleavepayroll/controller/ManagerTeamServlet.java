@@ -37,74 +37,109 @@ public class ManagerTeamServlet extends HttpServlet {
             return;
         }
 
+        int managerUserId =
+            ((Number) session.getAttribute("userId")).intValue();
+
         String sql =
-        	    "SELECT e.employee_id, u.full_name, e.department, " +
-        	    "e.designation, e.manager, e.employment_type, " +
-        	    "COALESCE(SUM(lb.available), 0) AS available_leave, " +
-        	    "a.status AS latest_attendance_status " +
-        	    "FROM employees e " +
-        	    "JOIN users u ON e.user_id = u.id " +
-        	    "LEFT JOIN leave_balances lb " +
-        	    "ON e.user_id = lb.user_id " +
-        	    "AND lb.leave_type <> 'Unpaid Leave' " +
-        	    "LEFT JOIN attendance a " +
-        	    "ON a.user_id = e.user_id " +
-        	    "AND a.attendance_date = (" +
-        	    "SELECT MAX(a2.attendance_date) " +
-        	    "FROM attendance a2 " +
-        	    "WHERE a2.user_id = e.user_id" +
-        	    ") " +
-        	    "GROUP BY e.employee_id, u.full_name, e.department, " +
-        	    "e.designation, e.manager, e.employment_type, " +
-        	    "a.status " +
-        	    "ORDER BY u.full_name";
-        
+            "SELECT e.employee_id, u.full_name, e.department, " +
+            "e.designation, e.manager, e.employment_type, " +
+            "COALESCE(SUM(lb.available), 0) AS available_leave, " +
+            "a.status AS latest_attendance_status " +
+            "FROM employees e " +
+            "JOIN users u ON e.user_id = u.id " +
+
+            "LEFT JOIN leave_balances lb " +
+            "ON e.user_id = lb.user_id " +
+            "AND lb.leave_type <> 'Unpaid Leave' " +
+
+            "LEFT JOIN attendance a " +
+            "ON a.user_id = e.user_id " +
+            "AND a.attendance_date = (" +
+                "SELECT MAX(a2.attendance_date) " +
+                "FROM attendance a2 " +
+                "WHERE a2.user_id = e.user_id" +
+            ") " +
+
+            "WHERE e.user_id <> ? " +
+
+            "GROUP BY e.employee_id, u.full_name, e.department, " +
+            "e.designation, e.manager, e.employment_type, " +
+            "a.status " +
+
+            "ORDER BY u.full_name";
+
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement =
+                 connection.prepareStatement(sql)) {
 
-            PrintWriter out = response.getWriter();
+            statement.setInt(1, managerUserId);
 
-            out.print("[");
+            try (ResultSet resultSet = statement.executeQuery()) {
 
-            boolean first = true;
+                PrintWriter out = response.getWriter();
 
-            while (resultSet.next()) {
+                out.print("[");
 
-                if (!first) {
-                    out.print(",");
+                boolean first = true;
+
+                while (resultSet.next()) {
+
+                    if (!first) {
+                        out.print(",");
+                    }
+
+                    out.print("{");
+
+                    out.print("\"employeeId\":\"" +
+                        escapeJson(
+                            resultSet.getString("employee_id")
+                        ) + "\",");
+
+                    out.print("\"fullName\":\"" +
+                        escapeJson(
+                            resultSet.getString("full_name")
+                        ) + "\",");
+
+                    out.print("\"department\":\"" +
+                        escapeJson(
+                            resultSet.getString("department")
+                        ) + "\",");
+
+                    out.print("\"designation\":\"" +
+                        escapeJson(
+                            resultSet.getString("designation")
+                        ) + "\",");
+
+                    out.print("\"manager\":\"" +
+                        escapeJson(
+                            resultSet.getString("manager")
+                        ) + "\",");
+
+                    out.print("\"employmentType\":\"" +
+                        escapeJson(
+                            resultSet.getString("employment_type")
+                        ) + "\",");
+
+                    out.print("\"availableLeave\":" +
+                        resultSet.getInt("available_leave") + ",");
+
+                    out.print("\"latestAttendanceStatus\":\"" +
+                        escapeJson(
+                            resultSet.getString(
+                                "latest_attendance_status"
+                            )
+                        ) + "\"");
+
+                    out.print("}");
+
+                    first = false;
                 }
 
-                out.print("{");
-                out.print("\"employeeId\":\"" +
-                    escapeJson(resultSet.getString("employee_id")) + "\",");
-                out.print("\"fullName\":\"" +
-                    escapeJson(resultSet.getString("full_name")) + "\",");
-                out.print("\"department\":\"" +
-                    escapeJson(resultSet.getString("department")) + "\",");
-                out.print("\"designation\":\"" +
-                    escapeJson(resultSet.getString("designation")) + "\",");
-                out.print("\"manager\":\"" +
-                    escapeJson(resultSet.getString("manager")) + "\",");
-                out.print("\"employmentType\":\"" +
-                	    escapeJson(resultSet.getString("employment_type")) + "\",");
-
-                out.print("\"availableLeave\":" +
-                	    resultSet.getInt("available_leave"));
-                out.print(",");
-
-                out.print("\"latestAttendanceStatus\":\"" +
-                    escapeJson(
-                        resultSet.getString("latest_attendance_status")
-                    ) + "\"");
-                out.print("}");
-
-                first = false;
+                out.print("]");
             }
 
-            out.print("]");
-
         } catch (Exception e) {
+
             e.printStackTrace();
 
             response.setStatus(
@@ -118,6 +153,7 @@ public class ManagerTeamServlet extends HttpServlet {
     }
 
     private String escapeJson(String value) {
+
         if (value == null) {
             return "";
         }
