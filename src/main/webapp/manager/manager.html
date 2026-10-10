@@ -2340,10 +2340,10 @@
                         </p>
                     </div>
 
-                    <select class="select-input">
-                        <option>August 2026</option>
-                        <option>July 2026</option>
-                        <option>June 2026</option>
+                    <select class="select-input" id="payrollMonth">
+                        <option value="August 2026">August 2026</option>
+                        <option value="July 2026">July 2026</option>
+                        <option value="June 2026">June 2026</option>
                     </select>
 
                 </div>
@@ -2424,51 +2424,13 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
-
-                                <tr>
-                                    <td><strong>Rahul Verma</strong></td>
-                                    <td>₹65,000</td>
-                                    <td>₹8,500</td>
-                                    <td>₹7,100</td>
-                                    <td><strong>₹66,400</strong></td>
-
-                                    <td>
-                                        <span class="status active-status">
-                                            Processed
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Priya Mehta</strong></td>
-                                    <td>₹58,000</td>
-                                    <td>₹6,500</td>
-                                    <td>₹6,300</td>
-                                    <td><strong>₹58,200</strong></td>
-
-                                    <td>
-                                        <span class="status active-status">
-                                            Processed
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td><strong>Vikram Singh</strong></td>
-                                    <td>₹72,000</td>
-                                    <td>₹9,000</td>
-                                    <td>₹8,200</td>
-                                    <td><strong>₹72,800</strong></td>
-
-                                    <td>
-                                        <span class="status active-status">
-                                            Processed
-                                        </span>
-                                    </td>
-                                </tr>
-
-                            </tbody>
+                            <tbody id="managerPayrollTable">
+							    <tr>
+							        <td colspan="6" style="text-align:center; padding:20px;">
+							            Loading payroll...
+							        </td>
+							    </tr>
+							</tbody>
 
                         </table>
 
@@ -2814,6 +2776,7 @@
     	loadPendingLeaveRequests();
     	loadManagerProfile();
     	loadManagerProjects();
+    	loadManagerPayroll();
     	
     	document
         .getElementById("attendanceDate")
@@ -3330,6 +3293,92 @@
                 }
             }
         }
+        
+
+        async function loadManagerPayroll() {
+            const payrollTable = document.getElementById("managerPayrollTable");
+            const monthSelect = document.getElementById("payrollMonth");
+
+            if (!payrollTable || !monthSelect) {
+                console.error("Payroll table or month dropdown not found.");
+                return;
+            }
+
+            const payrollMonth = monthSelect.value;
+
+            payrollTable.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align:center; padding:20px;">
+                        Loading payroll...
+                    </td>
+                </tr>`;
+
+            try {
+                const response = await fetch(
+                    "../ManagerPayrollServlet?month=" +
+                    encodeURIComponent(payrollMonth)
+                );
+
+                if (!response.ok) {
+                    throw new Error("Payroll request failed: " + response.status);
+                }
+
+                const payroll = await response.json();
+                payrollTable.innerHTML = "";
+
+                if (!Array.isArray(payroll) || payroll.length === 0) {
+                    payrollTable.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align:center; padding:20px;">
+                                No payroll records found for ${payrollMonth}.
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                payroll.forEach(record => {
+                    const row = document.createElement("tr");
+
+                    const money = value =>
+                        "₹" + Number(value || 0).toLocaleString("en-IN", {
+                            maximumFractionDigits: 2
+                        });
+
+                    row.innerHTML = `
+                        <td>${record.fullName || "—"}</td>
+                        <td>${money(record.basicSalary)}</td>
+                        <td>${money(record.allowances)}</td>
+                        <td>${money(record.deductions)}</td>
+                        <td><strong>${money(record.netSalary)}</strong></td>
+                        <td>
+                            <span class="status active-status">Processed</span>
+                        </td>`;
+
+                    payrollTable.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error("Payroll loading error:", error);
+
+                payrollTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:20px;">
+                            Unable to load payroll. Check the browser console.
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const monthSelect = document.getElementById("payrollMonth");
+
+            if (monthSelect) {
+                monthSelect.addEventListener("change", loadManagerPayroll);
+            }
+
+            loadManagerPayroll();
+        });
+
         
         async function loadLeaveRequests() {
 
